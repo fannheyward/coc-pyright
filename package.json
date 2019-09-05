@@ -1,0 +1,49 @@
+{
+  "name": "coc-pyright",
+  "version": "0.0.0-development",
+  "description": "Pyright extension for coc.nvim",
+  "author": "Heyward Fann <fannheyward@gmail.com>",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "keywords": [
+    "coc.nvim"
+  ],
+  "engines": {
+    "coc": "^0.0.70"
+  },
+  "scripts": {
+    "clean": "rimraf lib",
+    "watch": "webpack --watch",
+    "build": "webpack",
+    "prepare": "npx npm-run-all clean build"
+  },
+  "devDependencies": {
+    "@types/node": "^12.7.1",
+    "coc.nvim": "^0.0.73",
+    "pyright": "^1.0.58",
+    "rimraf": "^3.0.0",
+    "ts-loader": "^6.0.4",
+    "typescript": "^3.5.3",
+    "webpack": "^4.39.2",
+    "webpack-cli": "^3.3.6"
+  },
+  "contributes": {
+    "configuration": {
+      "type": "object",
+      "title": "coc-pyright configuration",
+      "properties": {
+        "coc-pyright.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable coc-pyright extension"
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "coc-pyright.Command",
+        "title": "coc-pyright command title"
+      }
+    ]
+  }
+}
