@@ -1,2 +1,6 @@
 lib
 node_modules/
+server/*
+!server/.gitkeep
+typeshed-fallback/*
+!typeshed-fallback/.gitkeep

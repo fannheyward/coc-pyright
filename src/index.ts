@@ -1,11 +1,7 @@
-import { LanguageClient, TransportKind, ServerOptions, commands, ExtensionContext, workspace, Executable, LanguageClientOptions, services } from 'coc.nvim';
-import { join } from 'path';
+import { commands, ExtensionContext, LanguageClient, LanguageClientOptions, ServerOptions, services, TransportKind, workspace } from 'coc.nvim';
 
 export async function activate(context: ExtensionContext): Promise<void> {
-  workspace.showMessage(`coc-pyright is works!`);
-
-  let serverModule = context.asAbsolutePath(join('node_modules', 'pyright', 'index.js'));
-  console.error(serverModule);
+  const serverModule = context.asAbsolutePath('server/server.js');
 
   const serverOptions: ServerOptions = {
     run: { module: serverModule, transport: TransportKind.ipc },
