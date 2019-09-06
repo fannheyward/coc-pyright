@@ -7,3 +7,5 @@ tsconfig.json
 webpack.config.js
 yarn.lock
 yarn-error.log
+!server/node_modules
+!typeshed-fallback
