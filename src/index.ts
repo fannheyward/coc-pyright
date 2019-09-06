@@ -1,11 +1,12 @@
-import { commands, ExtensionContext, LanguageClient, LanguageClientOptions, ServerOptions, services, TransportKind, workspace } from 'coc.nvim';
+import { ExtensionContext, LanguageClient, LanguageClientOptions, ServerOptions, services, TransportKind } from 'coc.nvim';
 
 export async function activate(context: ExtensionContext): Promise<void> {
   const serverModule = context.asAbsolutePath('server/server.js');
+  const debugOptions = { execArgv: ['--nolazy', '--inspect=6600'] };
 
   const serverOptions: ServerOptions = {
     run: { module: serverModule, transport: TransportKind.ipc },
-    debug: { module: serverModule, transport: TransportKind.ipc }
+    debug: { module: serverModule, transport: TransportKind.ipc, options: debugOptions }
   };
 
   const clientOptions: LanguageClientOptions = {
@@ -17,14 +18,4 @@ export async function activate(context: ExtensionContext): Promise<void> {
 
   const client: LanguageClient = new LanguageClient('pyright', 'Pyright Server', serverOptions, clientOptions);
   context.subscriptions.push(services.registLanguageClient(client));
-
-  context.subscriptions.push(
-    commands.registerCommand('coc-pyright.Command', async () => {
-      workspace.showMessage(`coc-pyright Commands works!`);
-    })
-  );
-
-  client.onReady().then(() => {
-    workspace.showMessage(`Pyright works`);
-  });
 }
