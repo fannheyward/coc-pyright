@@ -2,6 +2,8 @@
 
 [Pyright](https://github.com/microsoft/pyright) extension for coc.nvim
 
+<img width="603" alt="1" src="https://user-images.githubusercontent.com/345274/64470245-bda9a780-d172-11e9-9fda-48af0617a2ee.png">
+
 ## Install
 
 `:CocInstall coc-pyright`
