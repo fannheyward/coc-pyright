@@ -74,6 +74,12 @@
         }
       }
     },
-    "commands": []
+    "commands": [
+      {
+        "command": "pyright.organizeimports",
+        "title": "Organize Imports",
+        "category": "Pyright"
+      }
+    ]
   }
 }
