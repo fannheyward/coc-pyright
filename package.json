@@ -6,11 +6,17 @@
   "license": "MIT",
   "main": "lib/index.js",
   "keywords": [
-    "coc.nvim"
+    "coc.nvim",
+    "python",
+    "pyright"
   ],
   "engines": {
     "coc": "^0.0.70"
   },
+  "activationEvents": [
+    "onLanguage:python",
+    "workspaceContains:**/pyrightconfig.json"
+  ],
   "scripts": {
     "server": "./build_server.sh",
     "clean": "rimraf lib",
@@ -28,10 +34,44 @@
     "webpack-cli": "^3.3.6"
   },
   "contributes": {
+    "jsonValidation": [
+      {
+        "fileMatch": "pyrightconfig.json",
+        "url": "./schemas/pyrightconfig.schema.json"
+      }
+    ],
     "configuration": {
       "type": "object",
       "title": "coc-pyright configuration",
-      "properties": {}
+      "properties": {
+        "python.analysis.typeshedPaths": {
+          "type": "array",
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "description": "Paths to look for typeshed modules.",
+          "scope": "resource"
+        },
+        "python.pythonPath": {
+          "type": "string",
+          "default": "python",
+          "description": "Path to Python, you can use a custom version of Python.",
+          "scope": "resource"
+        },
+        "python.venvPath": {
+          "type": "string",
+          "default": "",
+          "description": "Path to folder with a list of Virtual Environments.",
+          "scope": "resource"
+        },
+        "pyright.disableLanguageServices": {
+          "type": "boolean",
+          "default": false,
+          "description": "Disables type completion, definitions, and references.",
+          "scope": "resource"
+        }
+      }
     },
     "commands": []
   }

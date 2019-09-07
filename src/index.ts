@@ -1,4 +1,4 @@
-import { ExtensionContext, LanguageClient, LanguageClientOptions, ServerOptions, services, TransportKind } from 'coc.nvim';
+import { ExtensionContext, LanguageClient, LanguageClientOptions, ServerOptions, services, TransportKind, workspace } from 'coc.nvim';
 
 export async function activate(context: ExtensionContext): Promise<void> {
   const serverModule = context.asAbsolutePath('server/server.js');
@@ -9,11 +9,13 @@ export async function activate(context: ExtensionContext): Promise<void> {
     debug: { module: serverModule, transport: TransportKind.ipc, options: debugOptions }
   };
 
+  const outputChannel = workspace.createOutputChannel('Pyright');
   const clientOptions: LanguageClientOptions = {
     documentSelector: [{ scheme: 'file', language: 'python' }],
     synchronize: {
       configurationSection: ['python', 'pyright']
-    }
+    },
+    outputChannel
   };
 
   const client: LanguageClient = new LanguageClient('pyright', 'Pyright Server', serverOptions, clientOptions);
