@@ -51,12 +51,17 @@ export async function activate(context: ExtensionContext): Promise<void> {
     );
   });
 
-  // const genericCommands = [cmdCreateTypeStub];
-  // genericCommands.forEach((command: string) => {
-  //   context.subscriptions.push(
-  //     commands.registerCommand(command, (...args: any[]) => {
-  //       client.sendRequest('workspace/executeCommand', { command, arguments: args });
-  //     })
-  //   );
-  // });
+  const genericCommands = ['pyright.createtypestub'];
+  genericCommands.forEach((command: string) => {
+    context.subscriptions.push(
+      commands.registerCommand(command, async (...args: any[]) => {
+        const doc = await workspace.document;
+        const cmd = {
+          command,
+          arguments: [doc.uri.toString(), ...args]
+        };
+        client.sendRequest('workspace/executeCommand', cmd);
+      })
+    );
+  });
 }
