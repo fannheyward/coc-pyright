@@ -18,11 +18,13 @@ test $? -ne 0 && echo "npm build error" && exit
 echo "Pyright build success!"
 
 cd ..
-rm -rf server/*
-rm -rf typeshed-fallback/*
+rm -rf server
+rm -rf typeshed-fallback
 
-cp -R ./pyright-${tag}/client/server/ ./server
-cp -R ./pyright-${tag}/client/typeshed-fallback/ ./typeshed-fallback
+cp -R ./pyright-${tag}/client/server .
+cp -R ./pyright-${tag}/client/typeshed-fallback .
 
 rm -rf ${tag}.tar.gz
 rm -rf ./pyright-${tag}
+
+find server -type f | grep -v "js$" | grep -v "json$" | xargs rm
