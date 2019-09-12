@@ -2,9 +2,6 @@ import { commands, ExtensionContext, LanguageClient, LanguageClientOptions, Serv
 import { TextEdit, WorkspaceEdit } from 'vscode-languageserver-protocol';
 import { ProgressReporting } from './progress';
 
-const cmdOrganizeImports = 'pyright.organizeimports';
-const cmdCreateTypeStub = 'pyright.createtypestub';
-
 export async function activate(context: ExtensionContext): Promise<void> {
   const serverModule = context.asAbsolutePath('server/server.js');
   const debugOptions = { execArgv: ['--nolazy', '--inspect=6600'] };
@@ -29,27 +26,30 @@ export async function activate(context: ExtensionContext): Promise<void> {
   const progressReporting = new ProgressReporting(client);
   context.subscriptions.push(progressReporting);
 
-  context.subscriptions.push(
-    commands.registerCommand(cmdOrganizeImports, async () => {
-      const doc = await workspace.document;
-      const cmd = {
-        command: cmdOrganizeImports,
-        arguments: [doc.uri]
-      };
+  const textEditorCommands = ['pyright.organizeimports', 'pyright.addoptionalforparam'];
+  textEditorCommands.forEach((commandName: string) => {
+    context.subscriptions.push(
+      commands.registerCommand(commandName, async (offset: number) => {
+        const doc = await workspace.document;
+        const cmd = {
+          command: commandName,
+          arguments: [doc.uri.toString(), offset]
+        };
 
-      const edits = await client.sendRequest<TextEdit[] | undefined>('workspace/executeCommand', cmd);
-      if (!edits) {
-        return;
-      }
-
-      const wsEdit: WorkspaceEdit = {
-        changes: {
-          [doc.uri]: edits
+        const edits = await client.sendRequest<TextEdit[] | undefined>('workspace/executeCommand', cmd);
+        if (!edits) {
+          return;
         }
-      };
-      await workspace.applyEdit(wsEdit);
-    })
-  );
+
+        const wsEdit: WorkspaceEdit = {
+          changes: {
+            [doc.uri]: edits
+          }
+        };
+        await workspace.applyEdit(wsEdit);
+      })
+    );
+  });
 
   // const genericCommands = [cmdCreateTypeStub];
   // genericCommands.forEach((command: string) => {
