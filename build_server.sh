@@ -11,7 +11,7 @@ curl -L -O ${url}
 tar xzf ${tag}.tar.gz
 cd ./pyright-${tag}
 
-npm run install:all && npm run build:server
+npm install && cd ./server && npm install && npm run build && cd ..
 
 test $? -ne 0 && echo "npm build error" && exit
 
