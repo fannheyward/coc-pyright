@@ -79,6 +79,11 @@
         "command": "pyright.organizeimports",
         "title": "Organize Imports",
         "category": "Pyright"
+      },
+      {
+        "command": "pyright.createtypestub",
+        "title": "Creates Type Stubs with given module name",
+        "category": "Pyright"
       }
     ]
   }
