@@ -3,7 +3,7 @@ import { TextEdit, WorkspaceEdit } from 'vscode-languageserver-protocol';
 import { ProgressReporting } from './progress';
 
 export async function activate(context: ExtensionContext): Promise<void> {
-  const serverModule = context.asAbsolutePath('server/server.js');
+  const serverModule = context.asAbsolutePath('server/server.bundle.js');
   const debugOptions = { execArgv: ['--nolazy', '--inspect=6600'] };
 
   const serverOptions: ServerOptions = {
