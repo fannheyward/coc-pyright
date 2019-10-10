@@ -13,6 +13,10 @@
   "engines": {
     "coc": "^0.0.70"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fannheyward/coc-pyright.git"
+  },
   "activationEvents": [
     "onLanguage:python",
     "workspaceContains:**/pyrightconfig.json"
