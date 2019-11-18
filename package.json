@@ -71,6 +71,12 @@
           "default": false,
           "description": "Disables type completion, definitions, and references.",
           "scope": "resource"
+        },
+        "pyright.openFilesOnly": {
+          "type": "boolean",
+          "default": false,
+          "description": "Report errors for all files in the workspace or only currently-open files?",
+          "scope": "resource"
         }
       }
     },
