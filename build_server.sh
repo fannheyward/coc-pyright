@@ -22,6 +22,7 @@ rm -rf server
 rm -rf typeshed-fallback
 
 cp -R ./pyright-${tag}/client/server .
+cp -R ./pyright-${tag}/client/schemas/pyrightconfig.schema.json ./schemas/pyrightconfig.schema.json
 cp -R ./pyright-${tag}/client/typeshed-fallback .
 
 rm -rf ${tag}.tar.gz
