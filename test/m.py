@@ -1,2 +1,3 @@
 def greeting(name: str):
-  print("Hello, " + name)
+    print(1+name)
+    print("Hello, " + name)
