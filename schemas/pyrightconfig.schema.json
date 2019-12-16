@@ -56,7 +56,7 @@
       }
     },
     "typeshedPath": {
-      "$id": "#/properties/typingsPath",
+      "$id": "#/properties/typeshedPath",
       "type": "string",
       "title": "Path to directory containing typeshed type stub files",
       "default": "",
@@ -130,6 +130,12 @@
       "$id": "#/properties/reportUnusedVariable",
       "$ref": "#/definitions/diagnostic",
       "title": "Controls reporting of local variables that are not accessed",
+      "default": "none"
+    },
+    "reportDuplicateImport": {
+      "$id": "#/properties/reportDuplicateImport",
+      "$ref": "#/definitions/diagnostic",
+      "title": "Controls reporting of symbols or modules that are imported more than once",
       "default": "none"
     },
     "reportOptionalSubscript": {
