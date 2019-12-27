@@ -1,4 +1,4 @@
-import { commands, ExtensionContext, LanguageClient, LanguageClientOptions, ServerOptions, services, TransportKind, workspace } from 'coc.nvim';
+import { commands, ExtensionContext, LanguageClient, LanguageClientOptions, ServerOptions, services, TransportKind, Uri, workspace } from 'coc.nvim';
 import { TextEdit, WorkspaceEdit } from 'vscode-languageserver-protocol';
 import { ProgressReporting } from './progress';
 
@@ -58,7 +58,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
         const doc = await workspace.document;
         const cmd = {
           command,
-          arguments: [doc.uri.toString(), ...args]
+          arguments: [Uri.parse(doc.uri).fsPath, ...args]
         };
         client.sendRequest('workspace/executeCommand', cmd);
       })
