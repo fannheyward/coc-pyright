@@ -30,7 +30,7 @@ Pyright includes a recent copy of the stdlib type stubs from [Typeshed](https://
 ## Commands
 
 - `pyright.organizeimports`: Organize imports
-- `pyright.createtypestub`: Creates Type Stubs with given module name
+- `pyright.createtypestub`: Creates Type Stubs with given module name, for example `:CocCommand pyright.createtypestub numpy`
 
 ## Configurations
 
