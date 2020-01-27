@@ -38,6 +38,7 @@ Pyright includes a recent copy of the stdlib type stubs from [Typeshed](https://
 - `python.pythonPath`: Path to Python, default: `python`
 - `python.venvPath`: Path to folder with a list of Virtual Environments, default: `""`
 - `pyright.disableLanguageServices`: Disables type completion, definitions and references, default: `false`
+- See [Pyright Settings](https://github.com/microsoft/pyright/blob/master/docs/settings.md) for more configurations
 
 Pyright supports [configuration files](https://github.com/microsoft/pyright/blob/master/docs/configuration.md) that provide granular control over settings. For more details, refer to the [README](https://github.com/Microsoft/pyright/blob/master/README.md) on the Pyright GitHub site.
 
