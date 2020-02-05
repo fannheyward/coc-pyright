@@ -1,8 +1,25 @@
-import { commands, ExtensionContext, LanguageClient, LanguageClientOptions, ServerOptions, services, TransportKind, Uri, workspace } from 'coc.nvim';
+import {
+  commands,
+  ExtensionContext,
+  extensions,
+  LanguageClient,
+  LanguageClientOptions,
+  ServerOptions,
+  services,
+  TransportKind,
+  Uri,
+  workspace
+} from 'coc.nvim';
 import { TextEdit, WorkspaceEdit } from 'vscode-languageserver-protocol';
 import { ProgressReporting } from './progress';
 
 export async function activate(context: ExtensionContext): Promise<void> {
+  const state = extensions.getExtensionState('coc-python');
+  if (state.toString() === 'activated') {
+    workspace.showMessage(`coc-python is installed and activated, coc-pyright will be disabled`, 'warning');
+    return;
+  }
+
   const serverModule = context.asAbsolutePath('server/server.bundle.js');
   const debugOptions = { execArgv: ['--nolazy', '--inspect=6600'] };
 
