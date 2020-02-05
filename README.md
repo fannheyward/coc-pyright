@@ -8,6 +8,8 @@
 
 `:CocInstall coc-pyright`
 
+**Note**: `coc-pyright` will be disabled if `coc-python` is installed and activated, to avoid conflicts.
+
 ## Features
 
 The extension supports many time-saving language features including:
