@@ -72,10 +72,16 @@ export async function activate(context: ExtensionContext): Promise<void> {
   genericCommands.forEach((command: string) => {
     context.subscriptions.push(
       commands.registerCommand(command, async (...args: any[]) => {
-        const doc = await workspace.document;
+        const root = workspace.root;
+        const module = args.pop()
+        if (!module) {
+          workspace.showMessage(`Module name is missing`, 'warning')
+          return ;
+        }
+
         const cmd = {
           command,
-          arguments: [Uri.parse(doc.uri).fsPath, ...args]
+          arguments: [root, module]
         };
         client.sendRequest('workspace/executeCommand', cmd);
       })
