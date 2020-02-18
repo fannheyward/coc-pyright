@@ -1,15 +1,4 @@
-import {
-  commands,
-  ExtensionContext,
-  extensions,
-  LanguageClient,
-  LanguageClientOptions,
-  ServerOptions,
-  services,
-  TransportKind,
-  Uri,
-  workspace
-} from 'coc.nvim';
+import { commands, ExtensionContext, extensions, LanguageClient, LanguageClientOptions, ServerOptions, services, TransportKind, workspace } from 'coc.nvim';
 import { TextEdit, WorkspaceEdit } from 'vscode-languageserver-protocol';
 import { ProgressReporting } from './progress';
 
@@ -73,10 +62,10 @@ export async function activate(context: ExtensionContext): Promise<void> {
     context.subscriptions.push(
       commands.registerCommand(command, async (...args: any[]) => {
         const root = workspace.root;
-        const module = args.pop()
+        const module = args.pop();
         if (!module) {
-          workspace.showMessage(`Module name is missing`, 'warning')
-          return ;
+          workspace.showMessage(`Module name is missing`, 'warning');
+          return;
         }
 
         const cmd = {
