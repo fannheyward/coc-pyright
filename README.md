@@ -39,6 +39,8 @@ Pyright includes a recent copy of the stdlib type stubs from [Typeshed](https://
 - `python.analysis.typeshedPaths`: Paths to look for typeshed modules, default: `[]`
 - `python.pythonPath`: Path to Python, default: `python`
 - `python.venvPath`: Path to folder with a list of Virtual Environments, default: `""`
+- `pyright.openFilesOnly`: Report errors only for currently-open files, default: `false`
+- `pyright.typeCheckingMode`: Defines the default rule set for type checking, default: `basic`
 - `pyright.disableLanguageServices`: Disables type completion, definitions and references, default: `false`
 - See [Pyright Settings](https://github.com/microsoft/pyright/blob/master/docs/settings.md) for more configurations
 
@@ -49,4 +51,5 @@ Pyright supports [configuration files](https://github.com/microsoft/pyright/blob
 MIT
 
 ---
+
 > This extension is created by [create-coc-extension](https://github.com/fannheyward/create-coc-extension)
