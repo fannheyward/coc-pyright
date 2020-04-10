@@ -12,12 +12,14 @@ export async function activate(context: ExtensionContext): Promise<void> {
   };
 
   const outputChannel = workspace.createOutputChannel('Pyright');
+  const config = workspace.getConfiguration('pyright');
   const clientOptions: LanguageClientOptions = {
     documentSelector: [{ scheme: 'file', language: 'python' }],
     synchronize: {
       configurationSection: ['python', 'pyright'],
     },
     outputChannel,
+    disableCompletion: !!config.get('disableCompletion'),
   };
 
   const client: LanguageClient = new LanguageClient('pyright', 'Pyright Server', serverOptions, clientOptions);
