@@ -64,6 +64,25 @@
           "description": "Automatically add common search paths like 'src'?",
           "scope": "resource"
         },
+        "python.analysis.stubPath": {
+          "type": "string",
+          "default": "",
+          "description": "Path to directory containing custom type stub files.",
+          "scope": "resource"
+        },
+        "python.analysis.diagnosticMode": {
+          "type": "string",
+          "default": "openFilesOnly",
+          "enum": [
+            "openFilesOnly",
+            "workspace"
+          ],
+          "enumDescriptions": [
+            "Analyzes and reports errors on only open files.",
+            "Analyzes and reports errors on all files in the workspace."
+          ],
+          "scope": "resource"
+        },
         "python.pythonPath": {
           "type": "string",
           "default": "python",
@@ -87,10 +106,10 @@
           "description": "Disables type completion, definitions, and references.",
           "scope": "resource"
         },
-        "pyright.openFilesOnly": {
+        "pyright.disableOrganizeImports": {
           "type": "boolean",
           "default": false,
-          "description": "Report errors only for currently-open files.",
+          "description": "Disables the `Organize Imports` command.",
           "scope": "resource"
         },
         "pyright.typeCheckingMode": {
