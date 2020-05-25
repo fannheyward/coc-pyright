@@ -38,6 +38,7 @@ Pyright includes a recent copy of the stdlib type stubs from [Typeshed](https://
 - `python.analysis.diagnosticMode`: Analyzes and reports errors for open only or all files in workspace, default: `openFilesOnly`
 - `python.analysis.stubPath`: Path to directory containing custom type stub files, default: `""`
 - `python.analysis.typeshedPaths`: Paths to look for typeshed modules, default: `[]`
+- `python.analysis.diagnosticSeverityOverrides`: Override the severity levels for individual diagnostics, default: `{}`
 - `python.pythonPath`: Path to Python, default: `python`
 - `python.venvPath`: Path to folder with a list of Virtual Environments, default: `""`
 - `pyright.typeCheckingMode`: Defines the default rule set for type checking, default: `basic`
