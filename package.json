@@ -89,6 +89,17 @@
           "description": "Allows a user to override the severity levels for individual diagnostics.",
           "scope": "resource"
         },
+        "python.analysis.logLevel": {
+          "type": "string",
+          "default": "info",
+          "description": "Specifies the level of logging for the Output panel",
+          "enum": [
+            "error",
+            "warning",
+            "info",
+            "trace"
+          ]
+        },
         "python.pythonPath": {
           "type": "string",
           "default": "python",
