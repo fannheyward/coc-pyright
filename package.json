@@ -19,7 +19,8 @@
   },
   "activationEvents": [
     "onLanguage:python",
-    "workspaceContains:**/pyrightconfig.json"
+    "workspaceContains:pyrightconfig.json",
+    "workspaceContains:mspythonconfig.json"
   ],
   "scripts": {
     "server": "./build_server.sh",
