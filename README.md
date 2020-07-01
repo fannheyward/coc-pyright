@@ -8,25 +8,6 @@
 
 `:CocInstall coc-pyright`
 
-## Features
-
-The extension supports many time-saving language features including:
-
-- Intelligent type completion of keywords, symbols, and import names appears when editing
-- Import statements are automatically inserted when necessary for type completions
-- Signature completion tips help when filling in arguments for a call
-- Hover over symbols to provide type information and doc strings
-- Find Definitions to quickly go to the location of a symbol’s definition
-- Find References to find all references to a symbol within a code base
-- Rename Symbol to rename all references to a symbol within a code base
-- Find Symbols within the current document or within the entire workspace
-- Organize Imports command for automatically ordering imports according to PEP8 rules
-- Type stub generation for third-party libraries
-
-## Built-in Type Stubs
-
-Pyright includes a recent copy of the stdlib type stubs from [Typeshed](https://github.com/python/typeshed). It can be configured to use another (perhaps more recent or modified) copy of the Typeshed type stubs. Of course, it also works with custom type stub files that are part of your project.
-
 ## Commands
 
 - `pyright.organizeimports`: Organize imports
@@ -47,7 +28,8 @@ Pyright includes a recent copy of the stdlib type stubs from [Typeshed](https://
 - `pyright.disableOrganizeImports`: Disables the `Organize Imports` command, default: `false`
 - `pyright.typeCheckingMode`: Defines the default rule set for type checking, default: `basic`
 - `pyright.useLibraryCodeForTypes`: Use library implementations to extract type information, default: `false`
-- See [Pyright Settings](https://github.com/microsoft/pyright/blob/master/docs/settings.md) for more configurations
+
+See [Pyright Settings](https://github.com/microsoft/pyright/blob/master/docs/settings.md) for more configurations.
 
 Pyright supports [configuration files](https://github.com/microsoft/pyright/blob/master/docs/configuration.md) that provide granular control over settings. For more details, refer to the [README](https://github.com/Microsoft/pyright/blob/master/README.md) on the Pyright GitHub site.
 
