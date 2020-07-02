@@ -22,7 +22,6 @@
 - `python.analysis.diagnosticSeverityOverrides`: Override the severity levels for individual diagnostics, default: `{}`
 - `python.pythonPath`: Path to Python, default: `python`
 - `python.venvPath`: Path to folder with a list of Virtual Environments, default: `""`
-- `pyright.typeCheckingMode`: Defines the default rule set for type checking, default: `basic`
 - `pyright.disableCompletion`: Disables completion only, left other LSP features work, default: `false`
 - `pyright.disableLanguageServices`: Disables type completion, definitions and references, default: `false`
 - `pyright.disableOrganizeImports`: Disables the `Organize Imports` command, default: `false`
