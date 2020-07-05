@@ -8,5 +8,6 @@ tsconfig.json
 webpack.config.js
 yarn.lock
 yarn-error.log
+build_server.sh
 !server/node_modules
 !typeshed-fallback
