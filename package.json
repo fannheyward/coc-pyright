@@ -110,6 +110,17 @@
             "trace"
           ]
         },
+        "python.analysis.typeCheckingMode": {
+          "type": "string",
+          "default": "basic",
+          "enum": [
+            "off",
+            "basic",
+            "strict"
+          ],
+          "description": "Defines the default rule set for type checking.",
+          "scope": "resource"
+        },
         "python.pythonPath": {
           "type": "string",
           "default": "python",
@@ -137,17 +148,6 @@
           "type": "boolean",
           "default": false,
           "description": "Disables the `Organize Imports` command.",
-          "scope": "resource"
-        },
-        "pyright.typeCheckingMode": {
-          "type": "string",
-          "default": "basic",
-          "enum": [
-            "off",
-            "basic",
-            "strict"
-          ],
-          "description": "Defines the default rule set for type checking.",
           "scope": "resource"
         },
         "pyright.useLibraryCodeForTypes": {
