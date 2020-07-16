@@ -1,10 +1,17 @@
 import { commands, ExtensionContext, LanguageClient, LanguageClientOptions, NodeModule, services, TransportKind, workspace } from 'coc.nvim';
 import { TextEdit, WorkspaceEdit } from 'vscode-languageserver-protocol';
 import { ProgressReporting } from './progress';
+import { existsSync } from 'fs';
 
 export async function activate(context: ExtensionContext): Promise<void> {
+  const module = context.asAbsolutePath('node_modules/pyright/langserver.index.js');
+  if (!existsSync(module)) {
+    workspace.showMessage(`Pyright file doesn't exist, please reinstall coc-pyright`, 'error');
+    return;
+  }
+
   const serverOptions: NodeModule = {
-    module: context.asAbsolutePath('node_modules/pyright/langserver.index.js'),
+    module,
     transport: TransportKind.ipc,
   };
 
