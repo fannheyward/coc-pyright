@@ -23,7 +23,6 @@
     "workspaceContains:mspythonconfig.json"
   ],
   "scripts": {
-    "server": "./build_server.sh",
     "clean": "rimraf lib",
     "watch": "webpack --watch",
     "build": "webpack",
@@ -170,5 +169,8 @@
         "category": "Pyright"
       }
     ]
+  },
+  "dependencies": {
+    "pyright": "^1.1.53"
   }
 }

@@ -1,14 +1,11 @@
-import { commands, ExtensionContext, LanguageClient, LanguageClientOptions, ServerOptions, services, TransportKind, workspace } from 'coc.nvim';
+import { commands, ExtensionContext, LanguageClient, LanguageClientOptions, NodeModule, services, TransportKind, workspace } from 'coc.nvim';
 import { TextEdit, WorkspaceEdit } from 'vscode-languageserver-protocol';
 import { ProgressReporting } from './progress';
 
 export async function activate(context: ExtensionContext): Promise<void> {
-  const serverModule = context.asAbsolutePath('server/server.bundle.js');
-  const debugOptions = { execArgv: ['--nolazy', '--inspect=6600'] };
-
-  const serverOptions: ServerOptions = {
-    run: { module: serverModule, transport: TransportKind.ipc },
-    debug: { module: serverModule, transport: TransportKind.ipc, options: debugOptions },
+  const serverOptions: NodeModule = {
+    module: context.asAbsolutePath('node_modules/pyright/langserver.index.js'),
+    transport: TransportKind.ipc,
   };
 
   const outputChannel = workspace.createOutputChannel('Pyright');
