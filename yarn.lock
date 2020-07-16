@@ -9,10 +9,10 @@
   dependencies:
     msgpack-lite "^0.1.26"
 
-"@types/node@^14.0.13":
-  version "14.0.14"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.0.14.tgz#24a0b5959f16ac141aeb0c5b3cd7a15b7c64cbce"
-  integrity sha512-syUgf67ZQpaJj01/tRTknkMNoBBLWJOBODF0Zm4NrXmiSuxjymFrxnTu1QVYRubhVkRcZLYZG8STTwJRdVm/WQ==
+"@types/node@^14.0.23":
+  version "14.0.23"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.0.23.tgz#676fa0883450ed9da0bb24156213636290892806"
+  integrity sha512-Z4U8yDAl5TFkmYsZdFPdjeMa57NOvnaf1tljHzhouaPEp7LCj2JKkejpI1ODviIAQuW4CcQmxkQ77rnLsOOoKw==
 
 "@webassemblyjs/ast@1.9.0":
   version "1.9.0"
@@ -2894,10 +2894,10 @@ to-regex@^3.0.1, to-regex@^3.0.2:
     regex-not "^1.0.2"
     safe-regex "^1.1.0"
 
-ts-loader@^7.0.5:
-  version "7.0.5"
-  resolved "https://registry.yarnpkg.com/ts-loader/-/ts-loader-7.0.5.tgz#789338fb01cb5dc0a33c54e50558b34a73c9c4c5"
-  integrity sha512-zXypEIT6k3oTc+OZNx/cqElrsbBtYqDknf48OZos0NQ3RTt045fBIU8RRSu+suObBzYB355aIPGOe/3kj9h7Ig==
+ts-loader@^8.0.1:
+  version "8.0.1"
+  resolved "https://registry.yarnpkg.com/ts-loader/-/ts-loader-8.0.1.tgz#9670dcbce2a8c8506d01a37fee042350d02c8c21"
+  integrity sha512-I9Nmly0ufJoZRMuAT9d5ijsC2B7oSPvUnOJt/GhgoATlPGYfa17VicDKPcqwUCrHpOkCxr/ybLYwbnS4cOxmvQ==
   dependencies:
     chalk "^2.3.0"
     enhanced-resolve "^4.0.0"
