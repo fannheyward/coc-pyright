@@ -23,6 +23,7 @@
     "workspaceContains:mspythonconfig.json"
   ],
   "scripts": {
+    "schema": "curl -o schemas/pyrightconfig.schema.json https://raw.githubusercontent.com/microsoft/pyright/master/client/schemas/pyrightconfig.schema.json",
     "clean": "rimraf lib",
     "watch": "webpack --watch",
     "build": "webpack",
@@ -42,6 +43,10 @@
     "jsonValidation": [
       {
         "fileMatch": "pyrightconfig.json",
+        "url": "./schemas/pyrightconfig.schema.json"
+      },
+      {
+        "fileMatch": "mspythonconfig.json",
         "url": "./schemas/pyrightconfig.schema.json"
       }
     ],
