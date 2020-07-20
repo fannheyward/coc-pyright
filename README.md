@@ -21,12 +21,12 @@
 - `python.analysis.typeshedPaths`: Paths to look for typeshed modules, default: `[]`
 - `python.analysis.diagnosticSeverityOverrides`: Override the severity levels for individual diagnostics, default: `{}`
 - `python.analysis.typeCheckingMode`: Defines the default rule set for type checking, default: `basic`
+- `python.analysis.useLibraryCodeForTypes`: Use library implementations to extract type information, default: `false`
 - `python.pythonPath`: Path to Python, default: `python`
 - `python.venvPath`: Path to folder with a list of Virtual Environments, default: `""`
 - `pyright.disableCompletion`: Disables completion only, left other LSP features work, default: `false`
 - `pyright.disableLanguageServices`: Disables type completion, definitions and references, default: `false`
 - `pyright.disableOrganizeImports`: Disables the `Organize Imports` command, default: `false`
-- `pyright.useLibraryCodeForTypes`: Use library implementations to extract type information, default: `false`
 
 See [Pyright Settings](https://github.com/microsoft/pyright/blob/master/docs/settings.md) for more configurations.
 

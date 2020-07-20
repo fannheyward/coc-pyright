@@ -149,10 +149,10 @@
           "description": "Disables the `Organize Imports` command.",
           "scope": "resource"
         },
-        "pyright.useLibraryCodeForTypes": {
+        "python.analysis.useLibraryCodeForTypes": {
           "type": "boolean",
           "default": false,
-          "description": "Use library implementations to extract type information.",
+          "description": "Use library implementations to extract type information when type stub is not present.",
           "scope": "resource"
         }
       }
