@@ -9,10 +9,10 @@
   dependencies:
     msgpack-lite "^0.1.26"
 
-"@types/node@^14.0.23":
-  version "14.0.23"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.0.23.tgz#676fa0883450ed9da0bb24156213636290892806"
-  integrity sha512-Z4U8yDAl5TFkmYsZdFPdjeMa57NOvnaf1tljHzhouaPEp7LCj2JKkejpI1ODviIAQuW4CcQmxkQ77rnLsOOoKw==
+"@types/node@^14.0.24":
+  version "14.0.24"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.0.24.tgz#b0f86f58564fa02a28b68f8b55d4cdec42e3b9d6"
+  integrity sha512-btt/oNOiDWcSuI721MdL8VQGnjsKjlTMdrKyTcLCKeQp/n4AAMFJ961wMbp+09y8WuGPClDEv07RIItdXKIXAA==
 
 "@webassemblyjs/ast@1.9.0":
   version "1.9.0"
@@ -2278,10 +2278,10 @@ punycode@^2.1.0:
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
   integrity sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==
 
-pyright@^1.1.54:
-  version "1.1.54"
-  resolved "https://registry.yarnpkg.com/pyright/-/pyright-1.1.54.tgz#e4bb5c556660a43695100e1eb6008b6843eb49fc"
-  integrity sha512-IGNhLdclyqCQ7sOFsJVD98Qj0tvKKhigh2IRpFrUd/JYvWKZZM58KIif060qRYcZ3SibweO5hEGgae8hk4zL3g==
+pyright@^1.1.55:
+  version "1.1.55"
+  resolved "https://registry.yarnpkg.com/pyright/-/pyright-1.1.55.tgz#5378ce536c169a09ae67171475b3cedb76d53983"
+  integrity sha512-sIcjNNfazzwyjUxx7pUS52W3oaxY6j6GnpyV8x0o3e6lqmLa2eU76QuVpx2jl87Zk9YG2o2EKXZEUWyHd87o3A==
 
 querystring-es3@^0.2.0:
   version "0.2.1"
@@ -2930,10 +2930,10 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typescript@^3.9.5:
-  version "3.9.6"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.9.6.tgz#8f3e0198a34c3ae17091b35571d3afd31999365a"
-  integrity sha512-Pspx3oKAPJtjNwE92YS05HQoY7z2SFyOpHo9MqJor3BXAGNaPUs83CuVp9VISFkSjyRfiTpmKuAYGJB7S7hOxw==
+typescript@^3.9.7:
+  version "3.9.7"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.9.7.tgz#98d600a5ebdc38f40cb277522f12dc800e9e25fa"
+  integrity sha512-BLbiRkiBzAwsjut4x/dsibSTB6yWpwT5qWmC2OfuCg3GgVQCSgMs4vEctYPhsaGtd0AeuuHMkjZ2h2WG8MSzRw==
 
 union-value@^1.0.0:
   version "1.0.1"
