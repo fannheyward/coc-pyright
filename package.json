@@ -30,13 +30,13 @@
     "prepare": "npm-run-all clean build"
   },
   "devDependencies": {
-    "@types/node": "^14.0.24",
+    "@types/node": "^14.0.26",
     "coc.nvim": "^0.0.77",
     "npm-run-all": "^4.1.5",
     "rimraf": "^3.0.0",
     "ts-loader": "^8.0.1",
     "typescript": "^3.9.7",
-    "webpack": "^4.43.0",
+    "webpack": "^4.44.0",
     "webpack-cli": "^3.3.10"
   },
   "contributes": {
@@ -176,6 +176,6 @@
     ]
   },
   "dependencies": {
-    "pyright": "^1.1.55"
+    "pyright": "^1.1.56"
   }
 }
