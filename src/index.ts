@@ -32,7 +32,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
   const progressReporting = new ProgressReporting(client);
   context.subscriptions.push(progressReporting);
 
-  const textEditorCommands = ['pyright.organizeimports', 'pyright.addoptionalforparam'];
+  const textEditorCommands = ['pyright.organizeimports', 'pyright.addoptionalforparam', 'pyright.restartserver'];
   textEditorCommands.forEach((commandName: string) => {
     context.subscriptions.push(
       commands.registerCommand(commandName, async (offset: number) => {

@@ -175,6 +175,11 @@
         "category": "Pyright"
       },
       {
+        "command": "pyright.restartserver",
+        "title": "Restart Server",
+        "category": "Pyright"
+      },
+      {
         "command": "pyright.createtypestub",
         "title": "Creates Type Stubs with given module name",
         "category": "Pyright"
