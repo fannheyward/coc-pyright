@@ -15,6 +15,7 @@
 
 ## Configurations
 
+- `python.analysis.autoImportCompletions`: Determines whether pyright offers auto-import completions, default: `true`
 - `python.analysis.autoSearchPaths`: Automatically add common search paths like 'src', default: `true`
 - `python.analysis.diagnosticMode`: Analyzes and reports errors for open only or all files in workspace, default: `openFilesOnly`
 - `python.analysis.stubPath`: Path to directory containing custom type stub files, default: `""`

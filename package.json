@@ -63,6 +63,12 @@
           "description": "Paths to look for typeshed modules.",
           "scope": "resource"
         },
+        "python.analysis.autoImportCompletions": {
+          "type": "boolean",
+          "default": true,
+          "description": "Offer auto-import completions.",
+          "scope": "resource"
+        },
         "python.analysis.autoSearchPaths": {
           "type": "boolean",
           "default": true,
@@ -176,6 +182,6 @@
     ]
   },
   "dependencies": {
-    "pyright": "^1.1.58"
+    "pyright": "^1.1.60"
   }
 }
