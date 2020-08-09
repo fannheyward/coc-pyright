@@ -2325,10 +2325,10 @@ punycode@^2.1.0:
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
   integrity sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==
 
-pyright@^1.1.60:
-  version "1.1.60"
-  resolved "https://registry.yarnpkg.com/pyright/-/pyright-1.1.60.tgz#6367933e8ef801cf027295e9c8671893562dbc13"
-  integrity sha512-rsTZswNU1rnpOfFdI45oE6jR0FGePi4+fETdDtjqXbPgTwL2OfW9lDmbxNj3oQCriXvPdGQ3vHBvcmJOznY01A==
+pyright@^1.1.61:
+  version "1.1.61"
+  resolved "https://registry.yarnpkg.com/pyright/-/pyright-1.1.61.tgz#d524413bc037ac4e74a481a8300a4c7d92a5a78c"
+  integrity sha512-4Z4t+BXIRhJCLPDKJ+cdgT0Jss2FeFW+Vbexy4t7oXowkgQfG8qiZ8c/e3ThRcCQACSDelB8OT1PcQR5iZpbhA==
 
 querystring-es3@^0.2.0:
   version "0.2.1"
