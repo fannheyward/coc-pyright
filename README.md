@@ -8,6 +8,8 @@
 
 `:CocInstall coc-pyright`
 
+It's recommended to install [data-science-types](https://github.com/predictive-analytics-lab/data-science-types), type stubs for NumPy, pandas and Matplotlib: `pip install data-science-types`.
+
 ## Commands
 
 - `pyright.organizeimports`: Organize imports
