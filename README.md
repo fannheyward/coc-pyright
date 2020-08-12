@@ -8,8 +8,6 @@
 
 `:CocInstall coc-pyright`
 
-It's recommended to install [data-science-types](https://github.com/predictive-analytics-lab/data-science-types), type stubs for NumPy, pandas and Matplotlib: `pip install data-science-types`.
-
 ## Commands
 
 - `pyright.organizeimports`: Organize imports
@@ -35,6 +33,15 @@ It's recommended to install [data-science-types](https://github.com/predictive-a
 See [Pyright Settings](https://github.com/microsoft/pyright/blob/master/docs/settings.md) for more configurations.
 
 Pyright supports [configuration files](https://github.com/microsoft/pyright/blob/master/docs/configuration.md) that provide granular control over settings. For more details, refer to the [README](https://github.com/Microsoft/pyright/blob/master/README.md) on the Pyright GitHub site.
+
+## Python typing and stub files
+
+To provide best experience, Pyright requires packages to be type annotated
+and/or have stub files. The Python community is currently in a transition phase
+where package authors are actively looking to provide that. Meanwhile, stub
+files for well-known packages may also be obtained from 3rd party, for example:
+
+- [Awesome Python Typing # stub-packages](https://github.com/typeddjango/awesome-python-typing#stub-packages)
 
 ## License
 
