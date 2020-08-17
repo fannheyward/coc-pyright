@@ -1,6 +1,5 @@
 import { commands, ExtensionContext, LanguageClient, LanguageClientOptions, NodeModule, services, TransportKind, workspace } from 'coc.nvim';
 import { TextEdit, WorkspaceEdit } from 'vscode-languageserver-protocol';
-import { ProgressReporting } from './progress';
 import { existsSync } from 'fs';
 
 export async function activate(context: ExtensionContext): Promise<void> {
@@ -24,13 +23,11 @@ export async function activate(context: ExtensionContext): Promise<void> {
     },
     outputChannel,
     disableCompletion: !!config.get('disableCompletion'),
+    progressOnInitialization: true,
   };
 
   const client: LanguageClient = new LanguageClient('pyright', 'Pyright Server', serverOptions, clientOptions);
   context.subscriptions.push(services.registLanguageClient(client));
-
-  const progressReporting = new ProgressReporting(client);
-  context.subscriptions.push(progressReporting);
 
   const textEditorCommands = ['pyright.organizeimports', 'pyright.addoptionalforparam', 'pyright.restartserver'];
   textEditorCommands.forEach((commandName: string) => {
