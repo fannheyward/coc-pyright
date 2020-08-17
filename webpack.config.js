@@ -12,7 +12,7 @@ module.exports = {
     'coc.nvim': 'commonjs coc.nvim',
   },
   optimization: {
-    minimize: true,
+    minimize: false,
   },
   module: {
     rules: [
