@@ -30,7 +30,7 @@
     "prepare": "npm-run-all clean build"
   },
   "devDependencies": {
-    "@types/node": "^14.0.26",
+    "@types/node": "^14.6.0",
     "coc.nvim": "^0.0.77",
     "npm-run-all": "^4.1.5",
     "rimraf": "^3.0.0",
@@ -609,6 +609,6 @@
     ]
   },
   "dependencies": {
-    "pyright": "^1.1.63"
+    "pyright": "^1.1.64"
   }
 }

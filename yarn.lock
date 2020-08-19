@@ -9,10 +9,10 @@
   dependencies:
     msgpack-lite "^0.1.26"
 
-"@types/node@^14.0.26":
-  version "14.0.27"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.0.27.tgz#a151873af5a5e851b51b3b065c9e63390a9e0eb1"
-  integrity sha512-kVrqXhbclHNHGu9ztnAwSncIgJv/FaxmzXJvGXNdcCpV1b8u1/Mi6z6m0vwy0LzKeXFTPLH0NzwmoJ3fNCIq0g==
+"@types/node@^14.6.0":
+  version "14.6.0"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.6.0.tgz#7d4411bf5157339337d7cff864d9ff45f177b499"
+  integrity sha512-mikldZQitV94akrc4sCcSjtJfsTKt4p+e/s0AGscVA6XArQ9kFclP+ZiYUMnq987rc6QlYxXv/EivqlfSLxpKA==
 
 "@webassemblyjs/ast@1.9.0":
   version "1.9.0"
@@ -2338,10 +2338,10 @@ punycode@^2.1.0:
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
   integrity sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==
 
-pyright@^1.1.63:
-  version "1.1.63"
-  resolved "https://registry.yarnpkg.com/pyright/-/pyright-1.1.63.tgz#cdc489a36b2f0f9bcf200241577d0155005ff441"
-  integrity sha512-3Vok/kL/Bqx/Huh9z7jxjx8a4HO32Ml6fSJemSejUj73UdXQdaWJYVeI0xSFC4hUfgixVL8y2AhuGgmSTTiZJA==
+pyright@^1.1.64:
+  version "1.1.64"
+  resolved "https://registry.yarnpkg.com/pyright/-/pyright-1.1.64.tgz#022a7f74e32583cb89a44481fa6f247699ec7026"
+  integrity sha512-/v4jJLRzrKQFxiQ2bDJuVuoGoQrQwo5OzplAWGikKfQpg15K4kEu75iXIbVuq9J3488bAbPABfSLldDitNaP4w==
 
 querystring-es3@^0.2.0:
   version "0.2.1"
