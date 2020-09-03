@@ -1,6 +1,9 @@
-import { commands, ExtensionContext, LanguageClient, LanguageClientOptions, NodeModule, services, TransportKind, workspace } from 'coc.nvim';
-import { TextEdit, WorkspaceEdit } from 'vscode-languageserver-protocol';
+import { commands, ExtensionContext, LanguageClient, LanguageClientOptions, languages, NodeModule, services, TransportKind, workspace } from 'coc.nvim';
 import { existsSync } from 'fs';
+import { DocumentSelector, TextEdit, WorkspaceEdit } from 'vscode-languageserver-protocol';
+import { PythonFormattingEditProvider } from './formatProvider';
+
+const documentSelector: DocumentSelector = [{ scheme: 'file', language: 'python' }];
 
 export async function activate(context: ExtensionContext): Promise<void> {
   const module = context.asAbsolutePath('node_modules/pyright/langserver.index.js');
@@ -17,7 +20,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
   const outputChannel = workspace.createOutputChannel('Pyright');
   const config = workspace.getConfiguration('pyright');
   const clientOptions: LanguageClientOptions = {
-    documentSelector: [{ scheme: 'file', language: 'python' }],
+    documentSelector,
     synchronize: {
       configurationSection: ['python', 'pyright'],
     },
@@ -28,6 +31,9 @@ export async function activate(context: ExtensionContext): Promise<void> {
 
   const client: LanguageClient = new LanguageClient('pyright', 'Pyright Server', serverOptions, clientOptions);
   context.subscriptions.push(services.registLanguageClient(client));
+  const formatProvider = new PythonFormattingEditProvider();
+  context.subscriptions.push(languages.registerDocumentFormatProvider(documentSelector, formatProvider));
+  context.subscriptions.push(languages.registerDocumentRangeFormatProvider(documentSelector, formatProvider));
 
   const textEditorCommands = ['pyright.organizeimports', 'pyright.addoptionalforparam', 'pyright.restartserver'];
   textEditorCommands.forEach((commandName: string) => {

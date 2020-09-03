@@ -30,12 +30,24 @@
     "prepare": "npm-run-all clean build"
   },
   "devDependencies": {
+    "@types/diff-match-patch": "^1.0.32",
+    "@types/fs-extra": "^9.0.1",
+    "@types/md5": "^2.2.0",
     "@types/node": "^14.10.1",
+    "@types/semver": "^7.3.4",
     "coc.nvim": "^0.0.79",
+    "diff-match-patch": "^1.0.5",
+    "fs-extra": "^9.0.1",
+    "iconv-lite": "^0.6.2",
+    "md5": "^2.3.0",
     "npm-run-all": "^4.1.5",
     "rimraf": "^3.0.0",
+    "semver": "^7.3.2",
+    "tree-kill": "^1.2.2",
     "ts-loader": "^8.0.3",
     "typescript": "^4.0.2",
+    "vscode-languageserver-protocol": "^3.15.3",
+    "vscode-languageserver-textdocument": "^1.0.1",
     "webpack": "^4.44.0",
     "webpack-cli": "^3.3.10"
   },
@@ -602,6 +614,63 @@
           "type": "string",
           "default": "",
           "description": "Path to folder with a list of Virtual Environments.",
+          "scope": "resource"
+        },
+        "python.formatting.blackArgs": {
+          "type": "array",
+          "description": "Arguments passed in. Each argument is a separate item in the array.",
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "scope": "resource"
+        },
+        "python.formatting.blackPath": {
+          "type": "string",
+          "default": "black",
+          "description": "Path to Black, you can use a custom version of Black by modifying this setting to include the full path.",
+          "scope": "resource"
+        },
+        "python.formatting.yapfArgs": {
+          "type": "array",
+          "description": "Arguments passed in. Each argument is a separate item in the array.",
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "scope": "resource"
+        },
+        "python.formatting.yapfPath": {
+          "type": "string",
+          "default": "yapf",
+          "description": "Path to yapf, you can use a custom version of yapf by modifying this setting to include the full path.",
+          "scope": "resource"
+        },
+        "python.formatting.autopep8Args": {
+          "type": "array",
+          "description": "Arguments passed in. Each argument is a separate item in the array.",
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "scope": "resource"
+        },
+        "python.formatting.autopep8Path": {
+          "type": "string",
+          "default": "autopep8",
+          "description": "Path to autopep8, you can use a custom version of autopep8 by modifying this setting to include the full path.",
+          "scope": "resource"
+        },
+        "python.formatting.provider": {
+          "type": "string",
+          "default": "autopep8",
+          "description": "Provider for formatting. Possible options include 'autopep8', 'black', and 'yapf'.",
+          "enum": [
+            "autopep8",
+            "black",
+            "yapf",
+            "none"
+          ],
           "scope": "resource"
         },
         "pyright.disableCompletion": {
