@@ -223,7 +223,7 @@
             "reportWildcardImportFromLibrary": {
               "type": "string",
               "description": "Diagnostics for an wildcard import from an external library.",
-              "default": "none",
+              "default": "warning",
               "enum": [
                 "none",
                 "information",
@@ -520,7 +520,7 @@
             "reportImplicitStringConcatenation": {
               "type": "string",
               "description": "Diagnostics for two or more string literals that follow each other, indicating an implicit concatenation. This is considered a bad practice and often masks bugs such as missing commas.",
-              "default": "warning",
+              "default": "none",
               "enum": [
                 "none",
                 "information",
@@ -569,10 +569,10 @@
           "default": "info",
           "description": "Specifies the level of logging for the Output panel",
           "enum": [
-            "error",
-            "warning",
-            "info",
-            "trace"
+            "Error",
+            "Warning",
+            "Information",
+            "Trace"
           ]
         },
         "python.analysis.typeCheckingMode": {
