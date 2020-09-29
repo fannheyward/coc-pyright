@@ -223,7 +223,7 @@
             "reportWildcardImportFromLibrary": {
               "type": "string",
               "description": "Diagnostics for an wildcard import from an external library.",
-              "default": "none",
+              "default": "warning",
               "enum": [
                 "none",
                 "information",
