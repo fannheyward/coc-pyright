@@ -1,4 +1,4 @@
-import { DocumentFormattingEditProvider, DocumentRangeFormattingEditProvider, ProviderResult } from 'coc.nvim';
+import { DocumentFormattingEditProvider, DocumentRangeFormattingEditProvider, ProviderResult, workspace } from 'coc.nvim';
 import { CancellationToken, Disposable, FormattingOptions, Range, TextEdit } from 'vscode-languageserver-protocol';
 import { TextDocument } from 'vscode-languageserver-textdocument';
 import { AutoPep8Formatter } from './formatters/autopep8';
@@ -17,7 +17,8 @@ export class PythonFormattingEditProvider implements DocumentFormattingEditProvi
   }
 
   private async _provideEdits(document: TextDocument, options: FormattingOptions, token: CancellationToken, range?: Range): Promise<TextEdit[]> {
-    const formater = this.formatters.get('autopep8');
+    const provider = workspace.getConfiguration('python').get('formatting.provider') as string;
+    const formater = this.formatters.get(provider);
     if (!formater) {
       return [] as TextEdit[];
     }
