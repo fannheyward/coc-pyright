@@ -483,11 +483,7 @@ function getTextEditsFromPatch(before: string, patch: string): TextEdit[] {
 }
 
 export abstract class BaseFormatter {
-  protected readonly outputChannel: OutputChannel;
-
-  constructor(public readonly Id: string) {
-    this.outputChannel = workspace.createOutputChannel('coc-pyright-formatter');
-  }
+  constructor(public readonly Id: string) {}
 
   public abstract formatDocument(document: TextDocument, options: FormattingOptions, token: CancellationToken, range?: Range): Thenable<TextEdit[]>;
   protected getDocumentPath(document: TextDocument, fallbackPath?: string): string {
@@ -593,7 +589,6 @@ export abstract class BaseFormatter {
       customError += `${this.Id} module is not installed.`;
     }
     workspace.showMessage(customError, 'warning');
-    this.outputChannel.appendLine(`\n${customError}\n${error}`);
   }
 
   private createTempFile(document: TextDocument): Promise<string> {
