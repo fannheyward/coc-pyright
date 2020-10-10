@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import { ExecOptions, spawn, SpawnOptions as ChildProcessSpawnOptions } from 'child_process';
 import { OutputChannel, Uri, workspace } from 'coc.nvim';
 import { Diff, diff_match_patch } from 'diff-match-patch';
@@ -284,7 +285,7 @@ function isNotInstalledError(error: Error): boolean {
 
 function getTempFileWithDocumentContents(document: TextDocument): Promise<string> {
   return new Promise<string>((resolve, reject) => {
-    let fsPath = Uri.parse(document.uri).fsPath;
+    const fsPath = Uri.parse(document.uri).fsPath;
     const ext = path.extname(fsPath);
     // Don't create file in temp folder since external utilities
     // look into configuration files in the workspace and are not able
@@ -491,15 +492,15 @@ export abstract class BaseFormatter {
 
   public abstract formatDocument(document: TextDocument, options: FormattingOptions, token: CancellationToken, range?: Range): Thenable<TextEdit[]>;
   protected getDocumentPath(document: TextDocument, fallbackPath?: string): string {
-    let filepath = Uri.parse(document.uri).fsPath;
+    const filepath = Uri.parse(document.uri).fsPath;
     if (fallbackPath && path.basename(filepath) === filepath) {
       return fallbackPath;
     }
     return path.dirname(filepath);
   }
   protected getWorkspaceUri(document: TextDocument): Uri | undefined {
-    let { rootPath } = workspace;
-    let filepath = Uri.parse(document.uri).fsPath;
+    const { rootPath } = workspace;
+    const filepath = Uri.parse(document.uri).fsPath;
     if (!filepath.startsWith(rootPath)) return;
     return Uri.file(rootPath);
   }
@@ -546,7 +547,7 @@ export abstract class BaseFormatter {
     // However they don't support returning the diff of the formatted text when reading data from the input stream.
     // Yet getting text formatted that way avoids having to create a temporary file, however the diffing will have
     // to be done here in node (extension), i.e. extension CPU, i.e. less responsive solution.
-    let filepath = Uri.parse(document.uri).fsPath;
+    const filepath = Uri.parse(document.uri).fsPath;
     const tempFile = await this.createTempFile(document);
     if (this.checkCancellation(filepath, tempFile, token)) {
       return [];
@@ -577,7 +578,7 @@ export abstract class BaseFormatter {
         workspace.showMessage(`Formatted with ${this.Id}`);
         const { nvim } = workspace;
         setTimeout(async () => {
-          let line = (await nvim.call('coc#util#echo_line')) as string;
+          const line = (await nvim.call('coc#util#echo_line')) as string;
           if (line && /Formatted/.test(line)) nvim.command('echo ""', true);
         }, 2000);
       },

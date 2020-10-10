@@ -1,5 +1,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
+/* eslint-disable prefer-rest-params */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 
 'use strict';
 
@@ -24,8 +26,8 @@ export interface Deferred<T> {
 class DeferredImpl<T> implements Deferred<T> {
   private _resolve!: (value?: T | PromiseLike<T>) => void;
   private _reject!: (reason?: any) => void;
-  private _resolved: boolean = false;
-  private _rejected: boolean = false;
+  private _resolved = false;
+  private _rejected = false;
   private _promise: Promise<T>;
   constructor(private scope: any = null) {
     this._promise = new Promise<T>((res, rej) => {
