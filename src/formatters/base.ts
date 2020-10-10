@@ -183,7 +183,6 @@ export class ProcessService {
         deferred.reject(new StdErrError(stderr));
       } else {
         const stdout = this.decoder.decode(stdoutBuffers, encoding);
-        console.error('--stdout:', stdout);
         deferred.resolve({ stdout, stderr });
       }
     });
@@ -539,8 +538,6 @@ export abstract class BaseFormatter {
   ): Promise<TextEdit[]> {
     if (typeof cwd !== 'string' || cwd.length === 0) {
       cwd = Uri.file(workspace.rootPath).fsPath;
-      console.error(workspace.rootPath);
-      console.error(cwd);
     }
 
     // autopep8 and yapf have the ability to read from the process input stream and return the formatted code out of the output stream.
