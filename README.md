@@ -26,6 +26,13 @@
 - `python.analysis.useLibraryCodeForTypes`: Use library implementations to extract type information, default: `true`
 - `python.pythonPath`: Path to Python, default: `python`
 - `python.venvPath`: Path to folder with a list of Virtual Environments, default: `""`
+- `python.formatting.provider`: Provider for formatting, default: `autopep8`
+- `python.formatting.blackPath`: Custom path to black, default: `black`
+- `python.formatting.blackArgs`: Arguments passed to black, default: `[]`
+- `python.formatting.yapfPath`: Custom path to yapf, default: `yapf`
+- `python.formatting.yapfArgs`: Arguments passed to yapf, default: `[]`
+- `python.formatting.autopep8Path`: Custom path to autopep8, default: `autopep8`
+- `python.formatting.autopep8Args`: Arguments passed to autopep8, default: `[]`
 - `pyright.disableCompletion`: Disables completion only, left other LSP features work, default: `false`
 - `pyright.disableLanguageServices`: Disables type completion, definitions and references, default: `false`
 - `pyright.disableOrganizeImports`: Disables the `Organize Imports` command, default: `false`
