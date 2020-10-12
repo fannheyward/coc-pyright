@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { ExecOptions, spawn, SpawnOptions as ChildProcessSpawnOptions } from 'child_process';
-import { OutputChannel, Uri, workspace } from 'coc.nvim';
+import { Uri, workspace } from 'coc.nvim';
 import { Diff, diff_match_patch } from 'diff-match-patch';
 import fs from 'fs-extra';
 import * as iconv from 'iconv-lite';
 import md5 from 'md5';
-import { EOL } from 'os';
+import { EOL, homedir } from 'os';
 import path from 'path';
 import { SemVer } from 'semver';
 import { promisify } from 'util';
@@ -149,6 +149,9 @@ export class ProcessService {
   }
 
   public exec(file: string, args: string[], options: SpawnOptions = {}): Promise<ExecutionResult<string>> {
+    if (file.startsWith('~/')) {
+      file = file.replace('~', homedir());
+    }
     const spawnOptions = this.getDefaultOptions(options);
     const encoding = spawnOptions.encoding ? spawnOptions.encoding : DEFAULT_ENCODING;
     const proc = spawn(file, args, spawnOptions);
@@ -586,7 +589,7 @@ export abstract class BaseFormatter {
     let customError = `Formatting with ${this.Id} failed.`;
 
     if (isNotInstalledError(error)) {
-      customError += `${this.Id} module is not installed.`;
+      customError += ` ${this.Id} module is not installed.`;
     }
     workspace.showMessage(customError, 'warning');
   }
