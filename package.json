@@ -66,6 +66,15 @@
       "type": "object",
       "title": "coc-pyright configuration",
       "properties": {
+        "python.analysis.extraPaths": {
+          "type": "array",
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "description": "Additional import search resolution paths",
+          "scope": "resource"
+        },
         "python.analysis.typeshedPaths": {
           "type": "array",
           "default": [],
