@@ -11,6 +11,7 @@ import { SemVer } from 'semver';
 import { promisify } from 'util';
 import { CancellationToken, FormattingOptions, Position, Range, TextEdit } from 'vscode-languageserver-protocol';
 import { TextDocument } from 'vscode-languageserver-textdocument';
+import which from 'which';
 import { createDeferred } from './async';
 
 const NEW_LINE_LENGTH = EOL.length;
@@ -230,9 +231,20 @@ class ModuleNotInstalledError extends Error {
 
 class PythonExecutionService {
   private readonly procService = new ProcessService();
-  private readonly pythonPath = workspace.getConfiguration('python').get('pythonPath') as string;
+  private readonly pythonPath: string;
 
-  constructor() {}
+  constructor() {
+    const pythonPath = workspace.getConfiguration('python').get('pythonPath') as string;
+    if (pythonPath === 'python') {
+      const bin = which.sync(pythonPath, { nothrow: true });
+      if (bin) {
+        this.pythonPath = bin;
+        return;
+      }
+    }
+
+    this.pythonPath = pythonPath;
+  }
 
   public async getExecutablePath(): Promise<string> {
     // If we've passed the python file, then return the file.
