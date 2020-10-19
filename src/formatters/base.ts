@@ -102,7 +102,7 @@ export function parsePythonVersion(version: string): SemVer | undefined {
   if (!version || version.trim().length === 0) {
     return;
   }
-  const versionParts = (version || '')
+  const versionParts = version
     .split('.')
     .map((item) => item.trim())
     .filter((item) => item.length > 0)
@@ -269,7 +269,7 @@ class PythonExecutionService {
       const result = await this.procService.exec(this.pythonPath, ['-m', moduleName, ...args], opts);
 
       // If a module is not installed we'll have something in stderr.
-      if (moduleName && ErrorUtils.outputHasModuleNotInstalledError(moduleName, result.stderr)) {
+      if (ErrorUtils.outputHasModuleNotInstalledError(moduleName, result.stderr)) {
         const isInstalled = await this.isModuleInstalled(moduleName!);
         if (!isInstalled) {
           throw new ModuleNotInstalledError(moduleName!);
