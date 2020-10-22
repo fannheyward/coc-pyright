@@ -9,3 +9,4 @@ webpack.config.js
 yarn.lock
 yarn-error.log
 build_server.sh
+diff.js
