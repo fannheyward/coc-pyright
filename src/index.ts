@@ -2,6 +2,8 @@ import { commands, ExtensionContext, LanguageClient, LanguageClientOptions, lang
 import { existsSync } from 'fs';
 import { DocumentSelector, TextEdit, WorkspaceEdit } from 'vscode-languageserver-protocol';
 import { PythonFormattingEditProvider } from './formatProvider';
+import { LinterProvider } from './linterProvider';
+import { LinterCommands } from './linters/linterCommands';
 
 const documentSelector: DocumentSelector = [{ scheme: 'file', language: 'python' }];
 
@@ -31,9 +33,13 @@ export async function activate(context: ExtensionContext): Promise<void> {
 
   const client: LanguageClient = new LanguageClient('pyright', 'Pyright Server', serverOptions, clientOptions);
   context.subscriptions.push(services.registLanguageClient(client));
+
   const formatProvider = new PythonFormattingEditProvider();
   context.subscriptions.push(languages.registerDocumentFormatProvider(documentSelector, formatProvider));
   context.subscriptions.push(languages.registerDocumentRangeFormatProvider(documentSelector, formatProvider));
+
+  context.subscriptions.push(new LinterProvider(context));
+  context.subscriptions.push(new LinterCommands());
 
   const textEditorCommands = ['pyright.organizeimports', 'pyright.addoptionalforparam', 'pyright.restartserver'];
   textEditorCommands.forEach((commandName: string) => {
