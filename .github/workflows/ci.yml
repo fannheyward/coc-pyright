@@ -15,7 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node-version: [14, 15]
+        node-version: [15]
 
     env:
       NODE_ENV: test
