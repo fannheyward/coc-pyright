@@ -202,8 +202,7 @@ export class ProcessService {
     const defaultOptions = { ...options };
     const execOptions = defaultOptions as SpawnOptions;
     if (execOptions) {
-      const encoding = (execOptions.encoding =
-        typeof execOptions.encoding === 'string' && execOptions.encoding.length > 0 ? execOptions.encoding : DEFAULT_ENCODING);
+      const encoding = (execOptions.encoding = typeof execOptions.encoding === 'string' && execOptions.encoding.length > 0 ? execOptions.encoding : DEFAULT_ENCODING);
       delete execOptions.encoding;
       execOptions.encoding = encoding;
     }
@@ -540,13 +539,7 @@ export abstract class BaseFormatter {
     return { execPath, moduleName, args };
   }
 
-  protected async provideDocumentFormattingEdits(
-    document: TextDocument,
-    _options: FormattingOptions,
-    token: CancellationToken,
-    args: string[],
-    cwd?: string
-  ): Promise<TextEdit[]> {
+  protected async provideDocumentFormattingEdits(document: TextDocument, _options: FormattingOptions, token: CancellationToken, args: string[], cwd?: string): Promise<TextEdit[]> {
     if (typeof cwd !== 'string' || cwd.length === 0) {
       cwd = Uri.file(workspace.rootPath).fsPath;
     }

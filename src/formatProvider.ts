@@ -37,7 +37,7 @@ export class PythonFormattingEditProvider implements DocumentFormattingEditProvi
   }
 
   private async onSaveDocument(document: TextDocument): Promise<void> {
-    let doc = workspace.getDocument(document.uri);
+    const doc = workspace.getDocument(document.uri);
     if (!doc) return;
     // Promise was rejected = formatting took too long.
     // Don't format inside the event handler, do it on timeout

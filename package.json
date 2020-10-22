@@ -25,6 +25,7 @@
   "scripts": {
     "schema": "curl -o schemas/pyrightconfig.schema.json https://raw.githubusercontent.com/microsoft/pyright/master/packages/vscode-pyright/schemas/pyrightconfig.schema.json && node diff.js",
     "clean": "rimraf lib",
+    "lint": "eslint src --ext ts",
     "watch": "webpack --watch",
     "build": "webpack",
     "prepare": "npm-run-all clean build"
@@ -36,12 +37,18 @@
     "@types/node": "^14.11.8",
     "@types/semver": "^7.3.4",
     "@types/which": "^1.3.2",
+    "@typescript-eslint/eslint-plugin": "^4.5.0",
+    "@typescript-eslint/parser": "^4.5.0",
     "coc.nvim": "^0.0.79",
     "diff-match-patch": "^1.0.5",
+    "eslint": "^7.11.0",
+    "eslint-config-prettier": "^6.14.0",
+    "eslint-plugin-prettier": "^3.1.4",
     "fs-extra": "^9.0.1",
     "iconv-lite": "^0.6.2",
     "md5": "^2.3.0",
     "npm-run-all": "^4.1.5",
+    "prettier": "^2.1.2",
     "rimraf": "^3.0.0",
     "semver": "^7.3.2",
     "tree-kill": "^1.2.2",
@@ -52,6 +59,11 @@
     "webpack": "^5.1.3",
     "webpack-cli": "^4.0.0",
     "which": "^2.0.2"
+  },
+  "prettier": {
+    "singleQuote": true,
+    "printWidth": 180,
+    "semi": true
   },
   "contributes": {
     "jsonValidation": [
