@@ -1,8 +1,9 @@
 import { commands, DocumentFormattingEditProvider, DocumentRangeFormattingEditProvider, ProviderResult, workspace } from 'coc.nvim';
 import { CancellationToken, Disposable, FormattingOptions, Range, TextEdit } from 'vscode-languageserver-protocol';
 import { TextDocument } from 'vscode-languageserver-textdocument';
+import { PythonSettings } from './configSettings';
 import { AutoPep8Formatter } from './formatters/autopep8';
-import { BaseFormatter } from './formatters/base';
+import { BaseFormatter } from './formatters/baseFormatter';
 import { BlackFormatter } from './formatters/black';
 import { YapfFormatter } from './formatters/yapf';
 
@@ -11,8 +12,10 @@ export class PythonFormattingEditProvider implements DocumentFormattingEditProvi
   private disposables: Disposable[] = [];
   private documentVersionBeforeFormatting = -1;
   private formatterMadeChanges = false;
+  private pythonSettings: PythonSettings;
 
   constructor() {
+    this.pythonSettings = PythonSettings.getInstance();
     this.formatters.set('black', new BlackFormatter());
     this.formatters.set('yapf', new YapfFormatter());
     this.formatters.set('autopep8', new AutoPep8Formatter());
@@ -20,7 +23,7 @@ export class PythonFormattingEditProvider implements DocumentFormattingEditProvi
   }
 
   private async _provideEdits(document: TextDocument, options: FormattingOptions, token: CancellationToken, range?: Range): Promise<TextEdit[]> {
-    const provider = workspace.getConfiguration('python').get('formatting.provider') as string;
+    const provider = this.pythonSettings.formatting.provider;
     const formater = this.formatters.get(provider);
     if (!formater) return [];
 
