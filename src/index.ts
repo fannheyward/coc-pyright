@@ -3,7 +3,6 @@ import { existsSync } from 'fs';
 import { DocumentSelector, TextEdit, WorkspaceEdit } from 'vscode-languageserver-protocol';
 import { PythonFormattingEditProvider } from './formatProvider';
 import { LinterProvider } from './linterProvider';
-import { LinterCommands } from './linters/linterCommands';
 
 const documentSelector: DocumentSelector = [{ scheme: 'file', language: 'python' }];
 
@@ -39,7 +38,6 @@ export async function activate(context: ExtensionContext): Promise<void> {
   context.subscriptions.push(languages.registerDocumentRangeFormatProvider(documentSelector, formatProvider));
 
   context.subscriptions.push(new LinterProvider(context));
-  context.subscriptions.push(new LinterCommands());
 
   const textEditorCommands = ['pyright.organizeimports', 'pyright.addoptionalforparam', 'pyright.restartserver'];
   textEditorCommands.forEach((commandName: string) => {

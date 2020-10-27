@@ -1,4 +1,4 @@
-import { ConfigurationChangeEvent, ExtensionContext, Uri, workspace } from 'coc.nvim';
+import { commands, ConfigurationChangeEvent, DiagnosticCollection, ExtensionContext, Uri, workspace } from 'coc.nvim';
 import path from 'path';
 import { Disposable } from 'vscode-languageserver-protocol';
 import { TextDocument } from 'vscode-languageserver-textdocument';
@@ -24,10 +24,16 @@ export class LinterProvider implements Disposable {
 
     const disposable = workspace.onDidChangeConfiguration(this.lintSettingsChangedHandler.bind(this));
     this.disposables.push(disposable);
+
+    this.disposables.push(commands.registerCommand('python.runLinting', this.runLinting.bind(this)));
   }
 
   public dispose() {
     this.disposables.forEach((d) => d.dispose());
+  }
+
+  private runLinting(): Promise<DiagnosticCollection> {
+    return this.engine.lintOpenPythonFiles();
   }
 
   private lintSettingsChangedHandler(e: ConfigurationChangeEvent) {
