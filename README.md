@@ -10,6 +10,7 @@
 
 ## Commands
 
+- `python.runLinting`: Run linting
 - `pyright.organizeimports`: Organize imports
 - `pyright.restartserver`: This command forces the type checker to discard all of its cached type information and restart analysis. It is useful in cases where new type stubs or libraries have been installed.
 - `pyright.createtypestub`: Creates Type Stubs with given module name, for example `:CocCommand pyright.createtypestub numpy`
@@ -33,6 +34,16 @@
 - `python.formatting.yapfArgs`: Arguments passed to yapf, default: `[]`
 - `python.formatting.autopep8Path`: Custom path to autopep8, default: `autopep8`
 - `python.formatting.autopep8Args`: Arguments passed to autopep8, default: `[]`
+- `python.linting.enabled`: Whether to lint Python files, default: `true`
+- `python.linting.flake8Enabled`: Whether to lint with flake8, default: `false`
+- `python.linting.banditEnabled`: Whether to lint with bandit, default: `false`
+- `python.linting.mypyEnabled`: Whether to lint with mypy, default: `false`
+- `python.linting.pytypeEnabled`: Whether to lint with pytype, default: `false`
+- `python.linting.pep8Enabled`: Whether to lint with pep8, default: `false`
+- `python.linting.prospectorEnabled`: Whether to lint with prospector, default: `false`
+- `python.linting.pydocstyleEnabled`: Whether to lint with pydocstyleEnabled, default: `false`
+- `python.linting.pylamaEnabled`: Whether to lint with pylama, default: `false`
+- `python.linting.pylintEnabled`: Whether to lint with pylint, default: `false`
 - `pyright.disableCompletion`: Disables completion only, left other LSP features work, default: `false`
 - `pyright.disableLanguageServices`: Disables type completion, definitions and references, default: `false`
 - `pyright.disableOrganizeImports`: Disables the `Organize Imports` command, default: `false`
