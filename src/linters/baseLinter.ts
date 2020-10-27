@@ -34,7 +34,7 @@ export function matchNamedRegEx(data: string, regex: string): IRegexGroup | unde
   return undefined;
 }
 
-function splitLines(str: string, splitOptions: { trim: boolean; removeEmptyEntries: boolean } = { removeEmptyEntries: true, trim: true }): string[] {
+function splitLines(str: string, splitOptions: { trim: boolean; removeEmptyEntries: boolean }): string[] {
   let lines = str.split(/\r?\n/g);
   if (splitOptions && splitOptions.trim) {
     lines = lines.map((line) => line.trim());
