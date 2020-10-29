@@ -36,10 +36,10 @@ export function matchNamedRegEx(data: string, regex: string): IRegexGroup | unde
 
 function splitLines(str: string, splitOptions: { trim: boolean; removeEmptyEntries: boolean }): string[] {
   let lines = str.split(/\r?\n/g);
-  if (splitOptions && splitOptions.trim) {
+  if (splitOptions.trim) {
     lines = lines.map((line) => line.trim());
   }
-  if (splitOptions && splitOptions.removeEmptyEntries) {
+  if (splitOptions.removeEmptyEntries) {
     lines = lines.filter((line) => line.length > 0);
   }
   return lines;
