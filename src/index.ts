@@ -1,5 +1,6 @@
 import { commands, ExtensionContext, LanguageClient, LanguageClientOptions, languages, NodeModule, services, TransportKind, workspace } from 'coc.nvim';
 import { existsSync } from 'fs';
+import { lt } from 'semver';
 import { DocumentSelector, TextEdit, WorkspaceEdit } from 'vscode-languageserver-protocol';
 import { PythonFormattingEditProvider } from './formatProvider';
 import { LinterProvider } from './linterProvider';
@@ -7,6 +8,10 @@ import { LinterProvider } from './linterProvider';
 const documentSelector: DocumentSelector = [{ scheme: 'file', language: 'python' }];
 
 export async function activate(context: ExtensionContext): Promise<void> {
+  if (lt(process.versions.node, '12.0.0')) {
+    workspace.showMessage(`Pyright needs Node.js v12+ to work, your Node.js is ${process.version}.`, 'error');
+    return;
+  }
   const module = context.asAbsolutePath('node_modules/pyright/langserver.index.js');
   if (!existsSync(module)) {
     workspace.showMessage(`Pyright file doesn't exist, please reinstall coc-pyright`, 'error');
