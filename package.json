@@ -22,6 +22,15 @@
     "workspaceContains:pyrightconfig.json",
     "workspaceContains:mspythonconfig.json"
   ],
+  "rootPatterns": [
+    {
+      "filetype": "python",
+      "patterns": [
+        "pyrightconfig.json",
+        "mspythonconfig.json"
+      ]
+    }
+  ],
   "scripts": {
     "schema": "curl -o schemas/pyrightconfig.schema.json https://raw.githubusercontent.com/microsoft/pyright/master/packages/vscode-pyright/schemas/pyrightconfig.schema.json && node diff.js",
     "clean": "rimraf lib",
