@@ -5,6 +5,8 @@ tsconfig.json
 *.test.js
 .tags
 .DS_Store
+.eslintrc.js
+.github
 webpack.config.js
 yarn.lock
 yarn-error.log
