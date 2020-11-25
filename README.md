@@ -61,6 +61,10 @@ files for well-known packages may also be obtained from 3rd party, for example:
 
 - [Awesome Python Typing # stub-packages](https://github.com/typeddjango/awesome-python-typing#stub-packages)
 
+## Links
+
+- [Fixing coc-pyright and anaconda import errors](https://hanspinckaers.com/fixing-coc-pyright-and-anaconda-import-errors)
+
 ## License
 
 MIT
