@@ -2072,9 +2072,9 @@ punycode@^2.1.0:
   integrity sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==
 
 pyright@^1.1.89:
-  version "1.1.90"
-  resolved "https://registry.yarnpkg.com/pyright/-/pyright-1.1.90.tgz#6e51cb94988a221ded8290b79272f2a7cace52f8"
-  integrity sha512-CNrTDpxd4vWcGpjxCPLg2fvKYlEhU8ksi7Fkdb+bFNfOb/1ENvZ8QoDYebtLFceoBlgWU9X+MluuFKudwHKKkw==
+  version "1.1.91"
+  resolved "https://registry.yarnpkg.com/pyright/-/pyright-1.1.91.tgz#edc79a495e2c200813b79ad4a0f5c3ab89b68554"
+  integrity sha512-9oyA7kcBMF1vIazyCRWAzatxj/99acmEbuCPhFY1x6hvVhHb8RGiKDwix4FNeEhVI0Rm7+Gr69cv9ymmk3JYoA==
 
 randombytes@^2.1.0:
   version "2.1.0"
