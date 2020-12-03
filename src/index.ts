@@ -1,4 +1,4 @@
-import { commands, ExtensionContext, LanguageClient, LanguageClientOptions, languages, NodeModule, services, TransportKind, workspace } from 'coc.nvim';
+import { commands, ExtensionContext, extensions, LanguageClient, LanguageClientOptions, languages, NodeModule, services, TransportKind, workspace } from 'coc.nvim';
 import { existsSync } from 'fs';
 import { lt } from 'semver';
 import { DocumentSelector, TextEdit, WorkspaceEdit } from 'vscode-languageserver-protocol';
@@ -8,6 +8,11 @@ import { LinterProvider } from './linterProvider';
 const documentSelector: DocumentSelector = [{ scheme: 'file', language: 'python' }];
 
 export async function activate(context: ExtensionContext): Promise<void> {
+  const state = extensions.getExtensionState('coc-python');
+  if (state.toString() === 'activated') {
+    workspace.showMessage(`coc-python is installed and activated, coc-pyright will be disabled`, 'warning');
+    return;
+  }
   if (lt(process.versions.node, '12.0.0')) {
     workspace.showMessage(`Pyright needs Node.js v12+ to work, your Node.js is ${process.version}.`, 'error');
     return;
