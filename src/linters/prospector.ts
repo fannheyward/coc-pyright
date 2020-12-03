@@ -32,6 +32,7 @@ export class Prospector extends BaseLinter {
     const relativePath = path.relative(cwd, Uri.parse(document.uri).fsPath);
     return this.run(['--absolute-paths', '--output-format=json', relativePath], document, cancellation);
   }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected async parseMessages(output: string, _document: TextDocument, _token: CancellationToken, _regEx: string) {
     let parsedData: IProspectorResponse;
     try {

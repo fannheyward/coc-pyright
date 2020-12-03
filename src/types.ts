@@ -39,7 +39,6 @@ export interface ILinterInfo {
   readonly argsSettingName: string;
   readonly enabledSettingName: string;
   readonly configFileNames: string[];
-  enableAsync(enabled: boolean, resource?: Uri): Promise<void>;
   isEnabled(resource?: Uri): boolean;
   pathName(resource?: Uri): string;
   linterArgs(resource?: Uri): string[];

@@ -37,22 +37,19 @@ export class LinterInfo implements ILinterInfo {
     return this._configFileNames;
   }
 
-  public async enableAsync(enabled: boolean, resource?: Uri): Promise<void> {
-    // return this.configService.updateSetting(`linting.${this.enabledSettingName}`, enabled, resource);
-  }
-  public isEnabled(resource?: Uri): boolean {
-    // const settings = this.configService.getSettings(resource);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public isEnabled(_resource?: Uri): boolean {
     const settings = this.configService;
     return (settings.linting as any)[this.enabledSettingName] as boolean;
   }
 
-  public pathName(resource?: Uri): string {
-    // const settings = this.configService.getSettings(resource);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public pathName(_resource?: Uri): string {
     const settings = this.configService;
     return (settings.linting as any)[this.pathSettingName] as string;
   }
-  public linterArgs(resource?: Uri): string[] {
-    // const settings = this.configService.getSettings(resource);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public linterArgs(_resource?: Uri): string[] {
     const settings = this.configService;
     const args = (settings.linting as any)[this.argsSettingName];
     return Array.isArray(args) ? (args as string[]) : [];
