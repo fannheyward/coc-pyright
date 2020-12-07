@@ -52,7 +52,7 @@
     "coc.nvim": "^0.0.79",
     "diff-match-patch": "^1.0.5",
     "eslint": "^7.11.0",
-    "eslint-config-prettier": "^6.14.0",
+    "eslint-config-prettier": "^7.0.0",
     "eslint-plugin-prettier": "^3.1.4",
     "fs-extra": "^9.0.1",
     "iconv-lite": "^0.6.2",
