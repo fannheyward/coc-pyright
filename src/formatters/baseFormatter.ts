@@ -320,23 +320,9 @@ export abstract class BaseFormatter {
     return Uri.file(rootPath);
   }
 
-  private getSettingsPropertyNames(): { pathName: string; argsName: string } {
-    return {
-      argsName: `${this.Id}Args`,
-      pathName: `${this.Id}Path`,
-    };
-  }
-
-  private getExecutionInfo(customArgs: string[]): ExecutionInfo {
-    const names = this.getSettingsPropertyNames();
-
-    const execPath = this.pythonSettings.formatting[names.pathName] as string;
-    let args = this.pythonSettings.formatting[names.argsName] as string[];
-    args = args.concat(customArgs);
-
+  private getExecutionInfo(args: string[]): ExecutionInfo {
     let moduleName: string | undefined;
-
-    // If path information is not available, then treat it as a module,
+    const execPath = this.pythonSettings.formatting[`${this.Id}Path`] as string;
     if (path.basename(execPath) === execPath) {
       moduleName = execPath;
     }
@@ -358,9 +344,9 @@ export abstract class BaseFormatter {
     if (this.checkCancellation(filepath, tempFile, token)) {
       return [];
     }
+    args.push(tempFile);
 
     const executionInfo = this.getExecutionInfo(args);
-    executionInfo.args.push(tempFile);
     const pythonToolsExecutionService = new PythonExecutionService();
     const promise = pythonToolsExecutionService
       .exec(executionInfo, { cwd, throwOnStdErr: false, token })
