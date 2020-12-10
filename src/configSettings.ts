@@ -136,13 +136,15 @@ export class PythonSettings implements IPythonSettings {
     this.formatting = this.formatting
       ? this.formatting
       : {
+          provider: 'autopep8',
           autopep8Args: [],
           autopep8Path: 'autopep8',
-          provider: 'autopep8',
           blackArgs: [],
           blackPath: 'black',
           yapfArgs: [],
           yapfPath: 'yapf',
+          darkerArgs: [],
+          darkerPah: 'darker',
         };
     this.formatting.autopep8Path = this.getAbsolutePath(systemVariables.resolveAny(this.formatting.autopep8Path));
     this.formatting.yapfPath = this.getAbsolutePath(systemVariables.resolveAny(this.formatting.yapfPath));

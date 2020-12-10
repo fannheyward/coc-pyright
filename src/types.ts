@@ -27,10 +27,11 @@ export enum Product {
   yapf = 10,
   autopep8 = 11,
   black = 12,
+  darker = 13,
 }
 
 export type LinterId = 'flake8' | 'mypy' | 'pep8' | 'prospector' | 'pydocstyle' | 'pylama' | 'pylint' | 'bandit' | 'pytype';
-export type FormatterId = 'yapf' | 'black' | 'autopep8';
+export type FormatterId = 'yapf' | 'black' | 'autopep8' | 'darker';
 
 export interface ILinterInfo {
   readonly id: LinterId;
@@ -133,6 +134,8 @@ export interface IFormattingSettings {
   readonly blackArgs: string[];
   yapfPath: string;
   readonly yapfArgs: string[];
+  darkerPah: string;
+  readonly darkerArgs: string[];
 }
 
 export interface IPythonSettings {

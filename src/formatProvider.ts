@@ -6,6 +6,7 @@ import { AutoPep8Formatter } from './formatters/autopep8';
 import { BaseFormatter } from './formatters/baseFormatter';
 import { BlackFormatter } from './formatters/black';
 import { YapfFormatter } from './formatters/yapf';
+import { DarkerFormatter } from './formatters/darker';
 
 export class PythonFormattingEditProvider implements DocumentFormattingEditProvider, DocumentRangeFormattingEditProvider {
   private formatters = new Map<string, BaseFormatter>();
@@ -19,6 +20,7 @@ export class PythonFormattingEditProvider implements DocumentFormattingEditProvi
     this.formatters.set('black', new BlackFormatter());
     this.formatters.set('yapf', new YapfFormatter());
     this.formatters.set('autopep8', new AutoPep8Formatter());
+    this.formatters.set('darker', new DarkerFormatter());
     this.disposables.push(workspace.onDidSaveTextDocument((e) => this.onSaveDocument(e)));
   }
 

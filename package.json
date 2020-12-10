@@ -1072,6 +1072,21 @@
           "description": "Path to Black, you can use a custom version of Black by modifying this setting to include the full path.",
           "scope": "resource"
         },
+        "python.formatting.darkerArgs": {
+          "type": "array",
+          "description": "Arguments passed in. Each argument is a separate item in the array.",
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "scope": "resource"
+        },
+        "python.formatting.darkerPath": {
+          "type": "string",
+          "default": "darker",
+          "description": "Path to darker, you can use a custom version of darker by modifying this setting to include the full path.",
+          "scope": "resource"
+        },
         "python.formatting.yapfArgs": {
           "type": "array",
           "description": "Arguments passed in. Each argument is a separate item in the array.",
@@ -1108,6 +1123,7 @@
           "description": "Provider for formatting. Possible options include 'autopep8', 'black', and 'yapf'.",
           "enum": [
             "autopep8",
+            "darker",
             "black",
             "yapf",
             "none"

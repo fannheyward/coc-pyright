@@ -406,7 +406,7 @@ export abstract class BaseFormatter {
     workspace.showMessage(customError, 'warning');
   }
 
-  private createTempFile(document: TextDocument): Promise<string> {
+  protected createTempFile(document: TextDocument): Promise<string> {
     return getTempFileWithDocumentContents(document);
   }
 
