@@ -1,4 +1,4 @@
-import { DocumentFormattingEditProvider, DocumentRangeFormattingEditProvider, ProviderResult, workspace } from 'coc.nvim';
+import { DocumentFormattingEditProvider, DocumentRangeFormattingEditProvider, ProviderResult } from 'coc.nvim';
 import { CancellationToken, Disposable, FormattingOptions, Range, TextEdit } from 'vscode-languageserver-protocol';
 import { TextDocument } from 'vscode-languageserver-textdocument';
 import { PythonSettings } from './configSettings';
@@ -7,9 +7,10 @@ import { BaseFormatter } from './formatters/baseFormatter';
 import { BlackFormatter } from './formatters/black';
 import { YapfFormatter } from './formatters/yapf';
 import { DarkerFormatter } from './formatters/darker';
+import { FormatterId } from './types';
 
 export class PythonFormattingEditProvider implements DocumentFormattingEditProvider, DocumentRangeFormattingEditProvider {
-  private formatters = new Map<string, BaseFormatter>();
+  private formatters = new Map<FormatterId, BaseFormatter>();
   private disposables: Disposable[] = [];
   private pythonSettings: PythonSettings;
 

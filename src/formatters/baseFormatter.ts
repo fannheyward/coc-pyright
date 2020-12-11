@@ -11,7 +11,7 @@ import { CancellationToken, FormattingOptions, Position, Range, TextEdit } from 
 import { TextDocument } from 'vscode-languageserver-textdocument';
 import { PythonSettings } from '../configSettings';
 import { isNotInstalledError, PythonExecutionService } from '../processService';
-import { ExecutionInfo, IPythonSettings } from '../types';
+import { ExecutionInfo, FormatterId, IPythonSettings } from '../types';
 
 const NEW_LINE_LENGTH = EOL.length;
 
@@ -292,7 +292,7 @@ export abstract class BaseFormatter {
   private _pythonSettings: IPythonSettings;
   private _outputChannel: OutputChannel;
 
-  constructor(public readonly Id: string) {
+  constructor(public readonly Id: FormatterId) {
     this._pythonSettings = PythonSettings.getInstance();
     this._outputChannel = workspace.createOutputChannel('coc-pyright-formatting');
   }

@@ -127,7 +127,7 @@ export interface ILintingSettings {
   readonly pylintUseMinimalCheckers: boolean;
 }
 export interface IFormattingSettings {
-  readonly provider: string;
+  readonly provider: FormatterId;
   autopep8Path: string;
   readonly autopep8Args: string[];
   blackPath: string;
