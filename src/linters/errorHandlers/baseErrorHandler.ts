@@ -2,12 +2,12 @@
 // Licensed under the MIT License.
 
 import { OutputChannel, Uri } from 'coc.nvim';
-import { ExecutionInfo, IErrorHandler, Product } from '../../types';
+import { ExecutionInfo, IErrorHandler, LinterId } from '../../types';
 
 export abstract class BaseErrorHandler implements IErrorHandler {
   private handler?: IErrorHandler;
 
-  constructor(protected product: Product, protected outputChannel: OutputChannel) {}
+  constructor(protected product: LinterId, protected outputChannel: OutputChannel) {}
   protected get nextHandler(): IErrorHandler | undefined {
     return this.handler;
   }

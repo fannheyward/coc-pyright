@@ -1,9 +1,9 @@
 import { OutputChannel, Uri } from 'coc.nvim';
-import { ExecutionInfo, Product } from '../../types';
+import { ExecutionInfo, LinterId } from '../../types';
 import { BaseErrorHandler } from './baseErrorHandler';
 
 export class StandardErrorHandler extends BaseErrorHandler {
-  constructor(product: Product, outputChannel: OutputChannel) {
+  constructor(product: LinterId, outputChannel: OutputChannel) {
     super(product, outputChannel);
   }
   public async handleError(error: Error, resource: Uri, execInfo: ExecutionInfo): Promise<boolean> {

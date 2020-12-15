@@ -78,7 +78,7 @@ export abstract class BaseLinter implements ILinter {
 
   constructor(info: ILinterInfo, protected readonly outputChannel: OutputChannel, protected readonly columnOffset = 0) {
     this._info = info;
-    this.errorHandler = new ErrorHandler(this.info.product, outputChannel);
+    this.errorHandler = new ErrorHandler(this.info.id, outputChannel);
     this._pythonSettings = PythonSettings.getInstance();
   }
 
