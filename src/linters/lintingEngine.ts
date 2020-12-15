@@ -85,7 +85,7 @@ export class LintingEngine {
     this.diagnosticCollection.set(document.uri, []);
 
     // Check if we need to lint this document
-    if (!(await this.shouldLintDocument(document))) {
+    if (!this.shouldLintDocument(document)) {
       return;
     }
 
@@ -107,7 +107,7 @@ export class LintingEngine {
     const activeLinters = await this.getActiveLinters(Uri.parse(document.uri));
     const promises: Promise<ILintMessage[]>[] = activeLinters.map(async (info: ILinterInfo) => {
       this.outputChannel.appendLine(`${'#'.repeat(10)} active linter: ${info.id}`);
-      const linter = await this.createLinter(info, this.outputChannel, Uri.parse(document.uri));
+      const linter = await this.createLinter(info, this.outputChannel);
       const promise = linter.lint(document, cancelToken.token);
       return promise;
     });
@@ -158,9 +158,10 @@ export class LintingEngine {
     return diagnostic;
   }
 
-  private async shouldLintDocument(document: TextDocument): Promise<boolean> {
-    if (!(await this.isLintingEnabled(Uri.parse(document.uri)))) {
-      this.diagnosticCollection.set(document.uri, []);
+  private shouldLintDocument(document: TextDocument): boolean {
+    const settings = this.configService;
+    if (!settings.linting.enabled) {
+      this.outputChannel.appendLine(`${'#'.repeat(5)} linting is disabled by python.linting.enabled`);
       return false;
     }
 
@@ -169,17 +170,19 @@ export class LintingEngine {
     }
 
     const relativeFileName = path.relative(workspace.rootPath, Uri.parse(document.uri).fsPath);
-    const settings = this.configService;
     // { dot: true } is important so dirs like `.venv` will be matched by globs
     const ignoreMinmatches = settings.linting.ignorePatterns.map((pattern) => new Minimatch(pattern, { dot: true }));
     if (ignoreMinmatches.some((matcher) => matcher.match(Uri.parse(document.uri).fsPath) || matcher.match(relativeFileName))) {
+      this.outputChannel.appendLine(`${'#'.repeat(5)} linting is ignored by python.linting.ignorePatterns`);
       return false;
     }
     const u = Uri.parse(document.uri);
-    if (u.scheme !== 'file' || !u.fsPath) {
+    const exists = fs.existsSync(u.fsPath);
+    if (!exists) {
+      this.outputChannel.appendLine(`${'#'.repeat(5)} linting is disabled because file is not exists: ${u.fsPath}`);
       return false;
     }
-    return fs.existsSync(u.fsPath);
+    return true;
   }
 
   public getAllLinterInfos(): ILinterInfo[] {
@@ -194,18 +197,12 @@ export class LintingEngine {
     throw new Error(`Invalid linter '${Product[product]}'`);
   }
 
-  public async isLintingEnabled(resource?: Uri): Promise<boolean> {
-    const settings = this.configService;
-    const activeLintersPresent = await this.getActiveLinters(resource);
-    return settings.linting.enabled && activeLintersPresent.length > 0;
-  }
-
   public async getActiveLinters(resource?: Uri): Promise<ILinterInfo[]> {
     return this.linters.filter((x) => x.isEnabled(resource));
   }
 
-  public async createLinter(info: ILinterInfo, outputChannel: OutputChannel, resource?: Uri): Promise<ILinter> {
-    if (!(await this.isLintingEnabled(resource))) {
+  public async createLinter(info: ILinterInfo, outputChannel: OutputChannel): Promise<ILinter> {
+    if (!this.configService.linting.enabled) {
       return new DisabledLinter(this.configService);
     }
     const error = 'Linter manager: Unknown linter';
