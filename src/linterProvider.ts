@@ -1,5 +1,4 @@
 import { commands, ConfigurationChangeEvent, DiagnosticCollection, ExtensionContext, Uri, workspace } from 'coc.nvim';
-import path from 'path';
 import { Disposable } from 'vscode-languageserver-protocol';
 import { TextDocument } from 'vscode-languageserver-textdocument';
 import { PythonSettings } from './configSettings';
@@ -54,17 +53,6 @@ export class LinterProvider implements Disposable {
       this.engine.lintDocument(document).catch(() => {});
       return;
     }
-
-    this.engine
-      .getActiveLinters(Uri.parse(document.uri))
-      .then((linters) => {
-        const fileName = path.basename(Uri.parse(document.uri).fsPath).toLowerCase();
-        const watchers = linters.filter((info) => info.configFileNames.indexOf(fileName) >= 0);
-        if (watchers.length > 0) {
-          setTimeout(() => this.engine.lintOpenPythonFiles(), 1000);
-        }
-      })
-      .catch(() => {});
   }
 
   private onDocumentClosed(document: TextDocument) {
