@@ -25,6 +25,8 @@ export class LinterProvider implements Disposable {
     this.disposables.push(disposable);
 
     this.disposables.push(commands.registerCommand('python.runLinting', this.runLinting.bind(this)));
+
+    setTimeout(() => this.engine.lintOpenPythonFiles().catch(this.emptyFn), 1200);
   }
 
   public dispose() {
@@ -61,5 +63,9 @@ export class LinterProvider implements Disposable {
     }
 
     this.engine.clearDiagnostics(document);
+  }
+
+  private emptyFn(): void {
+    // noop
   }
 }
