@@ -1,7 +1,5 @@
-import { OutputChannel, Uri } from 'coc.nvim';
+import { CancellationToken, OutputChannel, TextDocument, Uri, workspace } from 'coc.nvim';
 import path from 'path';
-import { CancellationToken } from 'vscode-languageserver-protocol';
-import { TextDocument } from 'vscode-languageserver-textdocument';
 import { ILinterInfo, ILintMessage } from '../types';
 import { BaseLinter } from './baseLinter';
 
@@ -28,8 +26,7 @@ export class Prospector extends BaseLinter {
   }
 
   protected async runLinter(document: TextDocument, cancellation: CancellationToken): Promise<ILintMessage[]> {
-    const cwd = this.getWorkspaceRootPath(document);
-    const relativePath = path.relative(cwd, Uri.parse(document.uri).fsPath);
+    const relativePath = path.relative(workspace.root, Uri.parse(document.uri).fsPath);
     return this.run(['--absolute-paths', '--output-format=json', relativePath], document, cancellation);
   }
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

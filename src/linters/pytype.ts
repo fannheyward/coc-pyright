@@ -1,8 +1,6 @@
-import { OutputChannel, Uri } from 'coc.nvim';
+import { CancellationToken, OutputChannel, TextDocument, Uri, workspace } from 'coc.nvim';
 import fs from 'fs-extra';
 import * as path from 'path';
-import { CancellationToken } from 'vscode-languageserver-protocol';
-import { TextDocument } from 'vscode-languageserver-textdocument';
 import { ILinterInfo, ILintMessage, LintMessageSeverity } from '../types';
 import { BaseLinter } from './baseLinter';
 
@@ -61,7 +59,7 @@ export class Pytype extends BaseLinter {
 
   protected async runLinter(document: TextDocument, cancellation: CancellationToken): Promise<ILintMessage[]> {
     const args: string[] = [];
-    if (await this.hasConfigurationFile(this.getWorkspaceRootPath(document))) {
+    if (await this.hasConfigurationFile(workspace.root)) {
       args.push(...['--config', pytypecfg]);
     }
     args.push(Uri.parse(document.uri).fsPath);

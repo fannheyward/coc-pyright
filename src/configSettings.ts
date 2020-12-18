@@ -1,10 +1,9 @@
 'use strict';
 
 import * as child_process from 'child_process';
-import { ConfigurationChangeEvent, Uri, workspace, WorkspaceConfiguration } from 'coc.nvim';
+import { ConfigurationChangeEvent, DiagnosticSeverity, Disposable, Uri, workspace, WorkspaceConfiguration } from 'coc.nvim';
 import path from 'path';
 import untildify from 'untildify';
-import { DiagnosticSeverity, Disposable } from 'vscode-languageserver-protocol';
 import which from 'which';
 import { SystemVariables } from './systemVariables';
 import { IFormattingSettings, ILintingSettings, IPythonSettings } from './types';

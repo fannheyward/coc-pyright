@@ -1,6 +1,4 @@
-import { Uri } from 'coc.nvim';
-import { CancellationToken, FormattingOptions, TextEdit } from 'vscode-languageserver-protocol';
-import { TextDocument } from 'vscode-languageserver-textdocument';
+import { CancellationToken, FormattingOptions, TextDocument, TextEdit, Thenable, Uri } from 'coc.nvim';
 import { BaseFormatter } from './baseFormatter';
 
 export class DarkerFormatter extends BaseFormatter {

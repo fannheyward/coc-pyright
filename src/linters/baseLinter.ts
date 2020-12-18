@@ -2,10 +2,8 @@
 // Licensed under the MIT License.
 'use strict';
 
-import { OutputChannel, Uri, workspace } from 'coc.nvim';
+import { CancellationToken, OutputChannel, TextDocument, Uri, workspace } from 'coc.nvim';
 import namedRegexp from 'named-js-regexp';
-import { CancellationToken } from 'vscode-languageserver-protocol';
-import { TextDocument } from 'vscode-languageserver-textdocument';
 import { PythonSettings } from '../configSettings';
 import { PythonExecutionService } from '../processService';
 import { ILinter, ILinterInfo, ILintMessage, IPythonSettings, LinterId, LintMessageSeverity } from '../types';
@@ -90,10 +88,6 @@ export abstract class BaseLinter implements ILinter {
     return this.runLinter(document, cancellation);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected getWorkspaceRootPath(_document?: TextDocument): string {
-    return workspace.rootPath;
-  }
   protected abstract runLinter(document: TextDocument, cancellation: CancellationToken): Promise<ILintMessage[]>;
 
   protected parseMessagesSeverity(error: string, categorySeverity: any): LintMessageSeverity {
@@ -123,10 +117,9 @@ export abstract class BaseLinter implements ILinter {
       return [];
     }
     const executionInfo = this.info.getExecutionInfo(args, Uri.parse(document.uri));
-    const cwd = this.getWorkspaceRootPath(document);
     try {
       const pythonToolsExecutionService = new PythonExecutionService();
-      const result = await pythonToolsExecutionService.exec(executionInfo, { cwd, token: cancellation, mergeStdOutErr: false });
+      const result = await pythonToolsExecutionService.exec(executionInfo, { cwd: workspace.root, token: cancellation, mergeStdOutErr: false });
 
       this.outputChannel.append(`${'#'.repeat(10)} Linting Output - ${this.info.id}${'#'.repeat(10)}\n`);
       this.outputChannel.append(result.stdout);

@@ -1,6 +1,4 @@
-import { commands, ConfigurationChangeEvent, DiagnosticCollection, ExtensionContext, Uri, workspace } from 'coc.nvim';
-import { Disposable } from 'vscode-languageserver-protocol';
-import { TextDocument } from 'vscode-languageserver-textdocument';
+import { commands, ConfigurationChangeEvent, DiagnosticCollection, Disposable, ExtensionContext, TextDocument, Uri, workspace } from 'coc.nvim';
 import { PythonSettings } from './configSettings';
 import { LintingEngine } from './linters/lintingEngine';
 

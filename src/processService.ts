@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { ExecOptions, spawn, SpawnOptions as ChildProcessSpawnOptions } from 'child_process';
+import { CancellationToken } from 'coc.nvim';
 import * as iconv from 'iconv-lite';
 import { homedir } from 'os';
-import { CancellationToken } from 'vscode-languageserver-protocol';
 import { createDeferred } from './async';
 import { PythonSettings } from './configSettings';
 import { ExecutionInfo, ExecutionResult } from './types';

@@ -1,7 +1,21 @@
-import { commands, ExtensionContext, extensions, LanguageClient, LanguageClientOptions, languages, NodeModule, services, TransportKind, workspace } from 'coc.nvim';
+import {
+  commands,
+  DocumentSelector,
+  ExtensionContext,
+  extensions,
+  LanguageClient,
+  LanguageClientOptions,
+  languages,
+  NodeModule,
+  services,
+  TextEdit,
+  TransportKind,
+  window,
+  workspace,
+  WorkspaceEdit,
+} from 'coc.nvim';
 import { existsSync } from 'fs';
 import { lt } from 'semver';
-import { DocumentSelector, TextEdit, WorkspaceEdit } from 'vscode-languageserver-protocol';
 import { PythonFormattingEditProvider } from './formatProvider';
 import { LinterProvider } from './linterProvider';
 
@@ -10,16 +24,16 @@ const documentSelector: DocumentSelector = [{ scheme: 'file', language: 'python'
 export async function activate(context: ExtensionContext): Promise<void> {
   const state = extensions.getExtensionState('coc-python');
   if (state.toString() === 'activated') {
-    workspace.showMessage(`coc-python is installed and activated, coc-pyright will be disabled`, 'warning');
+    window.showMessage(`coc-python is installed and activated, coc-pyright will be disabled`, 'warning');
     return;
   }
   if (lt(process.versions.node, '12.0.0')) {
-    workspace.showMessage(`Pyright needs Node.js v12+ to work, your Node.js is ${process.version}.`, 'error');
+    window.showMessage(`Pyright needs Node.js v12+ to work, your Node.js is ${process.version}.`, 'error');
     return;
   }
   const module = context.asAbsolutePath('node_modules/pyright/langserver.index.js');
   if (!existsSync(module)) {
-    workspace.showMessage(`Pyright file doesn't exist, please reinstall coc-pyright`, 'error');
+    window.showMessage(`Pyright file doesn't exist, please reinstall coc-pyright`, 'error');
     return;
   }
 
@@ -28,7 +42,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
     transport: TransportKind.ipc,
   };
 
-  const outputChannel = workspace.createOutputChannel('Pyright');
+  const outputChannel = window.createOutputChannel('Pyright');
   const config = workspace.getConfiguration('pyright');
   const clientOptions: LanguageClientOptions = {
     documentSelector,
@@ -81,7 +95,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
         const root = workspace.root;
         const module = args.pop();
         if (!module) {
-          workspace.showMessage(`Module name is missing`, 'warning');
+          window.showMessage(`Module name is missing`, 'warning');
           return;
         }
 

@@ -3,12 +3,24 @@
 
 'use strict';
 
-import { DiagnosticCollection, languages, OutputChannel, Uri, workspace } from 'coc.nvim';
+import {
+  CancellationTokenSource,
+  Diagnostic,
+  DiagnosticCollection,
+  DiagnosticSeverity,
+  DocumentFilter,
+  languages,
+  OutputChannel,
+  Position,
+  Range,
+  TextDocument,
+  Uri,
+  window,
+  workspace,
+} from 'coc.nvim';
 import fs from 'fs-extra';
 import { Minimatch } from 'minimatch';
 import path from 'path';
-import { CancellationTokenSource, Diagnostic, DiagnosticSeverity, DocumentFilter, Position, Range } from 'vscode-languageserver-protocol';
-import { TextDocument } from 'vscode-languageserver-textdocument';
 import { PythonSettings } from '../configSettings';
 import { ILinter, ILinterInfo, ILintMessage, LinterErrors, LintMessageSeverity, Product } from '../types';
 import { Bandit } from './bandit';
@@ -48,7 +60,7 @@ export class LintingEngine {
   protected linters: ILinterInfo[];
 
   constructor() {
-    this.outputChannel = workspace.createOutputChannel('coc-pyright-linting');
+    this.outputChannel = window.createOutputChannel('coc-pyright-linting');
     this.diagnosticCollection = languages.createDiagnosticCollection('python');
     this.configService = PythonSettings.getInstance();
     this.linters = [
@@ -169,7 +181,7 @@ export class LintingEngine {
       return false;
     }
 
-    const relativeFileName = path.relative(workspace.rootPath, Uri.parse(document.uri).fsPath);
+    const relativeFileName = path.relative(workspace.root, Uri.parse(document.uri).fsPath);
     // { dot: true } is important so dirs like `.venv` will be matched by globs
     const ignoreMinmatches = settings.linting.ignorePatterns.map((pattern) => new Minimatch(pattern, { dot: true }));
     if (ignoreMinmatches.some((matcher) => matcher.match(Uri.parse(document.uri).fsPath) || matcher.match(relativeFileName))) {

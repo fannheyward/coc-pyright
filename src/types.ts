@@ -1,6 +1,4 @@
-import { Uri } from 'coc.nvim';
-import { CancellationToken, DiagnosticSeverity } from 'vscode-languageserver-protocol';
-import { TextDocument } from 'vscode-languageserver-textdocument';
+import { CancellationToken, DiagnosticSeverity, TextDocument, Uri } from 'coc.nvim';
 
 export interface ExecutionInfo {
   execPath: string;

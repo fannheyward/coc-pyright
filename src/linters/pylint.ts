@@ -1,12 +1,10 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-import { OutputChannel, Uri } from 'coc.nvim';
+import { CancellationToken, OutputChannel, TextDocument, Uri, workspace } from 'coc.nvim';
 import fs from 'fs-extra';
 import * as os from 'os';
 import * as path from 'path';
-import { CancellationToken } from 'vscode-languageserver-protocol';
-import { TextDocument } from 'vscode-languageserver-textdocument';
 import { ILinterInfo, ILintMessage } from '../types';
 import { BaseLinter } from './baseLinter';
 
@@ -26,15 +24,14 @@ export class Pylint extends BaseLinter {
     //  a) there are no custom arguments and
     //  b) there is no pylintrc file next to the file or at the workspace root
     const uri = Uri.parse(document.uri);
-    const workspaceRoot = this.getWorkspaceRootPath(document);
     const settings = this.pythonSettings;
     if (
       settings.linting.pylintUseMinimalCheckers &&
       this.info.linterArgs(uri).length === 0 &&
       // Check pylintrc next to the file or above up to and including the workspace root
-      !(await this.hasConfigrationFileInWorkspace(path.dirname(uri.fsPath), workspaceRoot)) &&
+      !(await this.hasConfigrationFileInWorkspace(path.dirname(uri.fsPath), workspace.root)) &&
       // Check for pylintrc at the root and above
-      !(await this.hasConfigurationFile(this.getWorkspaceRootPath(document)))
+      !(await this.hasConfigurationFile(workspace.root))
     ) {
       // Disable all checkers up front and then selectively add back in:
       // - All F checkers

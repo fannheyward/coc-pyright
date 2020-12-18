@@ -1,7 +1,5 @@
-import { OutputChannel, Uri, workspace } from 'coc.nvim';
+import { CancellationToken, OutputChannel, TextDocument, Uri, workspace } from 'coc.nvim';
 import * as path from 'path';
-import { CancellationToken } from 'vscode-languageserver-protocol';
-import { TextDocument } from 'vscode-languageserver-textdocument';
 import { ILinterInfo, ILintMessage, LintMessageSeverity } from '../types';
 import { BaseLinter } from './baseLinter';
 

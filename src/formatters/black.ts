@@ -1,6 +1,4 @@
-import { workspace } from 'coc.nvim';
-import { CancellationToken, FormattingOptions, Range, TextEdit } from 'vscode-languageserver-protocol';
-import { TextDocument } from 'vscode-languageserver-textdocument';
+import { CancellationToken, FormattingOptions, Range, TextDocument, TextEdit, Thenable, window } from 'coc.nvim';
 import { BaseFormatter } from './baseFormatter';
 
 export class BlackFormatter extends BaseFormatter {
@@ -15,7 +13,7 @@ export class BlackFormatter extends BaseFormatter {
       const errorMessage = async () => {
         this.outputChannel.appendLine('Black does not support the "Format Selection" command');
         // Black does not support partial formatting on purpose.
-        workspace.showMessage('Black does not support the "Format Selection" command', 'error');
+        window.showMessage('Black does not support the "Format Selection" command', 'error');
         return [] as TextEdit[];
       };
 

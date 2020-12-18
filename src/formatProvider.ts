@@ -1,6 +1,14 @@
-import { DocumentFormattingEditProvider, DocumentRangeFormattingEditProvider, ProviderResult } from 'coc.nvim';
-import { CancellationToken, Disposable, FormattingOptions, Range, TextEdit } from 'vscode-languageserver-protocol';
-import { TextDocument } from 'vscode-languageserver-textdocument';
+import {
+  CancellationToken,
+  Disposable,
+  DocumentFormattingEditProvider,
+  DocumentRangeFormattingEditProvider,
+  FormattingOptions,
+  ProviderResult,
+  Range,
+  TextDocument,
+  TextEdit,
+} from 'coc.nvim';
 import { PythonSettings } from './configSettings';
 import { AutoPep8Formatter } from './formatters/autopep8';
 import { BaseFormatter } from './formatters/baseFormatter';

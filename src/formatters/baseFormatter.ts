@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { OutputChannel, Uri, workspace } from 'coc.nvim';
+import { CancellationToken, FormattingOptions, OutputChannel, Position, Range, TextDocument, TextEdit, Thenable, Uri, window, workspace } from 'coc.nvim';
 import { Diff, diff_match_patch } from 'diff-match-patch';
 import fs from 'fs-extra';
 import md5 from 'md5';
@@ -7,8 +7,6 @@ import { EOL } from 'os';
 import path from 'path';
 import { SemVer } from 'semver';
 import { promisify } from 'util';
-import { CancellationToken, FormattingOptions, Position, Range, TextEdit } from 'vscode-languageserver-protocol';
-import { TextDocument } from 'vscode-languageserver-textdocument';
 import { PythonSettings } from '../configSettings';
 import { isNotInstalledError, PythonExecutionService } from '../processService';
 import { ExecutionInfo, FormatterId, IPythonSettings } from '../types';
@@ -294,7 +292,7 @@ export abstract class BaseFormatter {
 
   constructor(public readonly Id: FormatterId) {
     this._pythonSettings = PythonSettings.getInstance();
-    this._outputChannel = workspace.createOutputChannel('coc-pyright-formatting');
+    this._outputChannel = window.createOutputChannel('coc-pyright-formatting');
   }
 
   protected get pythonSettings(): IPythonSettings {
@@ -314,10 +312,9 @@ export abstract class BaseFormatter {
     return path.dirname(filepath);
   }
   protected getWorkspaceUri(document: TextDocument): Uri | undefined {
-    const { rootPath } = workspace;
     const filepath = Uri.parse(document.uri).fsPath;
-    if (!filepath.startsWith(rootPath)) return;
-    return Uri.file(rootPath);
+    if (!filepath.startsWith(workspace.root)) return;
+    return Uri.file(workspace.root);
   }
 
   private getExecutionInfo(args: string[]): ExecutionInfo {
@@ -332,7 +329,7 @@ export abstract class BaseFormatter {
 
   protected async provideDocumentFormattingEdits(document: TextDocument, _options: FormattingOptions, token: CancellationToken, args: string[], cwd?: string): Promise<TextEdit[]> {
     if (typeof cwd !== 'string' || cwd.length === 0) {
-      cwd = Uri.file(workspace.rootPath).fsPath;
+      cwd = Uri.file(workspace.root).fsPath;
     }
 
     // autopep8 and yapf have the ability to read from the process input stream and return the formatted code out of the output stream.
@@ -367,7 +364,7 @@ export abstract class BaseFormatter {
     promise.then(
       () => {
         this.deleteTempFile(filepath, tempFile).catch(() => {});
-        workspace.showMessage(`Formatted with ${this.Id}`);
+        window.showMessage(`Formatted with ${this.Id}`);
         const { nvim } = workspace;
         setTimeout(async () => {
           const line = (await nvim.call('coc#util#echo_line')) as string;
@@ -389,7 +386,7 @@ export abstract class BaseFormatter {
     }
     this.outputChannel.appendLine(customError);
     this.outputChannel.appendLine(error.message);
-    workspace.showMessage(customError, 'warning');
+    window.showMessage(customError, 'warning');
   }
 
   protected createTempFile(document: TextDocument): Promise<string> {

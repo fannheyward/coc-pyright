@@ -3,9 +3,7 @@
 
 'use strict';
 
-import { OutputChannel, Uri } from 'coc.nvim';
-import { CancellationToken } from 'vscode-languageserver-protocol';
-import { TextDocument } from 'vscode-languageserver-textdocument';
+import { CancellationToken, OutputChannel, TextDocument, Uri } from 'coc.nvim';
 import { ILinterInfo, ILintMessage, LintMessageSeverity } from '../types';
 import { BaseLinter } from './baseLinter';
 

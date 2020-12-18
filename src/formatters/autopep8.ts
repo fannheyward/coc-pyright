@@ -1,5 +1,4 @@
-import { CancellationToken, FormattingOptions, Range, TextEdit } from 'vscode-languageserver-protocol';
-import { TextDocument } from 'vscode-languageserver-textdocument';
+import { TextDocument, FormattingOptions, CancellationToken, Range, Thenable, TextEdit } from 'coc.nvim';
 import { BaseFormatter } from './baseFormatter';
 
 export class AutoPep8Formatter extends BaseFormatter {
