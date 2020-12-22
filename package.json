@@ -11,7 +11,7 @@
     "pyright"
   ],
   "engines": {
-    "coc": "^0.0.79"
+    "coc": "^0.0.80"
   },
   "repository": {
     "type": "git",
