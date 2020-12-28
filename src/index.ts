@@ -16,6 +16,7 @@ import {
 } from 'coc.nvim';
 import { existsSync } from 'fs';
 import { lt } from 'semver';
+import { PythonCodeActionProvider } from './codeActionsProvider';
 import { PythonFormattingEditProvider } from './formatProvider';
 import { LinterProvider } from './linterProvider';
 
@@ -62,6 +63,9 @@ export async function activate(context: ExtensionContext): Promise<void> {
   context.subscriptions.push(languages.registerDocumentRangeFormatProvider(documentSelector, formatProvider));
 
   context.subscriptions.push(new LinterProvider(context));
+
+  const codeActionProvider = new PythonCodeActionProvider();
+  context.subscriptions.push(languages.registerCodeActionProvider(documentSelector, codeActionProvider, 'Pyright'));
 
   const textEditorCommands = ['pyright.organizeimports', 'pyright.addoptionalforparam', 'pyright.restartserver'];
   textEditorCommands.forEach((commandName: string) => {
