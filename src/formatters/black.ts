@@ -1,9 +1,10 @@
-import { CancellationToken, FormattingOptions, Range, TextDocument, TextEdit, Thenable, window } from 'coc.nvim';
+import { CancellationToken, FormattingOptions, OutputChannel, Range, TextDocument, TextEdit, Thenable, window } from 'coc.nvim';
+import { IPythonSettings } from '../types';
 import { BaseFormatter } from './baseFormatter';
 
 export class BlackFormatter extends BaseFormatter {
-  constructor() {
-    super('black');
+  constructor(public readonly pythonSettings: IPythonSettings, public readonly outputChannel: OutputChannel) {
+    super('black', pythonSettings, outputChannel);
   }
 
   public formatDocument(document: TextDocument, options: FormattingOptions, token: CancellationToken, range?: Range): Thenable<TextEdit[]> {

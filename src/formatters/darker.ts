@@ -1,9 +1,10 @@
-import { CancellationToken, FormattingOptions, TextDocument, TextEdit, Thenable, Uri } from 'coc.nvim';
+import { CancellationToken, FormattingOptions, OutputChannel, TextDocument, TextEdit, Thenable, Uri } from 'coc.nvim';
+import { IPythonSettings } from '../types';
 import { BaseFormatter } from './baseFormatter';
 
 export class DarkerFormatter extends BaseFormatter {
-  constructor() {
-    super('darker');
+  constructor(public readonly pythonSettings: IPythonSettings, public readonly outputChannel: OutputChannel) {
+    super('darker', pythonSettings, outputChannel);
   }
 
   createTempFile(document: TextDocument): Promise<string> {

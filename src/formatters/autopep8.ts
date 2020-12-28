@@ -1,9 +1,10 @@
-import { TextDocument, FormattingOptions, CancellationToken, Range, Thenable, TextEdit } from 'coc.nvim';
+import { TextDocument, FormattingOptions, CancellationToken, Range, Thenable, TextEdit, OutputChannel } from 'coc.nvim';
+import { IPythonSettings } from '../types';
 import { BaseFormatter } from './baseFormatter';
 
 export class AutoPep8Formatter extends BaseFormatter {
-  constructor() {
-    super('autopep8');
+  constructor(public readonly pythonSettings: IPythonSettings, public readonly outputChannel: OutputChannel) {
+    super('autopep8', pythonSettings, outputChannel);
   }
 
   public formatDocument(document: TextDocument, options: FormattingOptions, token: CancellationToken, range?: Range): Thenable<TextEdit[]> {

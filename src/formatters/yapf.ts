@@ -1,9 +1,10 @@
-import { TextDocument, FormattingOptions, CancellationToken, Range, Thenable, TextEdit } from 'coc.nvim';
+import { TextDocument, FormattingOptions, CancellationToken, Range, Thenable, TextEdit, OutputChannel } from 'coc.nvim';
+import { IPythonSettings } from '../types';
 import { BaseFormatter } from './baseFormatter';
 
 export class YapfFormatter extends BaseFormatter {
-  constructor() {
-    super('yapf');
+  constructor(public readonly pythonSettings: IPythonSettings, public readonly outputChannel: OutputChannel) {
+    super('yapf', pythonSettings, outputChannel);
   }
 
   public formatDocument(document: TextDocument, options: FormattingOptions, token: CancellationToken, range?: Range): Thenable<TextEdit[]> {

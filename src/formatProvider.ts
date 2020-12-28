@@ -4,10 +4,12 @@ import {
   DocumentFormattingEditProvider,
   DocumentRangeFormattingEditProvider,
   FormattingOptions,
+  OutputChannel,
   ProviderResult,
   Range,
   TextDocument,
   TextEdit,
+  window,
 } from 'coc.nvim';
 import { PythonSettings } from './configSettings';
 import { AutoPep8Formatter } from './formatters/autopep8';
@@ -21,20 +23,27 @@ export class PythonFormattingEditProvider implements DocumentFormattingEditProvi
   private formatters = new Map<FormatterId, BaseFormatter>();
   private disposables: Disposable[] = [];
   private pythonSettings: PythonSettings;
+  private outputChannel: OutputChannel;
 
   constructor() {
     this.pythonSettings = PythonSettings.getInstance();
-    this.formatters.set('black', new BlackFormatter());
-    this.formatters.set('yapf', new YapfFormatter());
-    this.formatters.set('autopep8', new AutoPep8Formatter());
-    this.formatters.set('darker', new DarkerFormatter());
+    this.outputChannel = window.createOutputChannel('coc-pyright-formatting');
+
+    this.formatters.set('black', new BlackFormatter(this.pythonSettings, this.outputChannel));
+    this.formatters.set('yapf', new YapfFormatter(this.pythonSettings, this.outputChannel));
+    this.formatters.set('autopep8', new AutoPep8Formatter(this.pythonSettings, this.outputChannel));
+    this.formatters.set('darker', new DarkerFormatter(this.pythonSettings, this.outputChannel));
   }
 
   private async _provideEdits(document: TextDocument, options: FormattingOptions, token: CancellationToken, range?: Range): Promise<TextEdit[]> {
     const provider = this.pythonSettings.formatting.provider;
     const formater = this.formatters.get(provider);
+    if (!formater) {
+      this.outputChannel.appendLine(`${'#'.repeat(10)} Error: python.formatting.provider is ${provider}, which is not supported`);
+    }
     if (!formater) return [];
 
+    this.outputChannel.appendLine(`${'#'.repeat(10)} active formattor: ${formater.Id}`);
     return await formater.formatDocument(document, options, token, range);
   }
 

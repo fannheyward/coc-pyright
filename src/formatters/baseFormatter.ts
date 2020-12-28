@@ -7,7 +7,6 @@ import { EOL } from 'os';
 import path from 'path';
 import { SemVer } from 'semver';
 import { promisify } from 'util';
-import { PythonSettings } from '../configSettings';
 import { isNotInstalledError, PythonExecutionService } from '../processService';
 import { ExecutionInfo, FormatterId, IPythonSettings } from '../types';
 
@@ -287,21 +286,7 @@ function getTextEditsFromPatch(before: string, patch: string): TextEdit[] {
 }
 
 export abstract class BaseFormatter {
-  private _pythonSettings: IPythonSettings;
-  private _outputChannel: OutputChannel;
-
-  constructor(public readonly Id: FormatterId) {
-    this._pythonSettings = PythonSettings.getInstance();
-    this._outputChannel = window.createOutputChannel('coc-pyright-formatting');
-  }
-
-  protected get pythonSettings(): IPythonSettings {
-    return this._pythonSettings;
-  }
-
-  protected get outputChannel(): OutputChannel {
-    return this._outputChannel;
-  }
+  constructor(public readonly Id: FormatterId, public readonly pythonSettings: IPythonSettings, public readonly outputChannel: OutputChannel) {}
 
   public abstract formatDocument(document: TextDocument, options: FormattingOptions, token: CancellationToken, range?: Range): Thenable<TextEdit[]>;
   protected getDocumentPath(document: TextDocument, fallbackPath?: string): string {
@@ -344,11 +329,18 @@ export abstract class BaseFormatter {
     args.push(tempFile);
 
     const executionInfo = this.getExecutionInfo(args);
+    this.outputChannel.appendLine(`execPath:   ${executionInfo.execPath}`);
+    this.outputChannel.appendLine(`moduleName: ${executionInfo.moduleName}`);
+    this.outputChannel.appendLine(`args:       ${executionInfo.args}`);
+
     const pythonToolsExecutionService = new PythonExecutionService();
     const promise = pythonToolsExecutionService
       .exec(executionInfo, { cwd, throwOnStdErr: false, token })
       .then((output) => output.stdout)
       .then((data) => {
+        this.outputChannel.appendLine('');
+        this.outputChannel.appendLine(`${'#'.repeat(10)} ${this.Id} output:`);
+        this.outputChannel.appendLine(data);
         if (this.checkCancellation(filepath, tempFile, token)) {
           return [] as TextEdit[];
         }
@@ -379,6 +371,7 @@ export abstract class BaseFormatter {
   }
 
   protected async handleError(_expectedFileName: string, error: Error) {
+    this.outputChannel.appendLine(`${'#'.repeat(10)} Formatting with ${this.Id} failed`);
     let customError = `Formatting with ${this.Id} failed.`;
 
     if (isNotInstalledError(error)) {
@@ -402,6 +395,7 @@ export abstract class BaseFormatter {
 
   private checkCancellation(originalFile: string, tempFile: string, token?: CancellationToken): boolean {
     if (token && token.isCancellationRequested) {
+      this.outputChannel.appendLine(`${'#'.repeat(10)} ${this.Id} formatting action is canceled.`);
       this.deleteTempFile(originalFile, tempFile).catch(() => {});
       return true;
     }
