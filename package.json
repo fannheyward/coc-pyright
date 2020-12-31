@@ -1150,6 +1150,22 @@
           ],
           "scope": "resource"
         },
+        "pyright.trace.server": {
+          "type": "string",
+          "scope": "window",
+          "enum": [
+            "off",
+            "messages",
+            "verbose"
+          ],
+          "enumDescriptions": [
+            "No traces",
+            "Error only",
+            "Full log"
+          ],
+          "default": "off",
+          "description": "Trace requests to Pyright"
+        },
         "pyright.disableCompletion": {
           "type": "boolean",
           "default": false,
