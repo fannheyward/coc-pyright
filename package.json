@@ -44,7 +44,6 @@
     "@types/fs-extra": "^9.0.2",
     "@types/md5": "^2.2.0",
     "@types/minimatch": "^3.0.3",
-    "@types/node": "^14.11.8",
     "@types/semver": "^7.3.4",
     "@types/which": "^2.0.0",
     "@typescript-eslint/eslint-plugin": "^4.5.0",
