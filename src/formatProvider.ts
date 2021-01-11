@@ -40,8 +40,8 @@ export class PythonFormattingEditProvider implements DocumentFormattingEditProvi
     const formater = this.formatters.get(provider);
     if (!formater) {
       this.outputChannel.appendLine(`${'#'.repeat(10)} Error: python.formatting.provider is ${provider}, which is not supported`);
+      return [];
     }
-    if (!formater) return [];
 
     this.outputChannel.appendLine(`${'#'.repeat(10)} active formattor: ${formater.Id}`);
     return await formater.formatDocument(document, options, token, range);
