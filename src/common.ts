@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { Position, Range, TextEdit } from 'coc.nvim';
+import { Position, Range, TextDocument, TextEdit } from 'coc.nvim';
 import { Diff, diff_match_patch } from 'diff-match-patch';
 import { EOL } from 'os';
 const NEW_LINE_LENGTH = EOL.length;
@@ -225,4 +225,41 @@ export function getTextEditsFromPatch(before: string, patch: string): TextEdit[]
   });
 
   return textEdits;
+}
+
+export function splitLines(str: string, splitOptions: { trim: boolean; removeEmptyEntries: boolean }): string[] {
+  let lines = str.split(/\r?\n/g);
+  if (splitOptions.trim) {
+    lines = lines.map((line) => line.trim());
+  }
+  if (splitOptions.removeEmptyEntries) {
+    lines = lines.filter((line) => line.length > 0);
+  }
+  return lines;
+}
+
+export function getWindowsLineEndingCount(document: TextDocument, offset: number) {
+  const eolPattern = /\r\n/g;
+  const readBlock = 1024;
+  let count = 0;
+  let offsetDiff = offset.valueOf();
+
+  // In order to prevent the one-time loading of large files from taking up too much memory
+  for (let pos = 0; pos < offset; pos += readBlock) {
+    const startAt = document.positionAt(pos);
+
+    let endAt: Position;
+    if (offsetDiff >= readBlock) {
+      endAt = document.positionAt(pos + readBlock);
+      offsetDiff = offsetDiff - readBlock;
+    } else {
+      endAt = document.positionAt(pos + offsetDiff);
+    }
+
+    const text = document.getText(Range.create(startAt, endAt!));
+    const cr = text.match(eolPattern);
+
+    count += cr ? cr.length : 0;
+  }
+  return count;
 }

@@ -4,6 +4,7 @@
 
 import { CancellationToken, OutputChannel, TextDocument, Uri, workspace } from 'coc.nvim';
 import namedRegexp from 'named-js-regexp';
+import { splitLines } from '../common';
 import { PythonSettings } from '../configSettings';
 import { PythonExecutionService } from '../processService';
 import { ILinter, ILinterInfo, ILintMessage, IPythonSettings, LinterId, LintMessageSeverity } from '../types';
@@ -30,17 +31,6 @@ export function matchNamedRegEx(data: string, regex: string): IRegexGroup | unde
   }
 
   return undefined;
-}
-
-function splitLines(str: string, splitOptions: { trim: boolean; removeEmptyEntries: boolean }): string[] {
-  let lines = str.split(/\r?\n/g);
-  if (splitOptions.trim) {
-    lines = lines.map((line) => line.trim());
-  }
-  if (splitOptions.removeEmptyEntries) {
-    lines = lines.filter((line) => line.length > 0);
-  }
-  return lines;
 }
 
 export function parseLine(line: string, regex: string, linterID: LinterId, colOffset = 0): ILintMessage | undefined {

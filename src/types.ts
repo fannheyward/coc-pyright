@@ -1,4 +1,6 @@
+import { ChildProcess } from 'child_process';
 import { CancellationToken, DiagnosticSeverity, TextDocument, Uri } from 'coc.nvim';
+import { Observable } from 'rxjs/Observable';
 
 export interface ExecutionInfo {
   execPath: string;
@@ -10,6 +12,17 @@ export interface ExecutionInfo {
 export interface ExecutionResult<T extends string | Buffer> {
   stdout: T;
   stderr?: T;
+}
+
+export interface Output<T extends string | Buffer> {
+  source: 'stdout' | 'stderr';
+  out: T;
+}
+
+export interface ObservableExecutionResult<T extends string | Buffer> {
+  proc: ChildProcess | undefined;
+  out: Observable<Output<T>>;
+  dispose(): void;
 }
 
 export enum Product {
@@ -26,6 +39,7 @@ export enum Product {
   autopep8 = 11,
   black = 12,
   darker = 13,
+  rope = 14,
 }
 
 export type LinterId = 'flake8' | 'mypy' | 'pep8' | 'prospector' | 'pydocstyle' | 'pylama' | 'pylint' | 'bandit' | 'pytype';

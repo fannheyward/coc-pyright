@@ -3,9 +3,10 @@ import { ExecOptions, spawn, SpawnOptions as ChildProcessSpawnOptions } from 'ch
 import { CancellationToken } from 'coc.nvim';
 import * as iconv from 'iconv-lite';
 import { homedir } from 'os';
+import { Observable } from 'rxjs/Observable';
 import { createDeferred } from './async';
 import { PythonSettings } from './configSettings';
-import { ExecutionInfo, ExecutionResult } from './types';
+import { ExecutionInfo, ExecutionResult, ObservableExecutionResult, Output } from './types';
 
 const DEFAULT_ENCODING = 'utf8';
 
@@ -75,6 +76,57 @@ class ProcessService {
     } catch {
       // Ignore.
     }
+  }
+
+  public execObservable(file: string, args: string[], options: SpawnOptions = {}): ObservableExecutionResult<string> {
+    const spawnOptions = this.getDefaultOptions(options);
+    const encoding = spawnOptions.encoding ? spawnOptions.encoding : 'utf8';
+    const proc = spawn(file, args, spawnOptions);
+    let procExited = false;
+
+    const output = new Observable<Output<string>>((subscriber) => {
+      if (options.token) {
+        options.token.onCancellationRequested(() => {
+          if (!procExited && !proc.killed) {
+            proc.kill();
+            procExited = true;
+          }
+        });
+      }
+
+      const sendOutput = (source: 'stdout' | 'stderr', data: Buffer) => {
+        const out = this.decoder.decode([data], encoding);
+        if (source === 'stderr' && options.throwOnStdErr) {
+          subscriber.error(new StdErrError(out));
+        } else {
+          subscriber.next({ source, out });
+        }
+      };
+      proc.stdout!.on('data', (data: Buffer) => sendOutput('stdout', data));
+      proc.stderr!.on('data', (data: Buffer) => sendOutput('stderr', data));
+
+      const onExit = (ex?: any) => {
+        if (procExited) return;
+        procExited = true;
+        if (ex) subscriber.error(ex);
+        subscriber.complete();
+      };
+
+      proc.once('close', () => {
+        onExit();
+      });
+      proc.once('error', onExit);
+    });
+
+    return {
+      proc,
+      out: output,
+      dispose: () => {
+        if (proc && !proc.killed) {
+          ProcessService.kill(proc.pid as number);
+        }
+      },
+    };
   }
 
   public exec(file: string, args: string[], options: SpawnOptions = {}): Promise<ExecutionResult<string>> {
@@ -164,6 +216,11 @@ export class PythonExecutionService {
       .exec(this.pythonPath, ['-c', `import ${moduleName}`], { throwOnStdErr: true })
       .then(() => true)
       .catch(() => false);
+  }
+
+  public execObservable(args: string[], options: SpawnOptions): ObservableExecutionResult<string> {
+    const opts: SpawnOptions = { ...options };
+    return this.procService.execObservable(this.pythonPath, args, opts);
   }
 
   async exec(executionInfo: ExecutionInfo, options: SpawnOptions): Promise<ExecutionResult<string>> {

@@ -1,4 +1,7 @@
 import {
+  CodeActionContext,
+  CodeActionProvider,
+  Command,
   commands,
   DocumentSelector,
   ExtensionContext,
@@ -7,7 +10,9 @@ import {
   LanguageClientOptions,
   languages,
   NodeModule,
+  Range,
   services,
+  TextDocument,
   TextEdit,
   TransportKind,
   window,
@@ -19,6 +24,7 @@ import { lt } from 'semver';
 import { PythonCodeActionProvider } from './codeActionsProvider';
 import { PythonFormattingEditProvider } from './formatProvider';
 import { LinterProvider } from './linterProvider';
+import { extractMethod, extractVariable } from './simpleRefactorProvider';
 
 const documentSelector: DocumentSelector = [{ scheme: 'file', language: 'python' }];
 
@@ -111,4 +117,48 @@ export async function activate(context: ExtensionContext): Promise<void> {
       })
     );
   });
+
+  let disposable = commands.registerCommand(
+    'python.refactorExtractVariable',
+    async (document: TextDocument, range: Range) => {
+      await extractVariable(context.extensionPath, document, range, outputChannel).catch(() => {});
+    },
+    null,
+    true
+  );
+  context.subscriptions.push(disposable);
+
+  disposable = commands.registerCommand(
+    'python.refactorExtractMethod',
+    async (document: TextDocument, range: Range) => {
+      await extractMethod(context.extensionPath, document, range, outputChannel).catch(() => {});
+    },
+    null,
+    true
+  );
+  context.subscriptions.push(disposable);
+
+  const provider: CodeActionProvider = {
+    provideCodeActions: (document: TextDocument, range: Range, actionContext: CodeActionContext): Command[] => {
+      // if (actionContext.only && !actionContext.only.includes(CodeActionKind.Refactor)) return [];
+      // TODO
+      if (actionContext.only && !actionContext.only.includes('refactor')) return [];
+
+      const commands: Command[] = [];
+      commands.push({
+        command: 'python.refactorExtractVariable',
+        title: 'Extract Variable',
+        arguments: [document, range],
+      });
+      commands.push({
+        command: 'python.refactorExtractMethod',
+        title: 'Extract Method',
+        arguments: [document, range],
+      });
+      return commands;
+    },
+  };
+  // languages.registerCodeActionProvider(['python'], provider, 'python.simpleRefactor', [CodeActionKind.Refactor]);
+  // TODO
+  languages.registerCodeActionProvider(['python'], provider, 'python.simpleRefactor', ['refactor']);
 }
