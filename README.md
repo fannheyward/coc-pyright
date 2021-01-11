@@ -17,6 +17,8 @@
 
 ## Configurations
 
+These configurations are used by `coc-pyright`, you need to set them in your `coc-settings.json`.
+
 - `python.analysis.autoImportCompletions`: Determines whether pyright offers auto-import completions, default: `true`
 - `python.analysis.autoSearchPaths`: Automatically add common search paths like 'src', default: `true`
 - `python.analysis.diagnosticMode`: Analyzes and reports errors for open only or all files in workspace, default: `openFilesOnly`
@@ -48,9 +50,9 @@
 - `pyright.disableLanguageServices`: Disables type completion, definitions and references, default: `false`
 - `pyright.disableOrganizeImports`: Disables the `Organize Imports` command, default: `false`
 
-See [Pyright Settings](https://github.com/microsoft/pyright/blob/master/docs/settings.md) for more configurations.
+## pyrightconfig.json
 
-Pyright supports [configuration files](https://github.com/microsoft/pyright/blob/master/docs/configuration.md) that provide granular control over settings. For more details, refer to the [README](https://github.com/Microsoft/pyright/blob/master/README.md) on the Pyright GitHub site.
+Pyright supports [pyrightconfig.json](https://github.com/microsoft/pyright/blob/master/docs/configuration.md) that provide granular control over settings.
 
 ## Python typing and stub files
 
