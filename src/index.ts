@@ -24,7 +24,7 @@ import { lt } from 'semver';
 import { PythonCodeActionProvider } from './codeActionsProvider';
 import { PythonFormattingEditProvider } from './formatProvider';
 import { LinterProvider } from './linterProvider';
-import { extractMethod, extractVariable } from './simpleRefactorProvider';
+import { extractMethod, extractVariable } from './refactorProvider';
 
 const documentSelector: DocumentSelector = [{ scheme: 'file', language: 'python' }];
 
