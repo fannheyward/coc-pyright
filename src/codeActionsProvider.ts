@@ -3,7 +3,7 @@ import { CodeAction, CodeActionProvider, ProviderResult } from 'coc.nvim';
 export class PythonCodeActionProvider implements CodeActionProvider {
   public provideCodeActions(): ProviderResult<CodeAction[]> {
     const action: CodeAction = {
-      title: '',
+      title: 'Pyright Organize Imports',
       kind: 'source.organizeImports',
       command: {
         title: '',
