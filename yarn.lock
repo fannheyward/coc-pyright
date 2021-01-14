@@ -499,10 +499,10 @@ chrome-trace-event@^1.0.2:
   dependencies:
     tslib "^1.9.0"
 
-coc.nvim@^0.0.80:
-  version "0.0.80"
-  resolved "https://registry.yarnpkg.com/coc.nvim/-/coc.nvim-0.0.80.tgz#785145c382660db03f517f9b497900d95cbd0e4f"
-  integrity sha512-/3vTcnofoAYMrdENrlQmADTzfXX4+PZ0fiM10a39UA37dTR2dpIGi9O469kcIksuunLjToqWG8S45AGx/9wV7g==
+coc.nvim@^0.0.81-next.1:
+  version "0.0.81-next.1"
+  resolved "https://registry.yarnpkg.com/coc.nvim/-/coc.nvim-0.0.81-next.1.tgz#55dc48a81a7c8baf187619061c9c23b769be88b1"
+  integrity sha512-HkcS991U6r9LMar/1Tjp9XkhmPK1SbNMYmCao/lHab+QoaYJILAURD/oNT9+VaB53JHiXGpQltu3z7j8mM2Yig==
 
 color-convert@^1.9.0:
   version "1.9.3"

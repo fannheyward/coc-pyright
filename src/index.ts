@@ -1,5 +1,6 @@
 import {
   CodeActionContext,
+  CodeActionKind,
   CodeActionProvider,
   Command,
   commands,
@@ -140,9 +141,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
 
   const provider: CodeActionProvider = {
     provideCodeActions: (document: TextDocument, range: Range, actionContext: CodeActionContext): Command[] => {
-      // if (actionContext.only && !actionContext.only.includes(CodeActionKind.Refactor)) return [];
-      // TODO
-      if (actionContext.only && !actionContext.only.includes('refactor')) return [];
+      if (actionContext.only && !actionContext.only.includes(CodeActionKind.Refactor)) return [];
 
       const commands: Command[] = [];
       commands.push({
@@ -158,7 +157,5 @@ export async function activate(context: ExtensionContext): Promise<void> {
       return commands;
     },
   };
-  // languages.registerCodeActionProvider(['python'], provider, 'python.simpleRefactor', [CodeActionKind.Refactor]);
-  // TODO
-  languages.registerCodeActionProvider(['python'], provider, 'python.simpleRefactor', ['refactor']);
+  languages.registerCodeActionProvider(['python'], provider, 'python.simpleRefactor', [CodeActionKind.Refactor]);
 }

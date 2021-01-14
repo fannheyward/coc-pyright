@@ -48,7 +48,7 @@
     "@types/which": "^2.0.0",
     "@typescript-eslint/eslint-plugin": "^4.5.0",
     "@typescript-eslint/parser": "^4.5.0",
-    "coc.nvim": "^0.0.80",
+    "coc.nvim": "^0.0.81-next.1",
     "diff-match-patch": "^1.0.5",
     "eslint": "^7.11.0",
     "eslint-config-prettier": "^7.0.0",
