@@ -67,6 +67,13 @@ files for well-known packages may also be obtained from 3rd party, for example:
 
 - [Fixing coc-pyright and anaconda import errors](https://hanspinckaers.com/fixing-coc-pyright-and-anaconda-import-errors)
 
+## My Workflow with Pyright
+
+1. create venv in project: `python3 -m venv .venv`
+2. `source .venv/bin/activate`
+3. install modules with pip and work with Pyright
+4. `deactivate`
+
 ## Supporting
 
 If this extension is helpful to you, please support me via Patreon or PayPal:
