@@ -11,6 +11,7 @@ import {
   LanguageClient,
   LanguageClientOptions,
   languages,
+  Location,
   NodeModule,
   Range,
   services,
@@ -71,6 +72,26 @@ export async function activate(context: ExtensionContext): Promise<void> {
     outputChannel,
     disableCompletion: !!config.get('disableCompletion'),
     progressOnInitialization: true,
+    middleware: {
+      provideDefinition: async (document, position, token, next) => {
+        const locations = await next(document, position, token);
+        if (!locations) {
+          return;
+        }
+        if (Location.is(locations)) return locations;
+
+        let pyiFirst = false;
+        if (Array.isArray(locations) && locations.length > 1) {
+          const first = locations[0];
+          const uri = Location.is(first) ? first.uri : first.targetUri;
+          if (uri.length && uri.endsWith('.pyi')) {
+            pyiFirst = true;
+          }
+        }
+
+        return pyiFirst ? locations.reverse() : locations;
+      },
+    },
   };
 
   const client: LanguageClient = new LanguageClient('pyright', 'Pyright Server', serverOptions, clientOptions);
