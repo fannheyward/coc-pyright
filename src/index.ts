@@ -4,6 +4,7 @@ import {
   CodeActionProvider,
   Command,
   commands,
+  DiagnosticTag,
   DocumentSelector,
   ExtensionContext,
   extensions,
@@ -13,6 +14,7 @@ import {
   NodeModule,
   Range,
   services,
+  StaticFeature,
   TextDocument,
   TextEdit,
   TransportKind,
@@ -28,6 +30,15 @@ import { LinterProvider } from './linterProvider';
 import { extractMethod, extractVariable } from './refactorProvider';
 
 const documentSelector: DocumentSelector = [{ scheme: 'file', language: 'python' }];
+
+class PyrightExtensionFeature implements StaticFeature {
+  constructor() {}
+  dispose(): void {}
+  initialize() {}
+  fillClientCapabilities(capabilities: any) {
+    capabilities.textDocument.publishDiagnostics.tagSupport = { valueSet: [DiagnosticTag.Deprecated] };
+  }
+}
 
 export async function activate(context: ExtensionContext): Promise<void> {
   const state = extensions.getExtensionState('coc-python');
@@ -63,6 +74,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
   };
 
   const client: LanguageClient = new LanguageClient('pyright', 'Pyright Server', serverOptions, clientOptions);
+  client.registerFeature(new PyrightExtensionFeature());
   context.subscriptions.push(services.registLanguageClient(client));
 
   const formatProvider = new PythonFormattingEditProvider();
