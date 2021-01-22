@@ -19,36 +19,38 @@
 
 These configurations are used by `coc-pyright`, you need to set them in your `coc-settings.json`.
 
-- `python.analysis.autoImportCompletions`: Determines whether pyright offers auto-import completions, default: `true`
-- `python.analysis.autoSearchPaths`: Automatically add common search paths like 'src', default: `true`
-- `python.analysis.diagnosticMode`: Analyzes and reports errors for open only or all files in workspace, default: `openFilesOnly`
-- `python.analysis.stubPath`: Path to directory containing custom type stub files, default: `typings`
-- `python.analysis.typeshedPaths`: Paths to look for typeshed modules, default: `[]`
-- `python.analysis.diagnosticSeverityOverrides`: Override the severity levels for individual diagnostics, default: `{}`
-- `python.analysis.typeCheckingMode`: Defines the default rule set for type checking, default: `basic`
-- `python.analysis.useLibraryCodeForTypes`: Use library implementations to extract type information, default: `true`
-- `python.pythonPath`: Path to Python, default: `python`
-- `python.venvPath`: Path to folder with a list of Virtual Environments, default: `""`
-- `python.formatting.provider`: Provider for formatting, default: `autopep8`
-- `python.formatting.blackPath`: Custom path to black, default: `black`
-- `python.formatting.blackArgs`: Arguments passed to black, default: `[]`
-- `python.formatting.yapfPath`: Custom path to yapf, default: `yapf`
-- `python.formatting.yapfArgs`: Arguments passed to yapf, default: `[]`
-- `python.formatting.autopep8Path`: Custom path to autopep8, default: `autopep8`
-- `python.formatting.autopep8Args`: Arguments passed to autopep8, default: `[]`
-- `python.linting.enabled`: Whether to lint Python files, default: `true`
-- `python.linting.flake8Enabled`: Whether to lint with flake8, default: `false`
-- `python.linting.banditEnabled`: Whether to lint with bandit, default: `false`
-- `python.linting.mypyEnabled`: Whether to lint with mypy, default: `false`
-- `python.linting.pytypeEnabled`: Whether to lint with pytype, default: `false`
-- `python.linting.pep8Enabled`: Whether to lint with pep8, default: `false`
-- `python.linting.prospectorEnabled`: Whether to lint with prospector, default: `false`
-- `python.linting.pydocstyleEnabled`: Whether to lint with pydocstyleEnabled, default: `false`
-- `python.linting.pylamaEnabled`: Whether to lint with pylama, default: `false`
-- `python.linting.pylintEnabled`: Whether to lint with pylint, default: `false`
-- `pyright.disableCompletion`: Disables completion only, left other LSP features work, default: `false`
-- `pyright.disableLanguageServices`: Disables type completion, definitions and references, default: `false`
-- `pyright.disableOrganizeImports`: Disables the `Organize Imports` command, default: `false`
+| Configuration | Description | Default |
+|  --- | --- | --- |
+| python.analysis.autoImportCompletions | Determines whether pyright offers auto-import completions | true |
+| python.analysis.autoSearchPaths | Automatically add common search paths like 'src' | true |
+| python.analysis.diagnosticMode | Analyzes and reports errors for open only or all files in workspace | openFilesOnly |
+| python.analysis.stubPath | Path to directory containing custom type stub files | typings |
+| python.analysis.typeshedPaths | Paths to look for typeshed modules | [] |
+| python.analysis.diagnosticSeverityOverrides | Override the severity levels for individual diagnostics | {} |
+| python.analysis.typeCheckingMode | Defines the default rule set for type checking | basic |
+| python.analysis.useLibraryCodeForTypes | Use library implementations to extract type information | true |
+| python.pythonPath | Path to Python | python |
+| python.venvPath | Path to folder with a list of Virtual Environments | "" |
+| python.formatting.provider | Provider for formatting | autopep8 |
+| python.formatting.blackPath | Custom path to black | black |
+| python.formatting.blackArgs | Arguments passed to black | [] |
+| python.formatting.yapfPath | Custom path to yapf | yapf |
+| python.formatting.yapfArgs | Arguments passed to yapf | [] |
+| python.formatting.autopep8Path | Custom path to autopep8 | autopep8 |
+| python.formatting.autopep8Args | Arguments passed to autopep8 | [] |
+| python.linting.enabled | Whether to lint Python files | true |
+| python.linting.flake8Enabled | Whether to lint with flake8 | false |
+| python.linting.banditEnabled | Whether to lint with bandit | false |
+| python.linting.mypyEnabled | Whether to lint with mypy | false |
+| python.linting.pytypeEnabled | Whether to lint with pytype | false |
+| python.linting.pep8Enabled | Whether to lint with pep8 | false |
+| python.linting.prospectorEnabled | Whether to lint with prospector | false |
+| python.linting.pydocstyleEnabled | Whether to lint with pydocstyleEnabled | false |
+| python.linting.pylamaEnabled | Whether to lint with pylama | false |
+| python.linting.pylintEnabled | Whether to lint with pylint | false |
+| pyright.disableCompletion | Disables completion only, left other LSP features work | false |
+| pyright.disableLanguageServices | Disables type completion, definitions and references | false |
+| pyright.disableOrganizeImports | Disables the Organize Imports command | false |
 
 ## pyrightconfig.json
 
