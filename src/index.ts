@@ -4,7 +4,6 @@ import {
   CodeActionProvider,
   Command,
   commands,
-  DiagnosticTag,
   DocumentSelector,
   ExtensionContext,
   extensions,
@@ -37,7 +36,8 @@ class PyrightExtensionFeature implements StaticFeature {
   dispose(): void {}
   initialize() {}
   fillClientCapabilities(capabilities: any) {
-    capabilities.textDocument.publishDiagnostics.tagSupport = { valueSet: [DiagnosticTag.Deprecated] };
+    // TODO: use DiagnosticTag.Deprecated
+    capabilities.textDocument.publishDiagnostics.tagSupport = { valueSet: [2] };
   }
 }
 
