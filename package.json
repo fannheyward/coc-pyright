@@ -1207,6 +1207,6 @@
     ]
   },
   "dependencies": {
-    "pyright": "^1.1.100"
+    "pyright": "^1.1.104"
   }
 }
