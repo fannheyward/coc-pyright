@@ -1163,6 +1163,15 @@
           },
           "scope": "resource"
         },
+        "pyright.organizeimports.provider": {
+          "type": "string",
+          "default": "pyright",
+          "description": "Organize imports provider",
+          "enum": [
+            "pyright",
+            "isort"
+          ]
+        },
         "pyright.trace.server": {
           "type": "string",
           "scope": "window",

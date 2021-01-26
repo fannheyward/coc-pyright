@@ -1,27 +1,49 @@
-import { CodeAction, CodeActionKind, CodeActionProvider, Command, ProviderResult, Range, TextDocument, workspace } from 'coc.nvim';
+import { CodeAction, CodeActionKind, CodeActionProvider, ProviderResult, Range, TextDocument, workspace } from 'coc.nvim';
 
 export class PythonCodeActionProvider implements CodeActionProvider {
-  public provideCodeActions(document: TextDocument, range: Range): ProviderResult<(CodeAction | Command)[]> {
-    const config = workspace.getConfiguration('python');
-    const actions: (CodeAction | Command)[] = [];
+  public provideCodeActions(document: TextDocument, range: Range): ProviderResult<CodeAction[]> {
+    const actions: CodeAction[] = [];
+
+    const config = workspace.getConfiguration('pyright');
+    const provider = config.get<'pyright' | 'isort'>('organizeimports.provider', 'pyright');
+    if (provider === 'pyright') {
+      actions.push({
+        title: 'Organize Imports by Pyright',
+        kind: CodeActionKind.SourceOrganizeImports,
+        command: {
+          title: '',
+          command: 'pyright.organizeimports',
+        },
+      });
+    } else if (provider === 'isort') {
+      actions.push({
+        title: 'Sort Imports by isort',
+        kind: CodeActionKind.SourceOrganizeImports,
+        command: {
+          title: '',
+          command: 'python.sortImports',
+        },
+      });
+    }
+
     actions.push({
-      title: 'Pyright Organize Imports',
-      kind: CodeActionKind.SourceOrganizeImports,
+      title: 'Extract Method',
+      kind: CodeActionKind.RefactorExtract,
       command: {
+        command: 'python.refactorExtractMethod',
         title: '',
-        command: 'pyright.organizeimports',
+        arguments: [document, range],
       },
     });
 
     actions.push({
-      command: 'python.refactorExtractVariable',
       title: 'Extract Variable',
-      arguments: [document, range],
-    });
-    actions.push({
-      command: 'python.refactorExtractMethod',
-      title: 'Extract Method',
-      arguments: [document, range],
+      kind: CodeActionKind.RefactorExtract,
+      command: {
+        title: '',
+        command: 'python.refactorExtractVariable',
+        arguments: [document, range],
+      },
     });
 
     return actions;
