@@ -26,6 +26,7 @@ import { existsSync } from 'fs';
 import { lt } from 'semver';
 import { PythonCodeActionProvider } from './codeActionsProvider';
 import { PythonFormattingEditProvider } from './formatProvider';
+import { sortImports } from './isortProvider';
 import { LinterProvider } from './linterProvider';
 import { extractMethod, extractVariable } from './refactorProvider';
 
@@ -171,6 +172,10 @@ export async function activate(context: ExtensionContext): Promise<void> {
     true
   );
   context.subscriptions.push(disposable);
+
+  disposable = commands.registerCommand('python.sortImports', async () => {
+    await sortImports(context.extensionPath, outputChannel).catch(() => {});
+  });
 
   const provider: CodeActionProvider = {
     provideCodeActions: (document: TextDocument, range: Range, actionContext: CodeActionContext): Command[] => {

@@ -149,11 +149,16 @@ export interface IFormattingSettings {
   darkerPah: string;
   readonly darkerArgs: string[];
 }
+export interface ISortSettings {
+  readonly path: string;
+  readonly args: string[];
+}
 
 export interface IPythonSettings {
   pythonPath: string;
   readonly linting: ILintingSettings;
   readonly formatting: IFormattingSettings;
+  readonly isort: ISortSettings;
   readonly envFile: string;
 }
 

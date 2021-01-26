@@ -6,7 +6,7 @@ import path from 'path';
 import untildify from 'untildify';
 import which from 'which';
 import { SystemVariables } from './systemVariables';
-import { IFormattingSettings, ILintingSettings, IPythonSettings } from './types';
+import { IFormattingSettings, ILintingSettings, IPythonSettings, ISortSettings } from './types';
 
 export class PythonSettings implements IPythonSettings {
   private workspaceRoot: string;
@@ -15,6 +15,7 @@ export class PythonSettings implements IPythonSettings {
   public envFile = '';
   public linting!: ILintingSettings;
   public formatting!: IFormattingSettings;
+  public isort!: ISortSettings;
 
   private disposables: Disposable[] = [];
   private _pythonPath = '';
@@ -148,6 +149,14 @@ export class PythonSettings implements IPythonSettings {
     this.formatting.autopep8Path = this.getAbsolutePath(systemVariables.resolveAny(this.formatting.autopep8Path));
     this.formatting.yapfPath = this.getAbsolutePath(systemVariables.resolveAny(this.formatting.yapfPath));
     this.formatting.blackPath = this.getAbsolutePath(systemVariables.resolveAny(this.formatting.blackPath));
+
+    const isort = systemVariables.resolveAny(pythonSettings.get<ISortSettings>('isort'))!;
+    if (this.isort) {
+      Object.assign<ISortSettings, ISortSettings>(this.isort, isort);
+    } else {
+      this.isort = isort;
+    }
+    this.isort = this.isort ? this.isort : { path: '', args: [] };
   }
 
   public get pythonPath(): string {
