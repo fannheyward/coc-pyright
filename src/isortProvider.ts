@@ -1,5 +1,4 @@
-import { CancellationToken, Document, OutputChannel, Position, TextEdit, Uri, window, workspace, WorkspaceEdit } from 'coc.nvim';
-import { EOL } from 'os';
+import { CancellationToken, OutputChannel, Uri, window, workspace } from 'coc.nvim';
 import * as path from 'path';
 import { getTextEditsFromPatch } from './common';
 import { PythonSettings } from './configSettings';
@@ -32,7 +31,6 @@ async function generateIsortFixDiff(extensionRoot: string, uri: string, token?: 
 export async function sortImports(extensionRoot: string, outputChannel: OutputChannel): Promise<void> {
   const doc = await workspace.document;
   if (!doc || doc.filetype !== 'python') {
-    window.showMessage('Please open a Python file to sort the imports.', 'error');
     return;
   }
   const uri = Uri.parse(doc.uri);
@@ -40,22 +38,8 @@ export async function sortImports(extensionRoot: string, outputChannel: OutputCh
     return;
   }
 
-  // Hack, if the document doesn't contain an empty line at the end, then add it
-  // Else the library strips off the last line
-  const lastLine = doc.getline(doc.lineCount - 1);
-  if (lastLine.trim().length > 0) {
-    const position = Position.create(doc.lineCount - 1, lastLine.length);
-    const edit: WorkspaceEdit = {
-      changes: {
-        [uri.toString()]: [TextEdit.insert(position, EOL)],
-      },
-    };
-    await workspace.applyEdit(edit);
-  }
-
   try {
     const patch = await generateIsortFixDiff(extensionRoot, uri.fsPath);
-    console.error('------diff', patch);
     const edits = getTextEditsFromPatch(doc.getDocumentContent(), patch);
     await doc.applyEdits(edits);
   } catch (err) {
