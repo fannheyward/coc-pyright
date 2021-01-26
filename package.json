@@ -1178,23 +1178,6 @@
           ],
           "default": "off",
           "description": "Trace requests to Pyright"
-        },
-        "pyright.disableCompletion": {
-          "type": "boolean",
-          "default": false,
-          "description": "Disable completion only."
-        },
-        "pyright.disableLanguageServices": {
-          "type": "boolean",
-          "default": false,
-          "description": "Disables type completion, definitions, and references.",
-          "scope": "resource"
-        },
-        "pyright.disableOrganizeImports": {
-          "type": "boolean",
-          "default": false,
-          "description": "Disables the `Organize Imports` command.",
-          "scope": "resource"
         }
       }
     },

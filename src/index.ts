@@ -60,14 +60,12 @@ export async function activate(context: ExtensionContext): Promise<void> {
   };
 
   const outputChannel = window.createOutputChannel('Pyright');
-  const config = workspace.getConfiguration('pyright');
   const clientOptions: LanguageClientOptions = {
     documentSelector,
     synchronize: {
       configurationSection: ['python', 'pyright'],
     },
     outputChannel,
-    disableCompletion: !!config.get('disableCompletion'),
     progressOnInitialization: true,
     middleware: {
       provideDefinition: async (document, position, token, next) => {

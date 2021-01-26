@@ -51,9 +51,6 @@ These configurations are used by `coc-pyright`, you need to set them in your `co
 | python.linting.pylintEnabled | Whether to lint with pylint | false |
 | python.sortImports.path | Path to isort script, default using inner version | '' |
 | python.sortImports.args | Arguments passed to isort | [] |
-| pyright.disableCompletion | Disables completion only, left other LSP features work | false |
-| pyright.disableLanguageServices | Disables type completion, definitions and references | false |
-| pyright.disableOrganizeImports | Disables the Organize Imports command | false |
 
 ## pyrightconfig.json
 
