@@ -1,6 +1,6 @@
 {
   "name": "coc-pyright",
-  "version": "1.1.104",
+  "version": "1.1.105",
   "description": "Pyright extension for coc.nvim",
   "author": "Heyward Fann <fannheyward@gmail.com>",
   "license": "MIT",
@@ -1194,7 +1194,7 @@
       {
         "command": "python.sortImports",
         "title": "Sort Imports by isort",
-        "category": "Python Refactor"
+        "category": "Pyright"
       },
       {
         "command": "python.runLinting",
