@@ -1,8 +1,4 @@
 import {
-  CodeActionContext,
-  CodeActionKind,
-  CodeActionProvider,
-  Command,
   commands,
   DocumentSelector,
   ExtensionContext,
@@ -176,24 +172,5 @@ export async function activate(context: ExtensionContext): Promise<void> {
   disposable = commands.registerCommand('python.sortImports', async () => {
     await sortImports(context.extensionPath, outputChannel).catch(() => {});
   });
-
-  const provider: CodeActionProvider = {
-    provideCodeActions: (document: TextDocument, range: Range, actionContext: CodeActionContext): Command[] => {
-      if (actionContext.only && !actionContext.only.includes(CodeActionKind.Refactor)) return [];
-
-      const commands: Command[] = [];
-      commands.push({
-        command: 'python.refactorExtractVariable',
-        title: 'Extract Variable',
-        arguments: [document, range],
-      });
-      commands.push({
-        command: 'python.refactorExtractMethod',
-        title: 'Extract Method',
-        arguments: [document, range],
-      });
-      return commands;
-    },
-  };
-  languages.registerCodeActionProvider(['python'], provider, 'python.simpleRefactor', [CodeActionKind.Refactor]);
+  context.subscriptions.push(disposable);
 }
