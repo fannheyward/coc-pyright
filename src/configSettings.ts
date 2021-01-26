@@ -6,7 +6,7 @@ import path from 'path';
 import untildify from 'untildify';
 import which from 'which';
 import { SystemVariables } from './systemVariables';
-import { IFormattingSettings, ILintingSettings, IPythonSettings, ISortSettings } from './types';
+import { IFormattingSettings, ILintingSettings, IPythonSettings, ISortImportSettings } from './types';
 
 export class PythonSettings implements IPythonSettings {
   private workspaceRoot: string;
@@ -15,7 +15,7 @@ export class PythonSettings implements IPythonSettings {
   public envFile = '';
   public linting!: ILintingSettings;
   public formatting!: IFormattingSettings;
-  public isort!: ISortSettings;
+  public sortImports!: ISortImportSettings;
 
   private disposables: Disposable[] = [];
   private _pythonPath = '';
@@ -150,13 +150,13 @@ export class PythonSettings implements IPythonSettings {
     this.formatting.yapfPath = this.getAbsolutePath(systemVariables.resolveAny(this.formatting.yapfPath));
     this.formatting.blackPath = this.getAbsolutePath(systemVariables.resolveAny(this.formatting.blackPath));
 
-    const isort = systemVariables.resolveAny(pythonSettings.get<ISortSettings>('isort'))!;
-    if (this.isort) {
-      Object.assign<ISortSettings, ISortSettings>(this.isort, isort);
+    const isort = systemVariables.resolveAny(pythonSettings.get<ISortImportSettings>('isort'))!;
+    if (this.sortImports) {
+      Object.assign<ISortImportSettings, ISortImportSettings>(this.sortImports, isort);
     } else {
-      this.isort = isort;
+      this.sortImports = isort;
     }
-    this.isort = this.isort ? this.isort : { path: '', args: [] };
+    this.sortImports = this.sortImports ? this.sortImports : { path: '', args: [] };
   }
 
   public get pythonPath(): string {

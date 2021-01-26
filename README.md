@@ -11,6 +11,7 @@
 ## Commands
 
 - `python.runLinting`: Run linting
+- `python.sortImports`: Sort imports by `isort`
 - `pyright.organizeimports`: Organize imports
 - `pyright.restartserver`: This command forces the type checker to discard all of its cached type information and restart analysis. It is useful in cases where new type stubs or libraries have been installed.
 - `pyright.createtypestub`: Creates Type Stubs with given module name, for example `:CocCommand pyright.createtypestub numpy`
@@ -48,6 +49,8 @@ These configurations are used by `coc-pyright`, you need to set them in your `co
 | python.linting.pydocstyleEnabled | Whether to lint with pydocstyleEnabled | false |
 | python.linting.pylamaEnabled | Whether to lint with pylama | false |
 | python.linting.pylintEnabled | Whether to lint with pylint | false |
+| python.sortImports.path | Path to isort script, default using inner version | '' |
+| python.sortImports.args | Arguments passed to isort | [] |
 | pyright.disableCompletion | Disables completion only, left other LSP features work | false |
 | pyright.disableLanguageServices | Disables type completion, definitions and references | false |
 | pyright.disableOrganizeImports | Disables the Organize Imports command | false |

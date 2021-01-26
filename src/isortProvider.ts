@@ -8,7 +8,7 @@ import { ExecutionInfo } from './types';
 
 async function generateIsortFixDiff(extensionRoot: string, uri: string, token?: CancellationToken): Promise<string> {
   const pythonSettings = PythonSettings.getInstance();
-  const { path: isortPath, args: userArgs } = pythonSettings.isort;
+  const { path: isortPath, args: userArgs } = pythonSettings.sortImports;
   const args = ['--diff'].concat(userArgs);
   args.push(uri);
   const options = { throwOnStdErr: true, token };

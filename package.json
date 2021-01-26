@@ -1148,6 +1148,21 @@
           ],
           "scope": "resource"
         },
+        "python.sortImports.path": {
+          "type": "string",
+          "description": "Path to isort script, default using inner version",
+          "default": "",
+          "scope": "resource"
+        },
+        "python.sortImports.args": {
+          "type": "array",
+          "description": "Arguments passed in. Each argument is a separate item in the array.",
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "scope": "resource"
+        },
         "pyright.trace.server": {
           "type": "string",
           "scope": "window",
@@ -1185,13 +1200,18 @@
     },
     "commands": [
       {
+        "command": "python.sortImports",
+        "title": "Sort Imports by isort",
+        "category": "Python Refactor"
+      },
+      {
         "command": "python.runLinting",
         "title": "Run Linting",
         "category": "Pyright"
       },
       {
         "command": "pyright.organizeimports",
-        "title": "Organize Imports",
+        "title": "Organize Imports by Pyright",
         "category": "Pyright"
       },
       {
