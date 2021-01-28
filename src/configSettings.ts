@@ -45,24 +45,33 @@ export class PythonSettings implements IPythonSettings {
     this.disposables = [];
   }
 
-  private pyenv(): string {
-    // `pyenv local` creates `.python-version`, but not `PYENV_VERSION`
-    const p = path.join(this.workspaceRoot, '.python-version');
-    if (fs.existsSync(p) && !process.env.PYENV_VERSION) {
-      process.env.PYENV_VERSION = fs.readFileSync(p).toString().trim();
-      try {
-        return child_process.execFileSync('pyenv', ['which', 'python'], { encoding: 'utf8' }).toString().trim();
-      } catch (ex) {}
-    }
+  private resolvePythonFromVENV(): string | undefined {
+    try {
+      // `pyenv local` creates `.python-version`, but not `PYENV_VERSION`
+      let p = path.join(this.workspaceRoot, '.python-version');
+      if (fs.existsSync(p)) {
+        if (!process.env.PYENV_VERSION) {
+          process.env.PYENV_VERSION = fs.readFileSync(p).toString().trim();
+        }
+        return;
+      }
 
-    return '';
+      // pipenv
+      p = path.join(this.workspaceRoot, 'Pipfile');
+      if (fs.existsSync(p)) {
+        return child_process.execFileSync('pipenv', ['--py'], { encoding: 'utf8' }).toString().trim();
+      }
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   protected update(pythonSettings: WorkspaceConfiguration) {
     const systemVariables: SystemVariables = new SystemVariables(this.workspaceRoot ? this.workspaceRoot : undefined);
-    const pyenvPython = this.pyenv();
-    if (pyenvPython.length) {
-      this.pythonPath = pyenvPython;
+    const vp = this.resolvePythonFromVENV();
+    if (vp) {
+      pythonSettings.update('pythonPath', vp);
+      this.pythonPath = vp;
     } else {
       this.pythonPath = systemVariables.resolve(pythonSettings.get('pythonPath') as string);
     }
