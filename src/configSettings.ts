@@ -1,7 +1,6 @@
-'use strict';
-
 import * as child_process from 'child_process';
 import { ConfigurationChangeEvent, Disposable, Uri, workspace, WorkspaceConfiguration } from 'coc.nvim';
+import fs from 'fs-extra';
 import path from 'path';
 import untildify from 'untildify';
 import which from 'which';
@@ -46,10 +45,27 @@ export class PythonSettings implements IPythonSettings {
     this.disposables = [];
   }
 
+  private pyenv(): string {
+    // `pyenv local` creates `.python-version`, but not `PYENV_VERSION`
+    const p = path.join(this.workspaceRoot, '.python-version');
+    if (fs.existsSync(p) && !process.env.PYENV_VERSION) {
+      process.env.PYENV_VERSION = fs.readFileSync(p).toString().trim();
+      try {
+        return child_process.execFileSync('pyenv', ['which', 'python'], { encoding: 'utf8' }).toString().trim();
+      } catch (ex) {}
+    }
+
+    return '';
+  }
+
   protected update(pythonSettings: WorkspaceConfiguration) {
     const systemVariables: SystemVariables = new SystemVariables(this.workspaceRoot ? this.workspaceRoot : undefined);
-    const pythonPath = systemVariables.resolveAny(pythonSettings.get<string>('pythonPath'))!;
-    this.pythonPath = this.getAbsolutePath(pythonPath);
+    const pyenvPython = this.pyenv();
+    if (pyenvPython.length) {
+      this.pythonPath = pyenvPython;
+    } else {
+      this.pythonPath = systemVariables.resolve(pythonSettings.get('pythonPath') as string);
+    }
 
     const lintingSettings = systemVariables.resolveAny(pythonSettings.get<ILintingSettings>('linting'))!;
     if (this.linting) {
