@@ -12,7 +12,6 @@ export class PythonSettings implements IPythonSettings {
   private workspaceRoot: string;
 
   private static pythonSettings: Map<string, PythonSettings> = new Map<string, PythonSettings>();
-  public envFile = '';
   public linting!: ILintingSettings;
   public formatting!: IFormattingSettings;
   public sortImports!: ISortImportSettings;
@@ -51,7 +50,6 @@ export class PythonSettings implements IPythonSettings {
     const systemVariables: SystemVariables = new SystemVariables(this.workspaceRoot ? this.workspaceRoot : undefined);
     const pythonPath = systemVariables.resolveAny(pythonSettings.get<string>('pythonPath'))!;
     this.pythonPath = this.getAbsolutePath(pythonPath);
-    this.envFile = systemVariables.resolveAny(pythonSettings.get<string>('envFile'))!;
 
     const lintingSettings = systemVariables.resolveAny(pythonSettings.get<ILintingSettings>('linting'))!;
     if (this.linting) {

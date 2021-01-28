@@ -159,7 +159,6 @@ export interface IPythonSettings {
   readonly linting: ILintingSettings;
   readonly formatting: IFormattingSettings;
   readonly sortImports: ISortImportSettings;
-  readonly envFile: string;
 }
 
 export interface IErrorHandler {
