@@ -204,23 +204,20 @@ class ProcessService {
 
 export class PythonExecutionService {
   private readonly procService = new ProcessService();
-  private readonly pythonPath: string;
+  private readonly pythonSettings = PythonSettings.getInstance();
 
-  constructor() {
-    const pythonSettings = PythonSettings.getInstance();
-    this.pythonPath = pythonSettings.pythonPath;
-  }
+  constructor() {}
 
   public async isModuleInstalled(moduleName: string): Promise<boolean> {
     return this.procService
-      .exec(this.pythonPath, ['-c', `import ${moduleName}`], { throwOnStdErr: true })
+      .exec(this.pythonSettings.pythonPath, ['-c', `import ${moduleName}`], { throwOnStdErr: true })
       .then(() => true)
       .catch(() => false);
   }
 
   public execObservable(args: string[], options: SpawnOptions): ObservableExecutionResult<string> {
     const opts: SpawnOptions = { ...options };
-    return this.procService.execObservable(this.pythonPath, args, opts);
+    return this.procService.execObservable(this.pythonSettings.pythonPath, args, opts);
   }
 
   async exec(executionInfo: ExecutionInfo, options: SpawnOptions): Promise<ExecutionResult<string>> {
@@ -228,7 +225,7 @@ export class PythonExecutionService {
     const { execPath, moduleName, args } = executionInfo;
 
     if (moduleName && moduleName.length > 0) {
-      const result = await this.procService.exec(this.pythonPath, ['-m', moduleName, ...args], opts);
+      const result = await this.procService.exec(this.pythonSettings.pythonPath, ['-m', moduleName, ...args], opts);
 
       // If a module is not installed we'll have something in stderr.
       if (ErrorUtils.outputHasModuleNotInstalledError(moduleName, result.stderr)) {
