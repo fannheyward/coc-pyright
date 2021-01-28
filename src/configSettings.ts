@@ -1,7 +1,7 @@
 'use strict';
 
 import * as child_process from 'child_process';
-import { ConfigurationChangeEvent, DiagnosticSeverity, Disposable, Uri, workspace, WorkspaceConfiguration } from 'coc.nvim';
+import { ConfigurationChangeEvent, Disposable, Uri, workspace, WorkspaceConfiguration } from 'coc.nvim';
 import path from 'path';
 import untildify from 'untildify';
 import which from 'which';
@@ -57,64 +57,6 @@ export class PythonSettings implements IPythonSettings {
     } else {
       this.linting = lintingSettings;
     }
-
-    this.linting = this.linting
-      ? this.linting
-      : {
-          enabled: false,
-          ignorePatterns: [],
-          flake8Args: [],
-          flake8Enabled: false,
-          flake8Path: 'flake',
-          lintOnSave: false,
-          maxNumberOfProblems: 100,
-          mypyArgs: [],
-          mypyEnabled: false,
-          mypyPath: 'mypy',
-          banditArgs: [],
-          banditEnabled: false,
-          banditPath: 'bandit',
-          pep8Args: [],
-          pep8Enabled: false,
-          pep8Path: 'pep8',
-          pylamaArgs: [],
-          pylamaEnabled: false,
-          pylamaPath: 'pylama',
-          prospectorArgs: [],
-          prospectorEnabled: false,
-          prospectorPath: 'prospector',
-          pydocstyleArgs: [],
-          pydocstyleEnabled: false,
-          pydocstylePath: 'pydocstyle',
-          pylintArgs: [],
-          pylintEnabled: false,
-          pylintPath: 'pylint',
-          pylintCategorySeverity: {
-            convention: DiagnosticSeverity.Hint,
-            error: DiagnosticSeverity.Error,
-            fatal: DiagnosticSeverity.Error,
-            refactor: DiagnosticSeverity.Hint,
-            warning: DiagnosticSeverity.Warning,
-          },
-          pep8CategorySeverity: {
-            E: DiagnosticSeverity.Error,
-            W: DiagnosticSeverity.Warning,
-          },
-          flake8CategorySeverity: {
-            E: DiagnosticSeverity.Error,
-            W: DiagnosticSeverity.Warning,
-            // Per http://flake8.pycqa.org/en/latest/glossary.html#term-error-code
-            // 'F' does not mean 'fatal as in PyLint but rather 'pyflakes' such as
-            // unused imports, variables, etc.
-            F: DiagnosticSeverity.Warning,
-          },
-          mypyCategorySeverity: {
-            error: DiagnosticSeverity.Error,
-            note: DiagnosticSeverity.Hint,
-          },
-          pylintUseMinimalCheckers: false,
-        };
-
     this.linting.pylintPath = this.getAbsolutePath(systemVariables.resolveAny(this.linting.pylintPath));
     this.linting.flake8Path = this.getAbsolutePath(systemVariables.resolveAny(this.linting.flake8Path));
     this.linting.pep8Path = this.getAbsolutePath(systemVariables.resolveAny(this.linting.pep8Path));
@@ -130,23 +72,10 @@ export class PythonSettings implements IPythonSettings {
     } else {
       this.formatting = formattingSettings;
     }
-    // Support for travis.
-    this.formatting = this.formatting
-      ? this.formatting
-      : {
-          provider: 'autopep8',
-          autopep8Args: [],
-          autopep8Path: 'autopep8',
-          blackArgs: [],
-          blackPath: 'black',
-          yapfArgs: [],
-          yapfPath: 'yapf',
-          darkerArgs: [],
-          darkerPah: 'darker',
-        };
     this.formatting.autopep8Path = this.getAbsolutePath(systemVariables.resolveAny(this.formatting.autopep8Path));
     this.formatting.yapfPath = this.getAbsolutePath(systemVariables.resolveAny(this.formatting.yapfPath));
     this.formatting.blackPath = this.getAbsolutePath(systemVariables.resolveAny(this.formatting.blackPath));
+    this.formatting.darkerPath = this.getAbsolutePath(systemVariables.resolveAny(this.formatting.darkerPath));
 
     const isort = systemVariables.resolveAny(pythonSettings.get<ISortImportSettings>('sortImports'))!;
     if (this.sortImports) {
@@ -154,7 +83,7 @@ export class PythonSettings implements IPythonSettings {
     } else {
       this.sortImports = isort;
     }
-    this.sortImports = this.sortImports ? this.sortImports : { path: '', args: [] };
+    this.sortImports.path = this.getAbsolutePath(systemVariables.resolveAny(this.sortImports.path));
   }
 
   public get pythonPath(): string {

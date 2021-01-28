@@ -146,11 +146,11 @@ export interface IFormattingSettings {
   readonly blackArgs: string[];
   yapfPath: string;
   readonly yapfArgs: string[];
-  darkerPah: string;
+  darkerPath: string;
   readonly darkerArgs: string[];
 }
 export interface ISortImportSettings {
-  readonly path: string;
+  path: string;
   readonly args: string[];
 }
 
