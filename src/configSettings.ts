@@ -61,6 +61,13 @@ export class PythonSettings implements IPythonSettings {
       if (fs.existsSync(p)) {
         return child_process.execFileSync('pipenv', ['--py'], { encoding: 'utf8' }).toString().trim();
       }
+
+      // poetry
+      p = path.join(this.workspaceRoot, 'poetry.lock');
+      if (fs.existsSync(p)) {
+        const info = child_process.execFileSync('poetry', ['env', 'info', '--path'], { encoding: 'utf8' }).toString().trim();
+        if (info) return path.join(info, 'bin', 'python');
+      }
     } catch (e) {
       console.error(e);
     }
