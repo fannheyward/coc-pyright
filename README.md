@@ -12,7 +12,7 @@
 
 - `python.runLinting`: Run linting
 - `python.sortImports`: Sort imports by `isort`
-- `pyright.organizeimports`: Organize imports
+- `pyright.organizeimports`: Organize imports by Pyright
 - `pyright.restartserver`: This command forces the type checker to discard all of its cached type information and restart analysis. It is useful in cases where new type stubs or libraries have been installed.
 - `pyright.createtypestub`: Creates Type Stubs with given module name, for example `:CocCommand pyright.createtypestub numpy`
 
