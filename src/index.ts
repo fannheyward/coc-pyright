@@ -35,6 +35,9 @@ class PyrightExtensionFeature implements StaticFeature {
   fillClientCapabilities(capabilities: any) {
     // TODO: use DiagnosticTag.Deprecated
     capabilities.textDocument.publishDiagnostics.tagSupport = { valueSet: [2] };
+    // Pyright set activeParameter = -1 when activeParameterSupport enabled
+    // this will break signatureHelp
+    capabilities.textDocument.signatureHelp.signatureInformation.activeParameterSupport = false;
   }
 }
 
