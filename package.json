@@ -1,6 +1,6 @@
 {
   "name": "coc-pyright",
-  "version": "1.1.106",
+  "version": "1.1.108",
   "description": "Pyright extension for coc.nvim",
   "author": "Heyward Fann <fannheyward@gmail.com>",
   "license": "MIT",
@@ -1219,6 +1219,6 @@
     ]
   },
   "dependencies": {
-    "pyright": "^1.1.106"
+    "pyright": "^1.1.108"
   }
 }
