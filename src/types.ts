@@ -40,10 +40,11 @@ export enum Product {
   black = 12,
   darker = 13,
   rope = 14,
+  blackd = 15,
 }
 
 export type LinterId = 'flake8' | 'mypy' | 'pep8' | 'prospector' | 'pydocstyle' | 'pylama' | 'pylint' | 'bandit' | 'pytype';
-export type FormatterId = 'yapf' | 'black' | 'autopep8' | 'darker';
+export type FormatterId = 'yapf' | 'black' | 'autopep8' | 'darker' | 'blackd';
 
 export interface ILinterInfo {
   readonly id: LinterId;
@@ -148,6 +149,7 @@ export interface IFormattingSettings {
   readonly yapfArgs: string[];
   darkerPath: string;
   readonly darkerArgs: string[];
+  blackdPath: string;
 }
 export interface ISortImportSettings {
   path: string;

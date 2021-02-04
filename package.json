@@ -1135,6 +1135,12 @@
           "description": "Path to autopep8, you can use a custom version of autopep8 by modifying this setting to include the full path.",
           "scope": "resource"
         },
+        "python.formatting.blackdPath": {
+          "type": "string",
+          "default": "blackd",
+          "description": "Path to blackd, you can use a custom version of blackd by modifying this setting to include the full path.",
+          "scope": "resource"
+        },
         "python.formatting.provider": {
           "type": "string",
           "default": "autopep8",
@@ -1143,6 +1149,7 @@
             "autopep8",
             "darker",
             "black",
+            "blackd",
             "yapf",
             "none"
           ],
