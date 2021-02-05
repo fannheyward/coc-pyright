@@ -107,6 +107,7 @@ export class PythonSettings implements IPythonSettings {
     this.formatting.autopep8Path = this.getAbsolutePath(systemVariables.resolveAny(this.formatting.autopep8Path));
     this.formatting.yapfPath = this.getAbsolutePath(systemVariables.resolveAny(this.formatting.yapfPath));
     this.formatting.blackPath = this.getAbsolutePath(systemVariables.resolveAny(this.formatting.blackPath));
+    this.formatting.blackdPath = this.getAbsolutePath(systemVariables.resolveAny(this.formatting.blackdPath));
     this.formatting.darkerPath = this.getAbsolutePath(systemVariables.resolveAny(this.formatting.darkerPath));
 
     const isort = systemVariables.resolveAny(pythonSettings.get<ISortImportSettings>('sortImports'))!;

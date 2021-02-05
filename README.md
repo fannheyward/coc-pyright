@@ -35,6 +35,9 @@ These configurations are used by `coc-pyright`, you need to set them in your `co
 | python.formatting.provider | Provider for formatting | autopep8 |
 | python.formatting.blackPath | Custom path to black | black |
 | python.formatting.blackArgs | Arguments passed to black | [] |
+| python.formatting.blackdPath | Custom path to blackd | blackd |
+| python.formatting.blackdHTTPURL | Custom blackd server url | "" |
+| python.formatting.blackdHTTPHeaders | Custom blackd request headers | {} |
 | python.formatting.yapfPath | Custom path to yapf | yapf |
 | python.formatting.yapfArgs | Arguments passed to yapf | [] |
 | python.formatting.autopep8Path | Custom path to autopep8 | autopep8 |

@@ -1135,6 +1135,24 @@
           "description": "Path to autopep8, you can use a custom version of autopep8 by modifying this setting to include the full path.",
           "scope": "resource"
         },
+        "python.formatting.blackdPath": {
+          "type": "string",
+          "default": "blackd",
+          "description": "Path to blackd, you can use a custom version of blackd by modifying this setting to include the full path.",
+          "scope": "resource"
+        },
+        "python.formatting.blackdHTTPURL": {
+          "type": "string",
+          "default": "",
+          "description": "Custom blackd server url.",
+          "scope": "resource"
+        },
+        "python.formatting.blackdHTTPHeaders": {
+          "type": "object",
+          "default": {},
+          "description": "Custom headers POST to blackd server, checkout https://github.com/psf/black/blob/master/docs/blackd.md#protocol",
+          "scope": "resource"
+        },
         "python.formatting.provider": {
           "type": "string",
           "default": "autopep8",
@@ -1143,6 +1161,7 @@
             "autopep8",
             "darker",
             "black",
+            "blackd",
             "yapf",
             "none"
           ],
