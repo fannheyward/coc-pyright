@@ -150,6 +150,8 @@ export interface IFormattingSettings {
   darkerPath: string;
   readonly darkerArgs: string[];
   blackdPath: string;
+  readonly blackdHTTPURL: string;
+  readonly blackdHTTPHeaders: Record<string, any>;
 }
 export interface ISortImportSettings {
   path: string;
