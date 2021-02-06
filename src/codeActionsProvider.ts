@@ -1,13 +1,18 @@
-import { CodeAction, CodeActionKind, CodeActionProvider, ProviderResult, Range, TextDocument, workspace } from 'coc.nvim';
+import { CodeAction, CodeActionKind, CodeActionProvider, Document, Position, ProviderResult, Range, TextDocument, TextEdit, workspace } from 'coc.nvim';
 
 export class PythonCodeActionProvider implements CodeActionProvider {
-  private equal(a: Range, b: Range): boolean {
-    return a.start.line === b.start.line && a.start.character === b.start.character && a.end.line === b.end.line && a.end.character === b.end.character;
+  private wholeRange(doc: Document, range: Range): boolean {
+    const whole = Range.create(0, 0, doc.lineCount, 0);
+    return (
+      whole.start.line === range.start.line && whole.start.character === range.start.character && whole.end.line === range.end.line && whole.end.character === whole.end.character
+    );
   }
 
   public provideCodeActions(document: TextDocument, range: Range): ProviderResult<CodeAction[]> {
+    const doc = workspace.getDocument(document.uri);
     const actions: CodeAction[] = [];
 
+    // sort imports actions
     const config = workspace.getConfiguration('pyright');
     const provider = config.get<'pyright' | 'isort'>('organizeimports.provider', 'pyright');
     if (provider === 'pyright') {
@@ -30,9 +35,40 @@ export class PythonCodeActionProvider implements CodeActionProvider {
       });
     }
 
-    const doc = workspace.getDocument(document.uri);
-    const whole = Range.create(0, 0, doc.lineCount, 0);
-    if (!this.equal(whole, range)) {
+    // ignore action for whole file
+    if (this.wholeRange(doc, range)) {
+      let pos = Position.create(0, 0);
+      if (doc.getline(0).startsWith('#!')) {
+        pos = Position.create(1, 0);
+      }
+      const edit = TextEdit.insert(pos, '# type: ignore\n');
+      actions.push({
+        title: 'Ignore Pyright typing check for whole file',
+        edit: {
+          changes: {
+            [doc.uri]: [edit],
+          },
+        },
+      });
+    }
+
+    // ignore action for current line
+    if (range.start.line === range.end.line && range.start.character === 0) {
+      const line = doc.getline(range.start.line);
+      if (!line.startsWith('#') && line.length === range.end.character) {
+        const edit = TextEdit.replace(range, line + ' # type: ignore');
+        actions.push({
+          title: 'Ignore Pyright typing check for current line',
+          edit: {
+            changes: {
+              [doc.uri]: [edit],
+            },
+          },
+        });
+      }
+    }
+
+    if (!this.wholeRange(doc, range)) {
       // extract actions should only work on range text
       actions.push({
         title: 'Extract Method',
