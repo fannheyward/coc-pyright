@@ -1182,6 +1182,11 @@
           },
           "scope": "resource"
         },
+        "pyright.completion.snippetSupport": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable completion snippets support"
+        },
         "pyright.organizeimports.provider": {
           "type": "string",
           "default": "pyright",

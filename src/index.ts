@@ -1,15 +1,19 @@
 import {
   CancellationToken,
   commands,
+  CompletionContext,
+  CompletionItemKind,
   DocumentSelector,
   ExtensionContext,
   extensions,
+  InsertTextFormat,
   LanguageClient,
   LanguageClientOptions,
   languages,
   Location,
   NodeModule,
   Position,
+  ProvideCompletionItemsSignature,
   ProvideDefinitionSignature,
   Range,
   services,
@@ -63,6 +67,25 @@ async function provideDefinition(document: TextDocument, position: Position, tok
   return pyiFirst ? locations.reverse() : locations;
 }
 
+async function provideCompletionItem(document: TextDocument, position: Position, context: CompletionContext, token: CancellationToken, next: ProvideCompletionItemsSignature) {
+  const result = await next(document, position, context, token);
+  if (!result) return;
+
+  const snippetSupport = workspace.getConfiguration('pyright').get<boolean>('completion.snippetSupport');
+  if (snippetSupport) {
+    const items = Array.isArray(result) ? result : result.items;
+    for (const item of items) {
+      if (item.data?.funcParensDisabled) continue;
+      if (item.kind === CompletionItemKind.Method || item.kind === CompletionItemKind.Function) {
+        item.insertText = `${item.label}($1)$0`;
+        item.insertTextFormat = InsertTextFormat.Snippet;
+      }
+    }
+  }
+
+  return result;
+}
+
 export async function activate(context: ExtensionContext): Promise<void> {
   const state = extensions.getExtensionState('coc-python');
   if (state.toString() === 'activated') {
@@ -94,6 +117,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
     progressOnInitialization: true,
     middleware: {
       provideDefinition,
+      provideCompletionItem,
     },
   };
 
