@@ -1,20 +1,15 @@
-import { CancellationToken, OutputChannel, Uri, window, workspace } from 'coc.nvim';
+import { OutputChannel, Uri, window, workspace } from 'coc.nvim';
 import * as path from 'path';
 import { getTextEditsFromPatch } from './common';
 import { PythonSettings } from './configSettings';
 import { PythonExecutionService } from './processService';
 import { ExecutionInfo } from './types';
 
-async function generateIsortFixDiff(extensionRoot: string, uri: string, token?: CancellationToken): Promise<string> {
+async function generateIsortFixDiff(extensionRoot: string, uri: string): Promise<string> {
   const pythonSettings = PythonSettings.getInstance();
   const { path: isortPath, args: userArgs } = pythonSettings.sortImports;
   const args = ['--diff'].concat(userArgs);
   args.push(uri);
-  const options = { throwOnStdErr: true, token };
-
-  if (token && token.isCancellationRequested) {
-    return '';
-  }
 
   const pythonToolsExecutionService = new PythonExecutionService();
   let executionInfo: ExecutionInfo;
@@ -24,7 +19,7 @@ async function generateIsortFixDiff(extensionRoot: string, uri: string, token?: 
     const importScript = path.join(extensionRoot, 'pythonFiles', 'sortImports.py');
     executionInfo = { execPath: pythonSettings.pythonPath, args: [importScript].concat(args) };
   }
-  const result = await pythonToolsExecutionService.exec(executionInfo, options);
+  const result = await pythonToolsExecutionService.exec(executionInfo, { throwOnStdErr: true });
   return result.stdout;
 }
 
