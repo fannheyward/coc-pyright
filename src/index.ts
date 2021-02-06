@@ -1,4 +1,5 @@
 import {
+  CancellationToken,
   commands,
   DocumentSelector,
   ExtensionContext,
@@ -8,6 +9,8 @@ import {
   languages,
   Location,
   NodeModule,
+  Position,
+  ProvideDefinitionSignature,
   Range,
   services,
   StaticFeature,
@@ -41,6 +44,25 @@ class PyrightExtensionFeature implements StaticFeature {
   }
 }
 
+async function provideDefinition(document: TextDocument, position: Position, token: CancellationToken, next: ProvideDefinitionSignature) {
+  const locations = await next(document, position, token);
+  if (!locations) {
+    return;
+  }
+  if (Location.is(locations)) return locations;
+
+  let pyiFirst = false;
+  if (Array.isArray(locations) && locations.length > 1) {
+    const first = locations[0];
+    const uri = Location.is(first) ? first.uri : first.targetUri;
+    if (uri.length && uri.endsWith('.pyi')) {
+      pyiFirst = true;
+    }
+  }
+
+  return pyiFirst ? locations.reverse() : locations;
+}
+
 export async function activate(context: ExtensionContext): Promise<void> {
   const state = extensions.getExtensionState('coc-python');
   if (state.toString() === 'activated') {
@@ -71,24 +93,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
     outputChannel,
     progressOnInitialization: true,
     middleware: {
-      provideDefinition: async (document, position, token, next) => {
-        const locations = await next(document, position, token);
-        if (!locations) {
-          return;
-        }
-        if (Location.is(locations)) return locations;
-
-        let pyiFirst = false;
-        if (Array.isArray(locations) && locations.length > 1) {
-          const first = locations[0];
-          const uri = Location.is(first) ? first.uri : first.targetUri;
-          if (uri.length && uri.endsWith('.pyi')) {
-            pyiFirst = true;
-          }
-        }
-
-        return pyiFirst ? locations.reverse() : locations;
-      },
+      provideDefinition,
     },
   };
 
