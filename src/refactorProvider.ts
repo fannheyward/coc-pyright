@@ -132,6 +132,7 @@ async function extractName(textEditor: Document, newName: string, renameResponse
     }
     outputChannel.appendLine(`${'#'.repeat(10)}Refactor Output${'#'.repeat(10)}`);
     outputChannel.appendLine(`Error in refactoring:\n${errorMessage}`);
+    outputChannel.appendLine('');
     window.showMessage(`Cannot perform refactoring using selected element(s).`, 'error');
     return await Promise.reject(error);
   }
