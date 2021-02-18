@@ -10,11 +10,9 @@ import {
   LanguageClient,
   LanguageClientOptions,
   languages,
-  Location,
   NodeModule,
   Position,
   ProvideCompletionItemsSignature,
-  ProvideDefinitionSignature,
   ProvideHoverSignature,
   Range,
   services,
@@ -47,25 +45,6 @@ class PyrightExtensionFeature implements StaticFeature {
     // this will break signatureHelp
     capabilities.textDocument.signatureHelp.signatureInformation.activeParameterSupport = false;
   }
-}
-
-async function provideDefinition(document: TextDocument, position: Position, token: CancellationToken, next: ProvideDefinitionSignature) {
-  const locations = await next(document, position, token);
-  if (!locations) {
-    return;
-  }
-  if (Location.is(locations)) return locations;
-
-  let pyiFirst = false;
-  if (Array.isArray(locations) && locations.length > 1) {
-    const first = locations[0];
-    const uri = Location.is(first) ? first.uri : first.targetUri;
-    if (uri.length && uri.endsWith('.pyi')) {
-      pyiFirst = true;
-    }
-  }
-
-  return pyiFirst ? locations.reverse() : locations;
 }
 
 async function provideCompletionItem(document: TextDocument, position: Position, context: CompletionContext, token: CancellationToken, next: ProvideCompletionItemsSignature) {
@@ -129,7 +108,6 @@ export async function activate(context: ExtensionContext): Promise<void> {
     progressOnInitialization: true,
     middleware: {
       provideHover,
-      provideDefinition,
       provideCompletionItem,
     },
   };
