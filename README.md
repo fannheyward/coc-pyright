@@ -2,6 +2,7 @@
 
 [Pyright](https://github.com/microsoft/pyright) extension for coc.nvim
 
+<!-- markdownlint-disable-next-line -->
 <img width="603" alt="1" src="https://user-images.githubusercontent.com/345274/64470245-bda9a780-d172-11e9-9fda-48af0617a2ee.png">
 
 ## Install
@@ -85,7 +86,9 @@ files for well-known packages may also be obtained from 3rd party, for example:
 
 If this extension is helpful to you, please support me via Patreon or PayPal:
 
+<!-- markdownlint-disable-next-line -->
 <a href="https://patreon.com/fannheyward"><img src="https://c5.patreon.com/external/logo/become_a_patron_button.png" alt="Patreon donate button" /> </a>
+<!-- markdownlint-disable-next-line -->
 <a href="https://paypal.me/fannheyward"><img src="https://user-images.githubusercontent.com/345274/104303610-41149f00-5505-11eb-88b2-5a95c53187b4.png" alt="PayPal donate button" /> </a>
 
 ## License
