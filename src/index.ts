@@ -15,6 +15,7 @@ import {
   Position,
   ProvideCompletionItemsSignature,
   ProvideDefinitionSignature,
+  ProvideHoverSignature,
   Range,
   services,
   StaticFeature,
@@ -85,6 +86,17 @@ async function provideCompletionItem(document: TextDocument, position: Position,
 
   return result;
 }
+async function provideHover(document: TextDocument, position: Position, token: CancellationToken, next: ProvideHoverSignature) {
+  const hover = await next(document, position, token);
+  if (!hover) return;
+
+  if (typeof hover.contents === 'object' && 'kind' in hover.contents) {
+    if (hover.contents.kind === 'markdown') {
+      hover.contents.value = hover.contents.value.replace(/&nbsp;/g, ' ');
+    }
+  }
+  return hover;
+}
 
 export async function activate(context: ExtensionContext): Promise<void> {
   const state = extensions.getExtensionState('coc-python');
@@ -116,6 +128,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
     outputChannel,
     progressOnInitialization: true,
     middleware: {
+      provideHover,
       provideDefinition,
       provideCompletionItem,
     },
