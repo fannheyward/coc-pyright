@@ -51,7 +51,8 @@ export class PythonSettings implements IPythonSettings {
       let p = path.join(this.workspaceRoot, '.python-version');
       if (fs.existsSync(p)) {
         if (!process.env.PYENV_VERSION) {
-          process.env.PYENV_VERSION = fs.readFileSync(p).toString().trim();
+          // pyenv local can special multiple Python, use first one only
+          process.env.PYENV_VERSION = fs.readFileSync(p).toString().trim().split('\n')[0];
         }
         return;
       }
