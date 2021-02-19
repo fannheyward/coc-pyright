@@ -59,13 +59,13 @@ export class PythonSettings implements IPythonSettings {
       // pipenv
       p = path.join(this.workspaceRoot, 'Pipfile');
       if (fs.existsSync(p)) {
-        return child_process.execFileSync('pipenv', ['--py'], { encoding: 'utf8' }).toString().trim();
+        return child_process.spawnSync('pipenv', ['--py'], { encoding: 'utf8' }).stdout.trim();
       }
 
       // poetry
       p = path.join(this.workspaceRoot, 'poetry.lock');
       if (fs.existsSync(p)) {
-        const list = child_process.spawnSync('poetry', ['env', 'list', '--full-path'], { encoding: 'utf8' }).stdout.toString().trim();
+        const list = child_process.spawnSync('poetry', ['env', 'list', '--full-path'], { encoding: 'utf8' }).stdout.trim();
         let info = '';
         for (const item of list.split('\n')) {
           if (item.includes('(Activated)')) {
@@ -190,8 +190,7 @@ function getPythonExecutable(pythonPath: string): string {
 
 function isValidPythonPath(pythonPath: string): boolean {
   try {
-    const output = child_process.execFileSync(pythonPath, ['-c', 'print(1234)'], { encoding: 'utf8' });
-    return output.startsWith('1234');
+    return child_process.spawnSync(pythonPath, ['-c', 'print(1234)'], { encoding: 'utf8' }).stdout.startsWith('1234');
   } catch (ex) {
     return false;
   }
