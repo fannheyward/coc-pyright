@@ -52,7 +52,7 @@
     "diff-match-patch": "^1.0.5",
     "esbuild": "^0.8.33",
     "eslint": "^7.11.0",
-    "eslint-config-prettier": "^7.0.0",
+    "eslint-config-prettier": "^8.0.0",
     "eslint-plugin-prettier": "^3.1.4",
     "fs-extra": "^9.0.1",
     "iconv-lite": "^0.6.2",
