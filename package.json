@@ -87,6 +87,11 @@
       "type": "object",
       "title": "coc-pyright configuration",
       "properties": {
+        "pyright.enable": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable coc-pyright extension"
+        },
         "python.analysis.extraPaths": {
           "type": "array",
           "default": [],
