@@ -23,6 +23,7 @@ These configurations are used by `coc-pyright`, you need to set them in your `co
 
 | Configuration | Description | Default |
 |  --- | --- | --- |
+| pyright.enable | Enable coc-pyright extension | true |
 | python.analysis.autoImportCompletions | Determines whether pyright offers auto-import completions | true |
 | python.analysis.autoSearchPaths | Automatically add common search paths like 'src' | true |
 | python.analysis.diagnosticMode | Analyzes and reports errors for open only or all files in workspace | openFilesOnly |

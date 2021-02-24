@@ -76,6 +76,9 @@ async function provideHover(document: TextDocument, position: Position, token: C
 }
 
 export async function activate(context: ExtensionContext): Promise<void> {
+  const isEnable = workspace.getConfiguration('pyright').get<boolean>('enable', true);
+  if (!isEnable) return;
+
   const state = extensions.getExtensionState('coc-python');
   if (state.toString() === 'activated') {
     window.showMessage(`coc-python is installed and activated, coc-pyright will be disabled`, 'warning');
