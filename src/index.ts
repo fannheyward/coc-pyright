@@ -27,6 +27,7 @@ import {
 import { existsSync } from 'fs';
 import { lt } from 'semver';
 import { PythonCodeActionProvider } from './codeActionsProvider';
+import { PythonSettings } from './configSettings';
 import { PythonFormattingEditProvider } from './formatProvider';
 import { sortImports } from './isortProvider';
 import { LinterProvider } from './linterProvider';
@@ -100,6 +101,8 @@ export async function activate(context: ExtensionContext): Promise<void> {
   };
 
   const outputChannel = window.createOutputChannel('Pyright');
+  const pythonSettings = PythonSettings.getInstance();
+  outputChannel.appendLine(`Using python from ${pythonSettings.pythonPath}\n`);
   const clientOptions: LanguageClientOptions = {
     documentSelector,
     synchronize: {
