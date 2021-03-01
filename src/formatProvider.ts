@@ -61,6 +61,7 @@ export class PythonFormattingEditProvider implements DocumentFormattingEditProvi
       return [];
     }
 
+    this.outputChannel.appendLine(`Using python from ${this.pythonSettings.pythonPath}\n`);
     this.outputChannel.appendLine(`${'#'.repeat(10)} active formattor: ${formater.Id}`);
     return await formater.formatDocument(document, options, token, range);
   }

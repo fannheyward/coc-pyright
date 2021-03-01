@@ -118,6 +118,7 @@ export class LintingEngine {
 
     const activeLinters = await this.getActiveLinters(Uri.parse(document.uri));
     const promises: Promise<ILintMessage[]>[] = activeLinters.map(async (info: ILinterInfo) => {
+      this.outputChannel.appendLine(`Using python from ${this.configService.pythonPath}\n`);
       this.outputChannel.appendLine(`${'#'.repeat(10)} active linter: ${info.id}`);
       const linter = await this.createLinter(info, this.outputChannel);
       const promise = linter.lint(document, cancelToken.token);
