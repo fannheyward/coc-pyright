@@ -77,7 +77,8 @@ async function provideHover(document: TextDocument, position: Position, token: C
 }
 
 export async function activate(context: ExtensionContext): Promise<void> {
-  const isEnable = workspace.getConfiguration('pyright').get<boolean>('enable', true);
+  const pyrightCfg = workspace.getConfiguration('pyright');
+  const isEnable = pyrightCfg.get<boolean>('enable', true);
   if (!isEnable) return;
 
   const state = extensions.getExtensionState('coc-python');
@@ -100,6 +101,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
     transport: TransportKind.ipc,
   };
 
+  const disableDiagnostics = pyrightCfg.get<boolean>('disableDiagnostics');
   const outputChannel = window.createOutputChannel('Pyright');
   const pythonSettings = PythonSettings.getInstance();
   outputChannel.appendLine(`Using python from ${pythonSettings.pythonPath}\n`);
@@ -109,6 +111,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
       configurationSection: ['python', 'pyright'],
     },
     outputChannel,
+    disableDiagnostics,
     progressOnInitialization: true,
     middleware: {
       provideHover,

@@ -1197,6 +1197,11 @@
           },
           "scope": "resource"
         },
+        "pyright.disableDiagnostics": {
+          "type": "boolean",
+          "default": false,
+          "description": "Disable diagnostics from Pyright"
+        },
         "pyright.completion.snippetSupport": {
           "type": "boolean",
           "default": true,
