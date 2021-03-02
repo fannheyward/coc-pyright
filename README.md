@@ -21,44 +21,44 @@
 
 These configurations are used by `coc-pyright`, you need to set them in your `coc-settings.json`.
 
-| Configuration | Description | Default |
-|  --- | --- | --- |
-| pyright.enable | Enable coc-pyright extension | true |
-| python.analysis.autoImportCompletions | Determines whether pyright offers auto-import completions | true |
-| python.analysis.autoSearchPaths | Automatically add common search paths like 'src' | true |
-| python.analysis.diagnosticMode | Analyzes and reports errors for open only or all files in workspace | openFilesOnly |
-| python.analysis.stubPath | Path to directory containing custom type stub files | typings |
-| python.analysis.typeshedPaths | Paths to look for typeshed modules | [] |
-| python.analysis.diagnosticSeverityOverrides | Override the severity levels for individual diagnostics | {} |
-| python.analysis.typeCheckingMode | Defines the default rule set for type checking | basic |
-| python.analysis.useLibraryCodeForTypes | Use library implementations to extract type information | true |
-| python.pythonPath | Path to Python | python |
-| python.venvPath | Path to folder with a list of Virtual Environments | "" |
-| python.formatting.provider | Provider for formatting | autopep8 |
-| python.formatting.blackPath | Custom path to black | black |
-| python.formatting.blackArgs | Arguments passed to black | [] |
-| python.formatting.blackdPath | Custom path to blackd | blackd |
-| python.formatting.blackdHTTPURL | Custom blackd server url | "" |
-| python.formatting.blackdHTTPHeaders | Custom blackd request headers | {} |
-| python.formatting.yapfPath | Custom path to yapf | yapf |
-| python.formatting.yapfArgs | Arguments passed to yapf | [] |
-| python.formatting.autopep8Path | Custom path to autopep8 | autopep8 |
-| python.formatting.autopep8Args | Arguments passed to autopep8 | [] |
-| python.linting.enabled | Whether to lint Python files | true |
-| python.linting.flake8Enabled | Whether to lint with flake8 | false |
-| python.linting.banditEnabled | Whether to lint with bandit | false |
-| python.linting.mypyEnabled | Whether to lint with mypy | false |
-| python.linting.pytypeEnabled | Whether to lint with pytype | false |
-| python.linting.pep8Enabled | Whether to lint with pep8 | false |
-| python.linting.prospectorEnabled | Whether to lint with prospector | false |
-| python.linting.pydocstyleEnabled | Whether to lint with pydocstyleEnabled | false |
-| python.linting.pylamaEnabled | Whether to lint with pylama | false |
-| python.linting.pylintEnabled | Whether to lint with pylint | false |
-| python.sortImports.path | Path to isort script, default using inner version | '' |
-| python.sortImports.args | Arguments passed to isort | [] |
-| pyright.disableDiagnostics | Disable diagnostics from Pyright | false |
-| pyright.completion.snippetSupport | Enable completion snippets support | true |
-| pyright.organizeimports.provider | Organize imports provider, `pyright` or `isort` | pyright |
+| Configuration                               | Description                                                         | Default       |
+| ------------------------------------------- | ------------------------------------------------------------------- | ------------- |
+| pyright.enable                              | Enable coc-pyright extension                                        | true          |
+| python.analysis.autoImportCompletions       | Determines whether pyright offers auto-import completions           | true          |
+| python.analysis.autoSearchPaths             | Automatically add common search paths like 'src'                    | true          |
+| python.analysis.diagnosticMode              | Analyzes and reports errors for open only or all files in workspace | openFilesOnly |
+| python.analysis.stubPath                    | Path to directory containing custom type stub files                 | typings       |
+| python.analysis.typeshedPaths               | Paths to look for typeshed modules                                  | []            |
+| python.analysis.diagnosticSeverityOverrides | Override the severity levels for individual diagnostics             | {}            |
+| python.analysis.typeCheckingMode            | Defines the default rule set for type checking                      | basic         |
+| python.analysis.useLibraryCodeForTypes      | Use library implementations to extract type information             | true          |
+| python.pythonPath                           | Path to Python                                                      | python        |
+| python.venvPath                             | Path to folder with a list of Virtual Environments                  | ""            |
+| python.formatting.provider                  | Provider for formatting                                             | autopep8      |
+| python.formatting.blackPath                 | Custom path to black                                                | black         |
+| python.formatting.blackArgs                 | Arguments passed to black                                           | []            |
+| python.formatting.blackdPath                | Custom path to blackd                                               | blackd        |
+| python.formatting.blackdHTTPURL             | Custom blackd server url                                            | ""            |
+| python.formatting.blackdHTTPHeaders         | Custom blackd request headers                                       | {}            |
+| python.formatting.yapfPath                  | Custom path to yapf                                                 | yapf          |
+| python.formatting.yapfArgs                  | Arguments passed to yapf                                            | []            |
+| python.formatting.autopep8Path              | Custom path to autopep8                                             | autopep8      |
+| python.formatting.autopep8Args              | Arguments passed to autopep8                                        | []            |
+| python.linting.enabled                      | Whether to lint Python files                                        | true          |
+| python.linting.flake8Enabled                | Whether to lint with flake8                                         | false         |
+| python.linting.banditEnabled                | Whether to lint with bandit                                         | false         |
+| python.linting.mypyEnabled                  | Whether to lint with mypy                                           | false         |
+| python.linting.pytypeEnabled                | Whether to lint with pytype                                         | false         |
+| python.linting.pep8Enabled                  | Whether to lint with pep8                                           | false         |
+| python.linting.prospectorEnabled            | Whether to lint with prospector                                     | false         |
+| python.linting.pydocstyleEnabled            | Whether to lint with pydocstyleEnabled                              | false         |
+| python.linting.pylamaEnabled                | Whether to lint with pylama                                         | false         |
+| python.linting.pylintEnabled                | Whether to lint with pylint                                         | false         |
+| python.sortImports.path                     | Path to isort script, default using inner version                   | ''            |
+| python.sortImports.args                     | Arguments passed to isort                                           | []            |
+| pyright.disableDiagnostics                  | Disable diagnostics from Pyright                                    | false         |
+| pyright.completion.snippetSupport           | Enable completion snippets support                                  | true          |
+| pyright.organizeimports.provider            | Organize imports provider, `pyright` or `isort`                     | pyright       |
 
 ## pyrightconfig.json
 
