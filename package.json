@@ -1246,6 +1246,11 @@
         "category": "Pyright"
       },
       {
+        "command": "pyright.version",
+        "title": "Show Pyright version",
+        "category": "Pyright"
+      },
+      {
         "command": "pyright.organizeimports",
         "title": "Organize Imports by Pyright",
         "category": "Pyright"

@@ -24,7 +24,8 @@ import {
   workspace,
   WorkspaceEdit,
 } from 'coc.nvim';
-import { existsSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
+import { join } from 'path';
 import { lt } from 'semver';
 import { PythonCodeActionProvider } from './codeActionsProvider';
 import { PythonSettings } from './configSettings';
@@ -33,7 +34,12 @@ import { sortImports } from './isortProvider';
 import { LinterProvider } from './linterProvider';
 import { extractMethod, extractVariable } from './refactorProvider';
 
-const documentSelector: DocumentSelector = [{ scheme: 'file', language: 'python' }];
+const documentSelector: DocumentSelector = [
+  {
+    scheme: 'file',
+    language: 'python',
+  },
+];
 
 class PyrightExtensionFeature implements StaticFeature {
   constructor() {}
@@ -199,6 +205,13 @@ export async function activate(context: ExtensionContext): Promise<void> {
 
   disposable = commands.registerCommand('python.sortImports', async () => {
     await sortImports(context.extensionPath, outputChannel).catch(() => {});
+  });
+  context.subscriptions.push(disposable);
+
+  disposable = commands.registerCommand('pyright.version', () => {
+    const json = join(context.extensionPath, 'node_modules', 'pyright', 'package.json');
+    const packageJSON = JSON.parse(readFileSync(json, 'utf8'));
+    window.showMessage(`Pyright version ${packageJSON.version}`);
   });
   context.subscriptions.push(disposable);
 }
