@@ -2,7 +2,9 @@ import {
   CancellationToken,
   commands,
   CompletionContext,
+  CompletionItem,
   CompletionItemKind,
+  CompletionItemProvider,
   DocumentSelector,
   ExtensionContext,
   extensions,
@@ -16,6 +18,7 @@ import {
   ProvideHoverSignature,
   Range,
   services,
+  sources,
   StaticFeature,
   TextDocument,
   TextEdit,
@@ -214,4 +217,31 @@ export async function activate(context: ExtensionContext): Promise<void> {
     window.showMessage(`Pyright version ${packageJSON.version}`);
   });
   context.subscriptions.push(disposable);
+
+  const provider = new ImportCompletionProvider();
+  disposable = languages.registerCompletionItemProvider('python-import', 'PY', 'python', provider, [' ']);
+}
+
+class ImportCompletionProvider implements CompletionItemProvider {
+  async provideCompletionItems(document: TextDocument, position: Position, token: CancellationToken, context: CompletionContext): Promise<CompletionItem[]> {
+    const line = document.getText(Range.create(position.line, 0, position.line, position.character)).trim();
+    if (!line.includes('from') && !line.includes('import')) return [];
+
+    const parts = line.split(' ');
+    const first = parts[0];
+    const last = parts[parts.length - 1];
+    if (first !== last && first === 'from' && last !== 'import' && !last.endsWith(',')) {
+      return [{ label: 'import' }];
+    }
+    const source = sources.getSource('pyright-1');
+    if (!source) return [];
+    // @ts-ignore
+    const result = await source.doComplete(context.option, token);
+    if (!result) return [];
+    const items: CompletionItem[] = [];
+    for (const o of result.items) {
+      items.push({ label: o.word });
+    }
+    return items;
+  }
 }
