@@ -220,6 +220,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
 
   const provider = new ImportCompletionProvider();
   disposable = languages.registerCompletionItemProvider('python-import', 'PY', 'python', provider, [' ']);
+  context.subscriptions.push(disposable);
 }
 
 class ImportCompletionProvider implements CompletionItemProvider {
