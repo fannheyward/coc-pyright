@@ -28,7 +28,7 @@ export interface ObservableExecutionResult<T extends string | Buffer> {
 export enum Product {
   pylint = 1,
   flake8 = 2,
-  pep8 = 3,
+  pycodestyle = 3,
   pylama = 4,
   prospector = 5,
   pydocstyle = 6,
@@ -43,7 +43,7 @@ export enum Product {
   blackd = 15,
 }
 
-export type LinterId = 'flake8' | 'mypy' | 'pep8' | 'prospector' | 'pydocstyle' | 'pylama' | 'pylint' | 'bandit' | 'pytype';
+export type LinterId = 'flake8' | 'mypy' | 'pycodestyle' | 'prospector' | 'pydocstyle' | 'pylama' | 'pylint' | 'bandit' | 'pytype';
 export type FormatterId = 'yapf' | 'black' | 'autopep8' | 'darker' | 'blackd';
 
 export interface ILinterInfo {
@@ -90,7 +90,7 @@ export interface PylintCategorySeverity {
   readonly fatal: DiagnosticSeverity;
 }
 
-export interface Pep8CategorySeverity {
+export interface PycodestyleCategorySeverity {
   readonly W: DiagnosticSeverity;
   readonly E: DiagnosticSeverity;
 }
@@ -111,8 +111,8 @@ export interface ILintingSettings {
   readonly prospectorArgs: string[];
   readonly pylintEnabled: boolean;
   readonly pylintArgs: string[];
-  readonly pep8Enabled: boolean;
-  readonly pep8Args: string[];
+  readonly pycodestyleEnabled: boolean;
+  readonly pycodestyleArgs: string[];
   readonly pylamaEnabled: boolean;
   readonly pylamaArgs: string[];
   readonly flake8Enabled: boolean;
@@ -122,12 +122,12 @@ export interface ILintingSettings {
   readonly lintOnSave: boolean;
   readonly maxNumberOfProblems: number;
   readonly pylintCategorySeverity: PylintCategorySeverity;
-  readonly pep8CategorySeverity: Pep8CategorySeverity;
+  readonly pycodestyleCategorySeverity: PycodestyleCategorySeverity;
   readonly flake8CategorySeverity: Flake8CategorySeverity;
   readonly mypyCategorySeverity: MypyCategorySeverity;
   prospectorPath: string;
   pylintPath: string;
-  pep8Path: string;
+  pycodestylePath: string;
   pylamaPath: string;
   flake8Path: string;
   pydocstylePath: string;

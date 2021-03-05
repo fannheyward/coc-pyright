@@ -50,7 +50,7 @@ These configurations are used by `coc-pyright`, you need to set them in your `co
 | python.linting.banditEnabled                | Whether to lint with bandit                                         | false         |
 | python.linting.mypyEnabled                  | Whether to lint with mypy                                           | false         |
 | python.linting.pytypeEnabled                | Whether to lint with pytype                                         | false         |
-| python.linting.pep8Enabled                  | Whether to lint with pep8                                           | false         |
+| python.linting.pycodestyleEnabled           | Whether to lint with pycodestyle                                    | false         |
 | python.linting.prospectorEnabled            | Whether to lint with prospector                                     | false         |
 | python.linting.pydocstyleEnabled            | Whether to lint with pydocstyleEnabled                              | false         |
 | python.linting.pylamaEnabled                | Whether to lint with pylama                                         | false         |

@@ -27,8 +27,8 @@ import { Bandit } from './bandit';
 import { Flake8 } from './flake8';
 import { LinterInfo } from './linterInfo';
 import { MyPy } from './mypy';
-import { Pep8 } from './pep8';
 import { Prospector } from './prospector';
+import { PyCodeStyle } from './pycodestyle';
 import { PyDocStyle } from './pydocstyle';
 import { PyLama } from './pylama';
 import { Pylint } from './pylint';
@@ -68,7 +68,7 @@ export class LintingEngine {
       new LinterInfo(Product.flake8, 'flake8', this.configService),
       new LinterInfo(Product.pylint, 'pylint', this.configService, ['.pylintrc', 'pylintrc']),
       new LinterInfo(Product.mypy, 'mypy', this.configService),
-      new LinterInfo(Product.pep8, 'pep8', this.configService),
+      new LinterInfo(Product.pycodestyle, 'pycodestyle', this.configService),
       new LinterInfo(Product.prospector, 'prospector', this.configService),
       new LinterInfo(Product.pydocstyle, 'pydocstyle', this.configService),
       new LinterInfo(Product.pylama, 'pylama', this.configService),
@@ -234,8 +234,8 @@ export class LintingEngine {
         return new PyLama(info, outputChannel);
       case Product.pydocstyle:
         return new PyDocStyle(info, outputChannel);
-      case Product.pep8:
-        return new Pep8(info, outputChannel);
+      case Product.pycodestyle:
+        return new PyCodeStyle(info, outputChannel);
       case Product.pytype:
         return new Pytype(info, outputChannel);
       default:
