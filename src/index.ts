@@ -241,7 +241,8 @@ class ImportCompletionProvider implements CompletionItemProvider {
     if (!result) return [];
     const items: CompletionItem[] = [];
     for (const o of result.items) {
-      items.push({ label: o.word });
+      // @ts-ignore
+      items.push({ label: o.word, sortText: o.sortText });
     }
     return items;
   }
