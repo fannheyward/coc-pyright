@@ -8,6 +8,7 @@ import { SystemVariables } from './systemVariables';
 import { IFormattingSettings, ILintingSettings, IPythonSettings, ISortImportSettings } from './types';
 
 export class PythonSettings implements IPythonSettings {
+  protected readonly isWindows = process.platform === 'win32';
   private workspaceRoot: string;
 
   private static pythonSettings: Map<string, PythonSettings> = new Map<string, PythonSettings>();
@@ -66,7 +67,7 @@ export class PythonSettings implements IPythonSettings {
       // poetry
       p = path.join(this.workspaceRoot, 'poetry.lock');
       if (fs.existsSync(p)) {
-        const list = child_process.spawnSync('poetry', ['env', 'list', '--full-path'], { encoding: 'utf8' }).stdout.trim();
+        const list = child_process.spawnSync('poetry', ['env', 'list', '--full-path', '--no-ansi'], { encoding: 'utf8' }).stdout.trim();
         let info = '';
         for (const item of list.split('\n')) {
           if (item.includes('(Activated)')) {
@@ -75,7 +76,12 @@ export class PythonSettings implements IPythonSettings {
           }
           info = item;
         }
-        if (info) return path.join(info, 'bin', 'python');
+        if (info) {
+          if (this.isWindows) {
+            return path.join(info, 'Scripts', 'python.exe');
+          }
+          return path.join(info, 'bin', 'python');
+        }
       }
     } catch (e) {
       console.error(e);
