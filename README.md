@@ -73,6 +73,8 @@ where package authors are actively looking to provide that. Meanwhile, stub
 files for well-known packages may also be obtained from 3rd party, for example:
 
 - [Awesome Python Typing # stub-packages](https://github.com/typeddjango/awesome-python-typing#stub-packages)
+- [typeshed](https://github.com/python/typeshed)
+- [python-type-stubs](https://github.com/microsoft/python-type-stubs)
 
 ## Links
 
