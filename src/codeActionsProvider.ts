@@ -8,6 +8,10 @@ export class PythonCodeActionProvider implements CodeActionProvider {
     );
   }
 
+  private cursorRange(r: Range): boolean {
+    return r.start.line === r.end.line && r.start.character === r.end.character;
+  }
+
   public provideCodeActions(document: TextDocument, range: Range): ProviderResult<CodeAction[]> {
     const doc = workspace.getDocument(document.uri);
     const actions: CodeAction[] = [];
@@ -36,7 +40,7 @@ export class PythonCodeActionProvider implements CodeActionProvider {
     }
 
     // ignore action for whole file
-    if (this.wholeRange(doc, range)) {
+    if (this.wholeRange(doc, range) || this.cursorRange(range)) {
       let pos = Position.create(0, 0);
       if (doc.getline(0).startsWith('#!')) {
         pos = Position.create(1, 0);
@@ -55,7 +59,7 @@ export class PythonCodeActionProvider implements CodeActionProvider {
     // ignore action for current line
     if (range.start.line === range.end.line && range.start.character === 0) {
       const line = doc.getline(range.start.line);
-      if (!line.startsWith('#') && line.length === range.end.character) {
+      if (line && !line.startsWith('#') && line.length === range.end.character) {
         const edit = TextEdit.replace(range, line + ' # type: ignore');
         actions.push({
           title: 'Ignore Pyright typing check for current line',
@@ -68,7 +72,7 @@ export class PythonCodeActionProvider implements CodeActionProvider {
       }
     }
 
-    if (!this.wholeRange(doc, range)) {
+    if (!this.wholeRange(doc, range) && !this.cursorRange(range)) {
       // extract actions should only work on range text
       actions.push({
         title: 'Extract Method',
