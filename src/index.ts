@@ -23,6 +23,7 @@ import {
   TextDocument,
   TextEdit,
   TransportKind,
+  Uri,
   window,
   workspace,
   WorkspaceEdit,
@@ -170,18 +171,24 @@ export async function activate(context: ExtensionContext): Promise<void> {
   genericCommands.forEach((command: string) => {
     context.subscriptions.push(
       commands.registerCommand(command, async (...args: any[]) => {
-        const root = workspace.root;
-        const module = args.pop();
-        if (!module) {
+        if (!args.length) {
           window.showMessage(`Module name is missing`, 'warning');
           return;
+        }
+        const doc = await workspace.document;
+        const filePath = Uri.parse(doc.uri).fsPath;
+        if (args[args.length - 1] !== filePath) {
+          // args from Pyright   : [root, module, filePath]
+          // args from CocCommand: [module]
+          args.unshift(workspace.root);
+          args.push(filePath);
         }
 
         const cmd = {
           command,
-          arguments: [root, module],
+          arguments: args,
         };
-        client.sendRequest('workspace/executeCommand', cmd);
+        await client.sendRequest('workspace/executeCommand', cmd);
       })
     );
   });
