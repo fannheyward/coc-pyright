@@ -3,8 +3,7 @@ import { ILinterInfo, ILintMessage } from '../types';
 import { BaseLinter } from './baseLinter';
 
 const COLUMN_OFF_SET = 1;
-
-export const REGEX = '(?<file>[^:]+):(?<line>\\d+)(:(?<column>\\d+))?: (?<type>\\w+): (?<message>.*)\\r?(\\n|$)';
+const REGEX = '(?<file>[^:]+):(?<line>\\d+)(:(?<column>\\d+))?: (?<type>\\w+): (?<message>.*)\\r?(\\n|$)';
 
 export class MyPy extends BaseLinter {
   constructor(info: ILinterInfo, outputChannel: OutputChannel) {
