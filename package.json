@@ -19,6 +19,9 @@
   },
   "activationEvents": [
     "onLanguage:python",
+    "workspaceContains:Pipfile",
+    "workspaceContains:pyproject.toml",
+    "workspaceContains:requirements.txt",
     "workspaceContains:pyrightconfig.json",
     "workspaceContains:mspythonconfig.json"
   ],
