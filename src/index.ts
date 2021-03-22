@@ -219,9 +219,11 @@ export async function activate(context: ExtensionContext): Promise<void> {
   context.subscriptions.push(disposable);
 
   disposable = commands.registerCommand('pyright.version', () => {
-    const json = join(context.extensionPath, 'node_modules', 'pyright', 'package.json');
-    const packageJSON = JSON.parse(readFileSync(json, 'utf8'));
-    window.showMessage(`Pyright version ${packageJSON.version}`);
+    const pyrightJSON = join(context.extensionPath, 'node_modules', 'pyright', 'package.json');
+    const pyrightPackage = JSON.parse(readFileSync(pyrightJSON, 'utf8'));
+    const cocPyrightJSON = join(context.extensionPath, 'package.json');
+    const cocPyrightPackage = JSON.parse(readFileSync(cocPyrightJSON, 'utf8'));
+    window.showMessage(`coc-pyright ${cocPyrightPackage.version} with Pyright ${pyrightPackage.version}`);
   });
   context.subscriptions.push(disposable);
 
