@@ -243,7 +243,7 @@ class ImportCompletionProvider implements CompletionItemProvider {
     if (first !== last && first === 'from' && last !== 'import' && !last.endsWith(',')) {
       return [{ label: 'import' }];
     }
-    const source = sources.getSource('pyright-1');
+    const source = sources.sources.find((s) => s.name.includes('pyright'));
     if (!source) return [];
     // @ts-ignore
     const result = await source.doComplete(context.option, token);
