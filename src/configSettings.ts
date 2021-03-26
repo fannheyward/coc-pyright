@@ -90,8 +90,10 @@ export class PythonSettings implements IPythonSettings {
         const p = path.join(this.workspaceRoot, file);
 
         if (fs.existsSync(path.join(p, 'pyvenv.cfg'))) {
-          const pythonPath = path.join(p, 'bin', 'python');
-          return pythonPath;
+          if (this.isWindows) {
+            return path.join(p, 'Scripts', 'python.exe');
+          }
+          return path.join(p, 'bin', 'python');
         }
       }
     } catch (e) {
