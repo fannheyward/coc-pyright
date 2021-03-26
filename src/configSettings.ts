@@ -83,6 +83,17 @@ export class PythonSettings implements IPythonSettings {
           return path.join(info, 'bin', 'python');
         }
       }
+
+      // virtualenv in the workspace root
+      const files = fs.readdirSync(this.workspaceRoot);
+      for (const file of files) {
+        const p = path.join(this.workspaceRoot, file);
+
+        if (fs.existsSync(path.join(p, 'pyvenv.cfg'))) {
+          const pythonPath = path.join(p, 'bin', 'python');
+          return pythonPath;
+        }
+      }
     } catch (e) {
       console.error(e);
     }
