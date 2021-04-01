@@ -1,6 +1,6 @@
 import { ChildProcess } from 'child_process';
 import { CancellationToken, DiagnosticSeverity, TextDocument, Uri } from 'coc.nvim';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 export interface ExecutionInfo {
   execPath: string;

@@ -3,7 +3,7 @@ import { ExecOptions, spawn, SpawnOptions as ChildProcessSpawnOptions } from 'ch
 import { CancellationToken } from 'coc.nvim';
 import * as iconv from 'iconv-lite';
 import { homedir } from 'os';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { createDeferred } from './async';
 import { PythonSettings } from './configSettings';
 import { ExecutionInfo, ExecutionResult, ObservableExecutionResult, Output } from './types';
