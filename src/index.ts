@@ -234,6 +234,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
 
 class ImportCompletionProvider implements CompletionItemProvider {
   async provideCompletionItems(document: TextDocument, position: Position, token: CancellationToken, context: CompletionContext): Promise<CompletionItem[]> {
+    if (context.triggerCharacter !== ' ') return [];
     const line = document.getText(Range.create(position.line, 0, position.line, position.character)).trim();
     if (!line.includes('from') && !line.includes('import')) return [];
 
