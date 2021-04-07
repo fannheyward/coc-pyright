@@ -114,7 +114,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
   };
 
   const disableDiagnostics = pyrightCfg.get<boolean>('disableDiagnostics');
-  const disableDiagnosticUnnecessaryTag = pyrightCfg.get<boolean>('disableDiagnosticUnnecessaryTag');
+  const disableSelfClsNotAccessed = pyrightCfg.get<boolean>('disableSelfClsNotAccessed');
   const outputChannel = window.createOutputChannel('Pyright');
   const pythonSettings = PythonSettings.getInstance();
   outputChannel.appendLine(`Using python from ${pythonSettings.pythonPath}\n`);
@@ -130,8 +130,9 @@ export async function activate(context: ExtensionContext): Promise<void> {
       provideHover,
       provideCompletionItem,
       handleDiagnostics: (uri: string, diagnostics: Diagnostic[], next: HandleDiagnosticsSignature) => {
-        if (disableDiagnosticUnnecessaryTag) {
-          diagnostics = diagnostics.filter((d) => !d.tags?.includes(1));
+        if (disableSelfClsNotAccessed) {
+          diagnostics = diagnostics.filter((d) => d.message !== '"self" is not accessed');
+          diagnostics = diagnostics.filter((d) => d.message !== '"cls" is not accessed');
         }
         next(uri, diagnostics);
       },

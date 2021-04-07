@@ -1214,10 +1214,10 @@
           "default": false,
           "description": "Disable diagnostics from Pyright"
         },
-        "pyright.disableDiagnosticUnnecessaryTag": {
+        "pyright.disableSelfClsNotAccessed": {
           "type": "boolean",
           "default": false,
-          "description": "Disable diagnostic unnecessary tag from Pyright"
+          "description": "Disable self, cls not accessed from Pyright"
         },
         "pyright.completion.snippetSupport": {
           "type": "boolean",
