@@ -1225,11 +1225,6 @@
           "default": false,
           "description": "Disable diagnostics from Pyright"
         },
-        "pyright.disableSelfClsNotAccessed": {
-          "type": "boolean",
-          "default": false,
-          "description": "Disable self, cls not accessed from Pyright"
-        },
         "pyright.completion.snippetSupport": {
           "type": "boolean",
           "default": true,
