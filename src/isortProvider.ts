@@ -1,15 +1,31 @@
-import { OutputChannel, Uri, window, workspace } from 'coc.nvim';
+import { OutputChannel, TextDocument, Uri, window, workspace } from 'coc.nvim';
+import fs from 'fs-extra';
+import md5 from 'md5';
 import * as path from 'path';
 import { getTextEditsFromPatch } from './common';
 import { PythonSettings } from './configSettings';
 import { PythonExecutionService } from './processService';
 import { ExecutionInfo } from './types';
 
-async function generateIsortFixDiff(extensionRoot: string, uri: string): Promise<string> {
+function getTempFileWithDocumentContents(document: TextDocument): Promise<string> {
+  return new Promise<string>((resolve, reject) => {
+    const fsPath = Uri.parse(document.uri).fsPath;
+    const fileName = `${fsPath}.${md5(document.uri)}${path.extname(fsPath)}`;
+    fs.writeFile(fileName, document.getText(), (ex) => {
+      if (ex) {
+        reject(new Error(`Failed to create a temporary file, ${ex.message}`));
+      }
+      resolve(fileName);
+    });
+  });
+}
+
+async function generateIsortFixDiff(extensionRoot: string, document: TextDocument): Promise<string> {
   const pythonSettings = PythonSettings.getInstance();
   const { path: isortPath, args: userArgs } = pythonSettings.sortImports;
   const args = ['--diff'].concat(userArgs);
-  args.push(uri);
+  const tempFile = await getTempFileWithDocumentContents(document);
+  args.push(tempFile);
 
   const pythonToolsExecutionService = new PythonExecutionService();
   let executionInfo: ExecutionInfo;
@@ -20,6 +36,7 @@ async function generateIsortFixDiff(extensionRoot: string, uri: string): Promise
     executionInfo = { execPath: pythonSettings.pythonPath, args: [importScript].concat(args) };
   }
   const result = await pythonToolsExecutionService.exec(executionInfo, { throwOnStdErr: true });
+  await fs.unlink(tempFile);
   return result.stdout;
 }
 
@@ -30,7 +47,7 @@ export async function sortImports(extensionRoot: string, outputChannel: OutputCh
   }
 
   try {
-    const patch = await generateIsortFixDiff(extensionRoot, Uri.parse(doc.uri).fsPath);
+    const patch = await generateIsortFixDiff(extensionRoot, doc.textDocument);
     const edits = getTextEditsFromPatch(doc.getDocumentContent(), patch);
     await doc.applyEdits(edits);
   } catch (err) {
