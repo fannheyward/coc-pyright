@@ -25,16 +25,12 @@ async function generateIsortFixDiff(extensionRoot: string, uri: string): Promise
 
 export async function sortImports(extensionRoot: string, outputChannel: OutputChannel): Promise<void> {
   const doc = await workspace.document;
-  if (!doc || doc.filetype !== 'python') {
-    return;
-  }
-  const uri = Uri.parse(doc.uri);
-  if (doc.lineCount <= 1) {
+  if (!doc || doc.filetype !== 'python' || doc.lineCount <= 1) {
     return;
   }
 
   try {
-    const patch = await generateIsortFixDiff(extensionRoot, uri.fsPath);
+    const patch = await generateIsortFixDiff(extensionRoot, Uri.parse(doc.uri).fsPath);
     const edits = getTextEditsFromPatch(doc.getDocumentContent(), patch);
     await doc.applyEdits(edits);
   } catch (err) {
