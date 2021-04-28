@@ -76,9 +76,21 @@ files for well-known packages may also be obtained from 3rd party, for example:
 - [typeshed](https://github.com/python/typeshed)
 - [python-type-stubs](https://github.com/microsoft/python-type-stubs)
 
-## Links
+## Conda setup
 
-- [Fixing coc-pyright and anaconda import errors](https://hanspinckaers.com/fixing-coc-pyright-and-anaconda-import-errors)
+1. Create the following file:
+```
+#!/bin/bash
+python "$@"
+```
+2. Make it executable: `chmod +x $path`
+3. Add the following to your `coc-settings.json`:
+```
+"python.pythonPath": "<PUT PATH HERE>"
+```
+4. Activate the environment before starting vim
+
+This way python from your currently activated environment will be used
 
 ## My Workflow with Pyright
 
