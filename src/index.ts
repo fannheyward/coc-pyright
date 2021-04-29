@@ -17,6 +17,7 @@ import {
   ProvideCompletionItemsSignature,
   ProvideHoverSignature,
   Range,
+  ResolveCompletionItemSignature,
   services,
   sources,
   StaticFeature,
@@ -74,6 +75,18 @@ async function provideCompletionItem(document: TextDocument, position: Position,
 
   return result;
 }
+
+async function resolveCompletionItem(item: CompletionItem, token: CancellationToken, next: ResolveCompletionItemSignature) {
+  const result = await next(item, token);
+
+  if (result && typeof result.documentation === 'object' && 'kind' in result.documentation) {
+    if (result.documentation.kind === 'markdown') {
+      result.documentation.value = result.documentation.value.replace(/&nbsp;/g, ' ');
+    }
+  }
+  return result;
+}
+
 async function provideHover(document: TextDocument, position: Position, token: CancellationToken, next: ProvideHoverSignature) {
   const hover = await next(document, position, token);
   if (!hover) return;
@@ -126,6 +139,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
     middleware: {
       provideHover,
       provideCompletionItem,
+      resolveCompletionItem,
     },
   };
 
