@@ -78,7 +78,6 @@ async function provideCompletionItem(document: TextDocument, position: Position,
 
 async function resolveCompletionItem(item: CompletionItem, token: CancellationToken, next: ResolveCompletionItemSignature) {
   const result = await next(item, token);
-
   if (result && typeof result.documentation === 'object' && 'kind' in result.documentation) {
     if (result.documentation.kind === 'markdown') {
       result.documentation.value = result.documentation.value.replace(/&nbsp;/g, ' ');
@@ -89,9 +88,7 @@ async function resolveCompletionItem(item: CompletionItem, token: CancellationTo
 
 async function provideHover(document: TextDocument, position: Position, token: CancellationToken, next: ProvideHoverSignature) {
   const hover = await next(document, position, token);
-  if (!hover) return;
-
-  if (typeof hover.contents === 'object' && 'kind' in hover.contents) {
+  if (hover && typeof hover.contents === 'object' && 'kind' in hover.contents) {
     if (hover.contents.kind === 'markdown') {
       hover.contents.value = hover.contents.value.replace(/&nbsp;/g, ' ');
     }
