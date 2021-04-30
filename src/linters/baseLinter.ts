@@ -6,9 +6,8 @@ import { CancellationToken, OutputChannel, TextDocument, Uri, workspace } from '
 import namedRegexp from 'named-js-regexp';
 import { splitLines } from '../common';
 import { PythonSettings } from '../configSettings';
-import { PythonExecutionService } from '../processService';
+import { isNotInstalledError, PythonExecutionService } from '../processService';
 import { ILinter, ILinterInfo, ILintMessage, IPythonSettings, LinterId, LintMessageSeverity } from '../types';
-import { ErrorHandler } from './errorHandlers/errorHandler';
 
 // Allow negative column numbers (https://github.com/PyCQA/pylint/issues/1822)
 const REGEX = '(?<line>\\d+),(?<column>-?\\d+),(?<type>\\w+),(?<code>\\w+\\d+):(?<message>.*)\\r?(\\n|$)';
@@ -56,7 +55,6 @@ export function parseLine(line: string, regex: string, linterID: LinterId, colOf
 export abstract class BaseLinter implements ILinter {
   protected readonly isWindows = process.platform === 'win32';
 
-  private errorHandler: ErrorHandler;
   private _pythonSettings: IPythonSettings;
   private _info: ILinterInfo;
 
@@ -66,7 +64,6 @@ export abstract class BaseLinter implements ILinter {
 
   constructor(info: ILinterInfo, protected readonly outputChannel: OutputChannel, protected readonly columnOffset = 0) {
     this._info = info;
-    this.errorHandler = new ErrorHandler(this.info.id, outputChannel);
     this._pythonSettings = PythonSettings.getInstance();
   }
 
@@ -116,7 +113,12 @@ export abstract class BaseLinter implements ILinter {
 
       return await this.parseMessages(result.stdout, document, cancellation, regEx);
     } catch (error) {
-      await this.errorHandler.handleError(error, Uri.parse(document.uri), executionInfo).catch(() => {});
+      let customError = `Linting with ${this.info.id} failed:`;
+      if (isNotInstalledError(error)) {
+        customError += ` ${this.info.id} module is not installed.`;
+      }
+      this.outputChannel.appendLine(customError);
+      this.outputChannel.appendLine(error.message.toString());
       return [];
     }
   }

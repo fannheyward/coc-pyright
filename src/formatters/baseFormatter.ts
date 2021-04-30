@@ -145,7 +145,7 @@ export abstract class BaseFormatter {
 
   protected async handleError(_expectedFileName: string, error: Error) {
     this.outputChannel.appendLine(`${'#'.repeat(10)} Formatting with ${this.Id} failed`);
-    let customError = `Formatting with ${this.Id} failed.`;
+    let customError = `Formatting with ${this.Id} failed:`;
 
     if (isNotInstalledError(error)) {
       customError += ` ${this.Id} module is not installed.`;

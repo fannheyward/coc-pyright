@@ -165,10 +165,6 @@ export interface IPythonSettings {
   readonly sortImports: ISortImportSettings;
 }
 
-export interface IErrorHandler {
-  handleError(error: Error, resource: Uri, execInfo: ExecutionInfo): Promise<boolean>;
-}
-
 export namespace LinterErrors {
   export namespace pylint {
     export const InvalidSyntax = 'E0001';
