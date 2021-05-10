@@ -54,7 +54,7 @@
     "coc.nvim": "^0.0.81-next.1",
     "diff-match-patch": "^1.0.5",
     "esbuild": "^0.11.20",
-    "eslint": "^7.11.0",
+    "eslint": "^7.26.0",
     "fs-extra": "^10.0.0",
     "iconv-lite": "^0.6.2",
     "md5": "^2.3.0",
