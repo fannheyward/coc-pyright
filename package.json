@@ -60,7 +60,7 @@
     "md5": "^2.3.0",
     "named-js-regexp": "^1.3.5",
     "rimraf": "^3.0.0",
-    "rxjs": "^6.6.7",
+    "rxjs": "^7.0.1",
     "rxjs-compat": "^6.6.7",
     "semver": "^7.3.2",
     "tree-kill": "^1.2.2",
