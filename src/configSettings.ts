@@ -105,7 +105,6 @@ export class PythonSettings implements IPythonSettings {
     const systemVariables: SystemVariables = new SystemVariables(this.workspaceRoot ? this.workspaceRoot : undefined);
     const vp = this.resolvePythonFromVENV();
     if (vp) {
-      pythonSettings.update('pythonPath', vp);
       this.pythonPath = vp;
     } else {
       this.pythonPath = systemVariables.resolve(pythonSettings.get('pythonPath') as string);
