@@ -28,8 +28,6 @@ export class Pylint extends BaseLinter {
     if (
       settings.linting.pylintUseMinimalCheckers &&
       this.info.linterArgs(uri).length === 0 &&
-      // Check pylintrc next to the file or above up to and including the workspace root
-      !(await this.hasConfigrationFileInWorkspace(path.dirname(uri.fsPath), workspace.root)) &&
       // Check for pylintrc at the root and above
       !(await this.hasConfigurationFile(workspace.root))
     ) {
@@ -128,19 +126,5 @@ export class Pylint extends BaseLinter {
     } else {
       return path1 === path2;
     }
-  }
-
-  private async hasConfigrationFileInWorkspace(folder: string, root: string): Promise<boolean> {
-    // Search up from file location to the workspace root
-    let current = folder;
-    let above = path.dirname(current);
-    do {
-      if ((await fs.pathExists(path.join(current, pylintrc))) || (await fs.pathExists(path.join(current, dotPylintrc)))) {
-        return true;
-      }
-      current = above;
-      above = path.dirname(above);
-    } while (!this.arePathsSame(current, root) && !this.arePathsSame(current, above));
-    return false;
   }
 }
