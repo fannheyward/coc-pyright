@@ -5,6 +5,7 @@ import {
   CompletionItem,
   CompletionItemKind,
   CompletionItemProvider,
+  ConfigurationParams,
   DocumentSelector,
   ExtensionContext,
   extensions,
@@ -55,6 +56,36 @@ class PyrightExtensionFeature implements StaticFeature {
     // this will break signatureHelp
     capabilities.textDocument.signatureHelp.signatureInformation.activeParameterSupport = false;
   }
+}
+
+function toJSONObject(obj: any): any {
+  if (obj) {
+    if (Array.isArray(obj)) {
+      return obj.map(toJSONObject);
+    } else if (typeof obj === 'object') {
+      const res = Object.create(null);
+      for (const key in obj) {
+        if (Object.prototype.hasOwnProperty.call(obj, key)) {
+          res[key] = toJSONObject(obj[key]);
+        }
+      }
+      return res;
+    }
+  }
+  return obj;
+}
+
+function configuration(params: ConfigurationParams, token: CancellationToken, next: any) {
+  const item = params.items.find(x => x.section === 'python');
+  if (item) {
+    const custom = () => {
+      const config = toJSONObject(workspace.getConfiguration(item.section, item.scopeUri));
+      config['pythonPath'] = PythonSettings.getInstance().pythonPath;
+      return [config];
+    };
+    return custom();
+  }
+  return next(params, token);
 }
 
 async function provideCompletionItem(document: TextDocument, position: Position, context: CompletionContext, token: CancellationToken, next: ProvideCompletionItemsSignature) {
@@ -130,6 +161,9 @@ export async function activate(context: ExtensionContext): Promise<void> {
     disableDiagnostics,
     progressOnInitialization: true,
     middleware: {
+      workspace: {
+        configuration,
+      },
       provideHover,
       provideCompletionItem,
       resolveCompletionItem,
