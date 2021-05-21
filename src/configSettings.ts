@@ -104,11 +104,7 @@ export class PythonSettings implements IPythonSettings {
   protected update(pythonSettings: WorkspaceConfiguration) {
     const systemVariables: SystemVariables = new SystemVariables(this.workspaceRoot ? this.workspaceRoot : undefined);
     const vp = this.resolvePythonFromVENV();
-    if (vp) {
-      this.pythonPath = vp;
-    } else {
-      this.pythonPath = systemVariables.resolve(pythonSettings.get('pythonPath') as string);
-    }
+    this.pythonPath = vp ? vp : systemVariables.resolve(pythonSettings.get('pythonPath') as string);
 
     const lintingSettings = systemVariables.resolveAny(pythonSettings.get<ILintingSettings>('linting'))!;
     if (this.linting) {
