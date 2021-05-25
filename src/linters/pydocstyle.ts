@@ -9,7 +9,7 @@ export class PyDocStyle extends BaseLinter {
   }
 
   protected async runLinter(document: TextDocument, cancellation: CancellationToken): Promise<ILintMessage[]> {
-    const messages = await this.run([Uri.parse(document.uri).fsPath], document, cancellation);
+    const messages = await this.run([path.dirname(Uri.parse(document.uri).fsPath)], document, cancellation);
     // All messages in pep8 are treated as warnings for now.
     messages.forEach((msg) => {
       msg.severity = LintMessageSeverity.Warning;
@@ -30,6 +30,7 @@ export class PyDocStyle extends BaseLinter {
     const oldOutputLines = outputLines.filter((line) => line.length > 0);
     outputLines = [];
     for (let counter = 0; counter < oldOutputLines.length / 2; counter += 1) {
+      if (!oldOutputLines[2*counter].startsWith(Uri.parse(document.uri).fsPath)) continue;
       outputLines.push(oldOutputLines[2 * counter] + oldOutputLines[2 * counter + 1]);
     }
     const doc = workspace.getDocument(document.uri);

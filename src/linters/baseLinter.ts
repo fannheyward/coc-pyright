@@ -104,12 +104,16 @@ export abstract class BaseLinter implements ILinter {
       return [];
     }
     const executionInfo = this.info.getExecutionInfo(args, Uri.parse(document.uri));
+    this.outputChannel.appendLine(`${'#'.repeat(10)} Run linter ${this.info.id}:`);
+    this.outputChannel.appendLine(JSON.stringify(executionInfo));
+    this.outputChannel.appendLine('');
     try {
       const pythonToolsExecutionService = new PythonExecutionService();
       const result = await pythonToolsExecutionService.exec(executionInfo, { cwd: workspace.root, token: cancellation, mergeStdOutErr: false });
 
       this.outputChannel.append(`${'#'.repeat(10)} Linting Output - ${this.info.id}${'#'.repeat(10)}\n`);
       this.outputChannel.append(result.stdout);
+      this.outputChannel.appendLine('');
 
       return await this.parseMessages(result.stdout, document, cancellation, regEx);
     } catch (error) {
