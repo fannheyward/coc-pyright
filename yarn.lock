@@ -388,9 +388,9 @@ enquirer@^2.3.5:
     ansi-colors "^4.1.1"
 
 esbuild@^0.12.0:
-  version "0.12.2"
-  resolved "https://registry.yarnpkg.com/esbuild/-/esbuild-0.12.2.tgz#2914445954044dc8b859d4a59c288a725bbae7bb"
-  integrity sha512-VELu6ndrs0CWMV+Ts8GwO3S08JsFFrEuHCo8ekfqNAv/rHEK4UjoXvZOFyopHvRvQVsbTvqQWfBzYKVeLBm0WA==
+  version "0.12.3"
+  resolved "https://registry.yarnpkg.com/esbuild/-/esbuild-0.12.3.tgz#9d978e8aa700034c3e3316e47df1c142ef290a72"
+  integrity sha512-0kuxNbGLGli8DYMHebJ4pk+RQ9ORYL1PmCSrSQpna1ioHvm+fzCAs99jwRYXGSfCNed1mj0vFSM9LbBm6YVbIQ==
 
 escape-string-regexp@^1.0.5:
   version "1.0.5"
