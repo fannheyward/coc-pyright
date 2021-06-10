@@ -151,6 +151,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
   const disableDiagnostics = pyrightCfg.get<boolean>('disableDiagnostics');
   const outputChannel = window.createOutputChannel('Pyright');
   const pythonSettings = PythonSettings.getInstance();
+  outputChannel.appendLine(`Workspace: ${workspace.root}`);
   outputChannel.appendLine(`Using python from ${pythonSettings.pythonPath}\n`);
   const clientOptions: LanguageClientOptions = {
     documentSelector,
