@@ -19,20 +19,14 @@
   },
   "activationEvents": [
     "onLanguage:python",
+    "workspaceContains:app.py",
     "workspaceContains:Pipfile",
+    "workspaceContains:setup.py",
+    "workspaceContains:manage.py",
     "workspaceContains:pyproject.toml",
     "workspaceContains:requirements.txt",
     "workspaceContains:pyrightconfig.json",
     "workspaceContains:mspythonconfig.json"
-  ],
-  "rootPatterns": [
-    {
-      "filetype": "python",
-      "patterns": [
-        "pyrightconfig.json",
-        "mspythonconfig.json"
-      ]
-    }
   ],
   "scripts": {
     "schema": "curl -o schemas/pyrightconfig.schema.json https://raw.githubusercontent.com/microsoft/pyright/main/packages/vscode-pyright/schemas/pyrightconfig.schema.json && node diff.js",
@@ -74,6 +68,20 @@
     "semi": true
   },
   "contributes": {
+    "rootPatterns": [
+      {
+        "filetype": "python",
+        "patterns": [
+          "app.py",
+          "setup.py",
+          "setup.cfg",
+          "manage.py",
+          "pyproject.toml",
+          "pyrightconfig.json",
+          "mspythonconfig.json"
+        ]
+      }
+    ],
     "jsonValidation": [
       {
         "fileMatch": "pyrightconfig.json",
