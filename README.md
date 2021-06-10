@@ -9,7 +9,7 @@
 
 `:CocInstall coc-pyright`
 
-Note: Pyright may not work as expected if can't detect *project root* correctly, check [Using workspaceFolders](https://github.com/neoclide/coc.nvim/wiki/Using-workspaceFolders#resolve-workspace-folder) in coc.nvim.
+Note: Pyright may not work as expected if can't detect *project root* correctly, check [#521](https://github.com/fannheyward/coc-pyright/issues/521#issuecomment-858530052) and [Using workspaceFolders](https://github.com/neoclide/coc.nvim/wiki/Using-workspaceFolders#resolve-workspace-folder) in coc.nvim.
 
 ## Commands
 
