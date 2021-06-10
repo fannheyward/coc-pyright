@@ -9,6 +9,8 @@
 
 `:CocInstall coc-pyright`
 
+Note: Pyright may not work as expected if can't detect *project root* correctly, check [Using workspaceFolders](https://github.com/neoclide/coc.nvim/wiki/Using-workspaceFolders#resolve-workspace-folder) in coc.nvim.
+
 ## Commands
 
 - `python.runLinting`: Run linting
