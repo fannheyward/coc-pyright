@@ -32,7 +32,7 @@ function validateDocumentForRefactor(doc: Document): Promise<void> {
   });
 }
 
-export async function extractVariable(extensionDir: string, document: TextDocument, range: Range, outputChannel: OutputChannel): Promise<any> {
+export async function extractVariable(root: string, document: TextDocument, range: Range, outputChannel: OutputChannel): Promise<any> {
   const doc = workspace.getDocument(document.uri);
   const valid = await checkDocument(doc);
   if (!valid) return;
@@ -50,7 +50,7 @@ export async function extractVariable(extensionDir: string, document: TextDocume
   const pythonSettings = PythonSettings.getInstance();
   return validateDocumentForRefactor(doc).then(() => {
     const newName = `newvariable${new Date().getMilliseconds().toString()}`;
-    const proxy = new RefactorProxy(extensionDir, pythonSettings, workspaceRoot);
+    const proxy = new RefactorProxy(root, pythonSettings, workspaceRoot);
     const rename = proxy.extractVariable<RenameResponse>(doc.textDocument, newName, Uri.parse(doc.uri).fsPath, range).then((response) => {
       return response.results[0].diff;
     });
@@ -59,7 +59,7 @@ export async function extractVariable(extensionDir: string, document: TextDocume
   });
 }
 
-export async function extractMethod(extensionDir: string, document: TextDocument, range: Range, outputChannel: OutputChannel): Promise<any> {
+export async function extractMethod(root: string, document: TextDocument, range: Range, outputChannel: OutputChannel): Promise<any> {
   const doc = workspace.getDocument(document.uri);
   const valid = await checkDocument(doc);
   if (!valid) return;
@@ -75,16 +75,66 @@ export async function extractMethod(extensionDir: string, document: TextDocument
   const workspaceRoot = workspaceFolder ? Uri.parse(workspaceFolder.uri).fsPath : workspace.cwd;
 
   const pythonSettings = PythonSettings.getInstance();
-
   return validateDocumentForRefactor(doc).then(() => {
     const newName = `newmethod${new Date().getMilliseconds().toString()}`;
-    const proxy = new RefactorProxy(extensionDir, pythonSettings, workspaceRoot);
+    const proxy = new RefactorProxy(root, pythonSettings, workspaceRoot);
     const rename = proxy.extractMethod<RenameResponse>(doc.textDocument, newName, Uri.parse(doc.uri).fsPath, range).then((response) => {
       return response.results[0].diff;
     });
 
     return extractName(doc, newName, rename, outputChannel);
   });
+}
+
+export async function addImport(root: string, document: TextDocument, name: string, parent: boolean, outputChannel: OutputChannel): Promise<void> {
+  const doc = workspace.getDocument(document.uri);
+  const valid = await checkDocument(doc);
+  if (!valid) return;
+
+  const pythonToolsExecutionService = new PythonExecutionService();
+  const rope = await pythonToolsExecutionService.isModuleInstalled('rope');
+  if (!rope) {
+    window.showMessage(`Module rope not installed`, 'warning');
+    return;
+  }
+
+  let parentModule = '';
+  if (parent) parentModule = await window.requestInput('Module:');
+
+  const workspaceFolder = workspace.getWorkspaceFolder(doc.uri);
+  const workspaceRoot = workspaceFolder ? Uri.parse(workspaceFolder.uri).fsPath : workspace.cwd;
+  const pythonSettings = PythonSettings.getInstance();
+  return validateDocumentForRefactor(doc).then(() => {
+    const proxy = new RefactorProxy(root, pythonSettings, workspaceRoot);
+    const resp = proxy.addImport<RenameResponse>(doc.textDocument, Uri.parse(doc.uri).fsPath, name, parentModule).then((response) => {
+      return response.results[0].diff;
+    });
+
+    return applyImports(doc, resp, outputChannel);
+  });
+}
+
+async function applyImports(doc: Document, resp: Promise<string>, outputChannel: OutputChannel): Promise<any> {
+  try {
+    const diff = await resp;
+    if (diff.length === 0) return;
+
+    const edits = getTextEditsFromPatch(doc.getDocumentContent(), diff);
+    await doc.applyEdits(edits);
+  } catch (error) {
+    let errorMessage = `${error}`;
+    if (typeof error === 'string') {
+      errorMessage = error;
+    }
+    if (typeof error === 'object' && error.message) {
+      errorMessage = error.message;
+    }
+    outputChannel.appendLine(`${'#'.repeat(10)}Rope Output${'#'.repeat(10)}`);
+    outputChannel.appendLine(`Error in add import:\n${errorMessage}`);
+    outputChannel.appendLine('');
+    window.showMessage(`Cannot perform addImport using selected element(s).`, 'error');
+    return await Promise.reject(error);
+  }
 }
 
 async function extractName(textEditor: Document, newName: string, renameResponse: Promise<string>, outputChannel: OutputChannel): Promise<any> {

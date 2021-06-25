@@ -11,11 +11,13 @@ import traceback
 
 try:
     import rope
+    import rope.base.project
+    import rope.base.taskhandle
     from rope.base import libutils
     from rope.refactor.rename import Rename
     from rope.refactor.extract import ExtractMethod, ExtractVariable
-    import rope.base.project
-    import rope.base.taskhandle
+    from rope.refactor.importutils import FromImport, NormalImport
+    from rope.refactor.importutils.module_imports import ModuleImports
 except:
     jsonMessage = {
         "error": True,
@@ -62,6 +64,23 @@ class Change:
         self.filePath = filePath
         self.diff = diff
         self.fileMode = fileMode
+
+def x_diff(x):
+    new = x["new_contents"]
+    old = x["old_contents"]
+    old_lines = old.splitlines(True)
+    old_lines = old.splitlines(True)
+    if not old_lines[-1].endswith("\n"):
+        old_lines[-1] = old_lines[-1] + os.linesep
+        new = new + os.linesep
+
+    result = difflib.unified_diff(
+        old_lines,
+        new.splitlines(True),
+        "a/" + x["path"],
+        "b/" + x["path"],
+    )
+    return "".join(list(result))
 
 
 def get_diff(changeset):
@@ -237,6 +256,41 @@ class ExtractMethodRefactor(ExtractVariableRefactor):
                 raise Exception("Unknown Change")
 
 
+class ImportRefactor(BaseRefactoring):
+    def __init__(
+        self,
+        project,
+        resource,
+        text = None,
+        name = None,
+        parent = None,
+    ):
+        BaseRefactoring.__init__(self, project, resource, name='Add Import', progressCallback=None)
+        self._name = name
+        self._text = text
+        self._parent = parent
+
+    def onRefactor(self):
+        if self._parent:
+            import_info = FromImport(self._parent, 0, [(self._name, None)])
+        else:
+            import_info = NormalImport([(self._name, None)])
+
+        pymodule = self.project.get_pymodule(self.resource)
+        module_imports = ModuleImports(self.project, pymodule)
+        module_imports.add_import(import_info)
+        changed_source = module_imports.get_changed_source()
+        if changed_source:
+            changeset = {
+                "old_contents": self._text,
+                "new_contents": changed_source,
+                "path": self.resource.path
+            }
+            self.changes.append(Change(self.resource.path, ChangeType.EDIT, x_diff(changeset)))
+        else:
+            raise Exception('Unknown Change')
+
+
 class RopeRefactoring(object):
     def __init__(self):
         self.default_sys_path = sys.path
@@ -318,6 +372,32 @@ class RopeRefactoring(object):
             valueToReturn.append({"diff": change.diff})
         return valueToReturn
 
+    def _add_import(self, filePath, text, name, parent, indent_size):
+        """
+        Add import
+        """
+        project = rope.base.project.Project(
+            WORKSPACE_ROOT,
+            ropefolder=ROPE_PROJECT_FOLDER,
+            save_history=False,
+            indent_size=indent_size,
+        )
+        resourceToRefactor = libutils.path_to_resource(project, filePath)
+        refactor = ImportRefactor(
+            project,
+            resourceToRefactor,
+            text,
+            name,
+            parent
+        )
+        refactor.refactor()
+        changes = refactor.changes
+        project.close()
+        valueToReturn = []
+        for change in changes:
+            valueToReturn.append({"diff": change.diff})
+        return valueToReturn
+
     def _serialize(self, identifier, results):
         """
         Serializes the refactor results
@@ -347,6 +427,15 @@ class RopeRefactoring(object):
                 request["file"],
                 int(request["start"]),
                 request["name"],
+                int(request["indent_size"]),
+            )
+            return self._write_response(self._serialize(request["id"], changes))
+        elif lookup == "add_import":
+            changes = self._add_import(
+                request["file"],
+                request["text"],
+                request["name"],
+                request.get("parent", None),
                 int(request["indent_size"]),
             )
             return self._write_response(self._serialize(request["id"], changes))

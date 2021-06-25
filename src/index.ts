@@ -38,7 +38,7 @@ import { PythonSettings } from './configSettings';
 import { PythonFormattingEditProvider } from './formatProvider';
 import { sortImports } from './isortProvider';
 import { LinterProvider } from './linterProvider';
-import { extractMethod, extractVariable } from './refactorProvider';
+import { addImport, extractMethod, extractVariable } from './refactorProvider';
 
 const documentSelector: DocumentSelector = [
   {
@@ -76,7 +76,7 @@ function toJSONObject(obj: any): any {
 }
 
 function configuration(params: ConfigurationParams, token: CancellationToken, next: any) {
-  const item = params.items.find(x => x.section === 'python');
+  const item = params.items.find((x) => x.section === 'python');
   if (item) {
     const custom = () => {
       const config = toJSONObject(workspace.getConfiguration(item.section, item.scopeUri));
@@ -253,6 +253,11 @@ export async function activate(context: ExtensionContext): Promise<void> {
     null,
     true
   );
+  context.subscriptions.push(disposable);
+
+  disposable = commands.registerCommand('pyright.addImport', async (document: TextDocument, name: string, parent: boolean) => {
+    await addImport(context.extensionPath, document, name, parent, outputChannel).catch(() => {});
+  });
   context.subscriptions.push(disposable);
 
   disposable = commands.registerCommand('python.sortImports', async () => {

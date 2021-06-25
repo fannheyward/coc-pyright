@@ -42,6 +42,20 @@ export class RefactorProxy implements Disposable {
     return offset - winEols;
   }
 
+  public async addImport<T>(document: TextDocument, filePath: string, name: string, parent: string): Promise<T> {
+    const options = await workspace.getFormatOptions();
+    const command = {
+      lookup: 'add_import',
+      id: '1',
+      file: filePath,
+      text: document.getText(),
+      name,
+      parent,
+      indent_size: options.tabSize,
+    };
+    return await this.sendCommand<T>(JSON.stringify(command));
+  }
+
   public async extractVariable<T>(document: TextDocument, name: string, filePath: string, range: Range): Promise<T> {
     const options = await workspace.getFormatOptions();
     const command = {
@@ -49,7 +63,7 @@ export class RefactorProxy implements Disposable {
       file: filePath,
       start: this.getOffsetAt(document, range.start).toString(),
       end: this.getOffsetAt(document, range.end).toString(),
-      id: '1',
+      id: '2',
       name,
       indent_size: options.tabSize,
     };
@@ -67,7 +81,7 @@ export class RefactorProxy implements Disposable {
       file: filePath,
       start: this.getOffsetAt(document, range.start).toString(),
       end: this.getOffsetAt(document, range.end).toString(),
-      id: '1',
+      id: '3',
       name,
       indent_size: options.tabSize,
     };

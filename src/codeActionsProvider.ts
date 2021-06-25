@@ -1,4 +1,4 @@
-import { CodeAction, CodeActionKind, CodeActionProvider, Document, Position, ProviderResult, Range, TextDocument, TextEdit, workspace } from 'coc.nvim';
+import { CodeAction, CodeActionContext, CodeActionKind, CodeActionProvider, Document, Position, ProviderResult, Range, TextDocument, TextEdit, workspace } from 'coc.nvim';
 
 export class PythonCodeActionProvider implements CodeActionProvider {
   private wholeRange(doc: Document, range: Range): boolean {
@@ -88,7 +88,39 @@ export class PythonCodeActionProvider implements CodeActionProvider {
     ];
   }
 
-  public provideCodeActions(document: TextDocument, range: Range): ProviderResult<CodeAction[]> {
+  private addImportActions(document: TextDocument, msg: string): CodeAction[] {
+    const match = msg.match(/"(.*)" is not defined/);
+    if (!match) return [];
+    return [
+      {
+        title: `Add "import ${match[1]}"`,
+        kind: CodeActionKind.Source,
+        command: {
+          title: '',
+          command: 'pyright.addImport',
+          arguments: [document, match[1], false],
+        },
+      },
+
+      {
+        title: `Add "from _ import ${match[1]}"`,
+        kind: CodeActionKind.Source,
+        command: {
+          title: '',
+          command: 'pyright.addImport',
+          arguments: [document, match[1], true],
+        },
+      },
+    ];
+  }
+
+  public provideCodeActions(document: TextDocument, range: Range, context: CodeActionContext): ProviderResult<CodeAction[]> {
+    // add import actions
+    if (context.diagnostics.length) {
+      const diag = context.diagnostics.find((d) => d.code === 'reportUndefinedVariable');
+      if (diag) return this.addImportActions(document, diag.message);
+    }
+
     const doc = workspace.getDocument(document.uri);
     const actions: CodeAction[] = [];
 
