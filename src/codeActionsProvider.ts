@@ -12,33 +12,22 @@ export class PythonCodeActionProvider implements CodeActionProvider {
     return r.start.line === r.end.line && r.start.character === r.end.character;
   }
 
-  public provideCodeActions(document: TextDocument, range: Range): ProviderResult<CodeAction[]> {
-    const doc = workspace.getDocument(document.uri);
-    const actions: CodeAction[] = [];
-
-    // sort imports actions
+  private sortImportsAction(): CodeAction {
     const config = workspace.getConfiguration('pyright');
     const provider = config.get<'pyright' | 'isort'>('organizeimports.provider', 'pyright');
-    if (provider === 'pyright') {
-      actions.push({
-        title: 'Organize Imports by Pyright',
-        kind: CodeActionKind.SourceOrganizeImports,
-        command: {
-          title: '',
-          command: 'pyright.organizeimports',
-        },
-      });
-    } else if (provider === 'isort') {
-      actions.push({
-        title: 'Sort Imports by isort',
-        kind: CodeActionKind.SourceOrganizeImports,
-        command: {
-          title: '',
-          command: 'python.sortImports',
-        },
-      });
-    }
+    const command = provider === 'pyright' ? 'pyright.organizeimports' : 'python.sortImports';
+    const title = provider === 'pyright' ? 'Organize Imports by Pyright' : 'Sort Imports by isort';
+    return {
+      title,
+      kind: CodeActionKind.SourceOrganizeImports,
+      command: {
+        title: '',
+        command,
+      },
+    };
+  }
 
+  private ignoreAction(doc: Document, range: Range): CodeAction | null {
     // ignore action for whole file
     if (this.wholeRange(doc, range) || this.cursorRange(range)) {
       let pos = Position.create(0, 0);
@@ -46,14 +35,14 @@ export class PythonCodeActionProvider implements CodeActionProvider {
         pos = Position.create(1, 0);
       }
       const edit = TextEdit.insert(pos, '# type: ignore\n');
-      actions.push({
+      return {
         title: 'Ignore Pyright typing check for whole file',
         edit: {
           changes: {
             [doc.uri]: [edit],
           },
         },
-      });
+      };
     }
 
     // ignore action for current line
@@ -61,20 +50,23 @@ export class PythonCodeActionProvider implements CodeActionProvider {
       const line = doc.getline(range.start.line);
       if (line && !line.startsWith('#') && line.length === range.end.character) {
         const edit = TextEdit.replace(range, line + '  # type: ignore');
-        actions.push({
+        return {
           title: 'Ignore Pyright typing check for current line',
           edit: {
             changes: {
               [doc.uri]: [edit],
             },
           },
-        });
+        };
       }
     }
+    return null;
+  }
 
-    if (!this.wholeRange(doc, range) && !this.cursorRange(range)) {
+  private extractActions(document: TextDocument, range: Range): CodeAction[] {
+    return [
       // extract actions should only work on range text
-      actions.push({
+      {
         title: 'Extract Method',
         kind: CodeActionKind.RefactorExtract,
         command: {
@@ -82,9 +74,9 @@ export class PythonCodeActionProvider implements CodeActionProvider {
           title: '',
           arguments: [document, range],
         },
-      });
+      },
 
-      actions.push({
+      {
         title: 'Extract Variable',
         kind: CodeActionKind.RefactorExtract,
         command: {
@@ -92,7 +84,24 @@ export class PythonCodeActionProvider implements CodeActionProvider {
           command: 'python.refactorExtractVariable',
           arguments: [document, range],
         },
-      });
+      },
+    ];
+  }
+
+  public provideCodeActions(document: TextDocument, range: Range): ProviderResult<CodeAction[]> {
+    const doc = workspace.getDocument(document.uri);
+    const actions: CodeAction[] = [];
+
+    // sort imports actions
+    actions.push(this.sortImportsAction());
+
+    // ignore actions
+    const ignore = this.ignoreAction(doc, range);
+    if (ignore) actions.push(ignore);
+
+    // extract actions
+    if (!this.wholeRange(doc, range) && !this.cursorRange(range)) {
+      actions.push(...this.extractActions(document, range));
     }
 
     return actions;
