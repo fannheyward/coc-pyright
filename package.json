@@ -25,8 +25,7 @@
     "workspaceContains:manage.py",
     "workspaceContains:pyproject.toml",
     "workspaceContains:requirements.txt",
-    "workspaceContains:pyrightconfig.json",
-    "workspaceContains:mspythonconfig.json"
+    "workspaceContains:pyrightconfig.json"
   ],
   "scripts": {
     "schema": "curl -o schemas/pyrightconfig.schema.json https://raw.githubusercontent.com/microsoft/pyright/main/packages/vscode-pyright/schemas/pyrightconfig.schema.json && node diff.js",
@@ -77,18 +76,13 @@
           "setup.cfg",
           "manage.py",
           "pyproject.toml",
-          "pyrightconfig.json",
-          "mspythonconfig.json"
+          "pyrightconfig.json"
         ]
       }
     ],
     "jsonValidation": [
       {
         "fileMatch": "pyrightconfig.json",
-        "url": "./schemas/pyrightconfig.schema.json"
-      },
-      {
-        "fileMatch": "mspythonconfig.json",
         "url": "./schemas/pyrightconfig.schema.json"
       }
     ],
