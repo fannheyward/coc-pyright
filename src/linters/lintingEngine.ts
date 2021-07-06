@@ -159,11 +159,21 @@ export class LintingEngine {
     this.diagnosticCollection.set(document.uri, diagnostics);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  private createDiagnostics(message: ILintMessage, _document?: TextDocument): Diagnostic {
-    const position = Position.create(message.line - 1, message.column);
-    const range = Range.create(position, position);
+  private createDiagnostics(message: ILintMessage, document: TextDocument): Diagnostic {
+    let start = Position.create(message.line - 1, message.column);
+    let end = Position.create(message.line - 1, message.column);
 
+    const ms = /['"](.*?)['"]/g.exec(message.message);
+    if (ms && ms.length > 0) {
+      const line = workspace.getDocument(document.uri).getline(message.line - 1);
+      if (line.includes(ms[1])) {
+        const s = message.column > line.indexOf(ms[1]) ? message.column : line.indexOf(ms[1]);
+        start = Position.create(message.line - 1, s);
+        end = Position.create(message.line - 1, s + ms[1].length);
+      }
+    }
+
+    const range = Range.create(start, end);
     const severity = lintSeverityToVSSeverity.get(message.severity!)!;
     const diagnostic = Diagnostic.create(range, message.message, severity);
     diagnostic.code = message.code;
