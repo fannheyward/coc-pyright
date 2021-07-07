@@ -18,7 +18,7 @@ try:
     from rope.refactor.extract import ExtractMethod, ExtractVariable
     from rope.refactor.importutils import FromImport, NormalImport
     from rope.refactor.importutils.module_imports import ModuleImports
-except:
+except ImportError:
     jsonMessage = {
         "error": True,
         "message": "Rope not installed",
@@ -65,10 +65,10 @@ class Change:
         self.diff = diff
         self.fileMode = fileMode
 
+
 def x_diff(x):
     new = x["new_contents"]
     old = x["old_contents"]
-    old_lines = old.splitlines(True)
     old_lines = old.splitlines(True)
     if not old_lines[-1].endswith("\n"):
         old_lines[-1] = old_lines[-1] + os.linesep
