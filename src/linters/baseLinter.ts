@@ -6,7 +6,7 @@ import { CancellationToken, OutputChannel, TextDocument, Uri, workspace } from '
 import namedRegexp from 'named-js-regexp';
 import { splitLines } from '../common';
 import { PythonSettings } from '../configSettings';
-import { isNotInstalledError, PythonExecutionService } from '../processService';
+import { PythonExecutionService } from '../processService';
 import { ILinter, ILinterInfo, ILintMessage, IPythonSettings, LinterId, LintMessageSeverity } from '../types';
 
 // Allow negative column numbers (https://github.com/PyCQA/pylint/issues/1822)
@@ -117,11 +117,7 @@ export abstract class BaseLinter implements ILinter {
 
       return await this.parseMessages(result.stdout, document, cancellation, regEx);
     } catch (error) {
-      let customError = `Linting with ${this.info.id} failed:`;
-      if (isNotInstalledError(error)) {
-        customError += ` ${this.info.id} module is not installed.`;
-      }
-      this.outputChannel.appendLine(customError);
+      this.outputChannel.appendLine(`Linting with ${this.info.id} failed:`);
       this.outputChannel.appendLine(error.message.toString());
       return [];
     }
