@@ -160,8 +160,8 @@ export class LintingEngine {
   }
 
   private createDiagnostics(message: ILintMessage, document: TextDocument): Diagnostic {
-    let start = Position.create(message.line - 1, message.column);
-    let end = Position.create(message.line - 1, message.column + 1);
+    let start = Position.create(message.line > 0 ? message.line - 1 : 0, message.column);
+    let end = Position.create(message.line > 0 ? message.line - 1 : 0, message.column + 1);
 
     const ms = /['"](.*?)['"]/g.exec(message.message);
     if (ms && ms.length > 0) {
