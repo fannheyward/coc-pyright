@@ -120,7 +120,7 @@ export class PythonCodeActionProvider implements CodeActionProvider {
 
   public provideCodeActions(document: TextDocument, range: Range, context: CodeActionContext): ProviderResult<CodeAction[]> {
     // add import actions
-    if (context.diagnostics.length) {
+    if (this.cursorRange(range) && context.diagnostics.length) {
       const diag = context.diagnostics.find((d) => d.code === 'reportUndefinedVariable');
       if (diag) return this.addImportActions(document, diag.message);
     }
