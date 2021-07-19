@@ -12,6 +12,10 @@ export class PythonCodeActionProvider implements CodeActionProvider {
     return r.start.line === r.end.line && r.start.character === r.end.character;
   }
 
+  private lineRange(r: Range): boolean {
+    return (r.start.line + 1 === r.end.line && r.start.character === 0 && r.end.character === 0) || (r.start.line === r.end.line && r.start.character === 0);
+  }
+
   private sortImportsAction(): CodeAction {
     const config = workspace.getConfiguration('pyright');
     const provider = config.get<'pyright' | 'isort'>('organizeimports.provider', 'pyright');
@@ -46,10 +50,10 @@ export class PythonCodeActionProvider implements CodeActionProvider {
     }
 
     // ignore action for current line
-    if (range.start.line === range.end.line && range.start.character === 0) {
+    if (this.lineRange(range)) {
       const line = doc.getline(range.start.line);
-      if (line && !line.startsWith('#') && line.length === range.end.character) {
-        const edit = TextEdit.replace(range, line + '  # type: ignore');
+      if (line && line.length && !line.startsWith('#')) {
+        const edit = TextEdit.replace(range, `${line} # type: ignore${range.start.line + 1 === range.end.line ? '\n' : ''}`);
         return {
           title: 'Ignore Pyright typing check for current line',
           edit: {
