@@ -23,12 +23,10 @@ import {
   sources,
   StaticFeature,
   TextDocument,
-  TextEdit,
   TransportKind,
   Uri,
   window,
   workspace,
-  WorkspaceEdit,
 } from 'coc.nvim';
 import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
@@ -40,6 +38,7 @@ import { sortImports } from './isortProvider';
 import { LinterProvider } from './linterProvider';
 import { addImport, extractMethod, extractVariable } from './refactorProvider';
 
+const method = 'workspace/executeCommand';
 const documentSelector: DocumentSelector = [
   {
     scheme: 'file',
@@ -184,7 +183,10 @@ export async function activate(context: ExtensionContext): Promise<void> {
   const codeActionProvider = new PythonCodeActionProvider();
   context.subscriptions.push(languages.registerCodeActionProvider(documentSelector, codeActionProvider, 'Pyright'));
 
-  const textEditorCommands = ['pyright.organizeimports', 'pyright.addoptionalforparam', 'pyright.restartserver'];
+  const provider = new ImportCompletionProvider();
+  context.subscriptions.push(languages.registerCompletionItemProvider('python-import', 'PY', 'python', provider, [' ']));
+
+  const textEditorCommands = ['pyright.organizeimports', 'pyright.addoptionalforparam'];
   textEditorCommands.forEach((commandName: string) => {
     context.subscriptions.push(
       commands.registerCommand(commandName, async (offset: number) => {
@@ -194,48 +196,41 @@ export async function activate(context: ExtensionContext): Promise<void> {
           arguments: [doc.uri.toString(), offset],
         };
 
-        const edits = await client.sendRequest<TextEdit[] | undefined>('workspace/executeCommand', cmd);
-        if (!edits) {
-          return;
-        }
-
-        const wsEdit: WorkspaceEdit = {
-          changes: {
-            [doc.uri]: edits,
-          },
-        };
-        await workspace.applyEdit(wsEdit);
+        await client.sendRequest(method, cmd);
       })
     );
   });
 
-  const genericCommands = ['pyright.createtypestub'];
-  genericCommands.forEach((command: string) => {
-    context.subscriptions.push(
-      commands.registerCommand(command, async (...args: any[]) => {
-        if (!args.length) {
-          window.showMessage(`Module name is missing`, 'warning');
-          return;
-        }
-        const doc = await workspace.document;
-        const filePath = Uri.parse(doc.uri).fsPath;
-        if (args[args.length - 1] !== filePath) {
-          // args from Pyright   : [root, module, filePath]
-          // args from CocCommand: [module]
-          args.unshift(workspace.root);
-          args.push(filePath);
-        }
-
-        const cmd = {
-          command,
-          arguments: args,
-        };
-        await client.sendRequest('workspace/executeCommand', cmd);
-      })
-    );
+  let command = 'pyright.restartserver';
+  let disposable = commands.registerCommand(command, async () => {
+    await client.sendRequest(method, { command });
   });
+  context.subscriptions.push(disposable);
 
-  let disposable = commands.registerCommand(
+  command = 'pyright.createtypestub';
+  disposable = commands.registerCommand(command, async (...args: any[]) => {
+    if (!args.length) {
+      window.showMessage(`Module name is missing`, 'warning');
+      return;
+    }
+    const doc = await workspace.document;
+    const filePath = Uri.parse(doc.uri).fsPath;
+    if (args[args.length - 1] !== filePath) {
+      // args from Pyright   : [root, module, filePath]
+      // args from CocCommand: [module]
+      args.unshift(workspace.root);
+      args.push(filePath);
+    }
+
+    const cmd = {
+      command,
+      arguments: args,
+    };
+    await client.sendRequest(method, cmd);
+  });
+  context.subscriptions.push(disposable);
+
+  disposable = commands.registerCommand(
     'python.refactorExtractVariable',
     async (document: TextDocument, range: Range) => {
       await extractVariable(context.extensionPath, document, range, outputChannel).catch(() => {});
@@ -255,9 +250,14 @@ export async function activate(context: ExtensionContext): Promise<void> {
   );
   context.subscriptions.push(disposable);
 
-  disposable = commands.registerCommand('pyright.addImport', async (document: TextDocument, name: string, parent: boolean) => {
-    await addImport(context.extensionPath, document, name, parent, outputChannel).catch(() => {});
-  });
+  disposable = commands.registerCommand(
+    'pyright.addImport',
+    async (document: TextDocument, name: string, parent: boolean) => {
+      await addImport(context.extensionPath, document, name, parent, outputChannel).catch(() => {});
+    },
+    null,
+    true
+  );
   context.subscriptions.push(disposable);
 
   disposable = commands.registerCommand('python.sortImports', async () => {
@@ -272,10 +272,6 @@ export async function activate(context: ExtensionContext): Promise<void> {
     const cocPyrightPackage = JSON.parse(readFileSync(cocPyrightJSON, 'utf8'));
     window.showMessage(`coc-pyright ${cocPyrightPackage.version} with Pyright ${pyrightPackage.version}`);
   });
-  context.subscriptions.push(disposable);
-
-  const provider = new ImportCompletionProvider();
-  disposable = languages.registerCompletionItemProvider('python-import', 'PY', 'python', provider, [' ']);
   context.subscriptions.push(disposable);
 }
 
