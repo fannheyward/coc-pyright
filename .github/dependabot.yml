@@ -3,21 +3,8 @@ updates:
 - package-ecosystem: npm
   directory: "/"
   schedule:
-    interval: daily
+    interval: "weekly"
     time: "21:00"
   open-pull-requests-limit: 10
   reviewers:
   - fannheyward
-  ignore:
-  - dependency-name: pyright
-    versions:
-    - 1.1.107
-    - 1.1.132
-    - 1.1.135
-    - 1.1.136
-  - dependency-name: esbuild
-    versions:
-    - 0.8.55
-  - dependency-name: rxjs
-    versions:
-    - 6.6.6
