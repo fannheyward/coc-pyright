@@ -53,7 +53,7 @@ export class PythonCodeActionProvider implements CodeActionProvider {
     if (this.lineRange(range)) {
       const line = doc.getline(range.start.line);
       if (line && line.length && !line.startsWith('#')) {
-        const edit = TextEdit.replace(range, `${line} # type: ignore${range.start.line + 1 === range.end.line ? '\n' : ''}`);
+        const edit = TextEdit.replace(range, `${line}  # type: ignore${range.start.line + 1 === range.end.line ? '\n' : ''}`);
         return {
           title: 'Ignore Pyright typing check for current line',
           edit: {
