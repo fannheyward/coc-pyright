@@ -83,6 +83,7 @@ function configuration(params: ConfigurationParams, token: CancellationToken, ne
 
       // expand relative path
       const analysis = config['analysis'];
+      analysis['stubPath'] = workspace.expand(analysis['stubPath'] as string);
       const extraPaths = analysis['extraPaths'] as string[];
       if (extraPaths?.length) {
         analysis['extraPaths'] = extraPaths.map((p) => workspace.expand(p));
@@ -100,6 +101,7 @@ function configuration(params: ConfigurationParams, token: CancellationToken, ne
   if (analysisItem) {
     const custom = () => {
       const analysis = toJSONObject(workspace.getConfiguration(analysisItem.section, analysisItem.scopeUri));
+      analysis['stubPath'] = workspace.expand(analysis['stubPath'] as string);
       const extraPaths = analysis['extraPaths'] as string[];
       if (extraPaths?.length) {
         analysis['extraPaths'] = extraPaths.map((p) => workspace.expand(p));
