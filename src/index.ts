@@ -75,15 +75,45 @@ function toJSONObject(obj: any): any {
 }
 
 function configuration(params: ConfigurationParams, token: CancellationToken, next: any) {
-  const item = params.items.find((x) => x.section === 'python');
-  if (item) {
+  const pythonItem = params.items.find((x) => x.section === 'python');
+  if (pythonItem) {
     const custom = () => {
-      const config = toJSONObject(workspace.getConfiguration(item.section, item.scopeUri));
+      const config = toJSONObject(workspace.getConfiguration(pythonItem.section, pythonItem.scopeUri));
       config['pythonPath'] = PythonSettings.getInstance().pythonPath;
+
+      // expand relative path
+      const analysis = config['analysis'];
+      const extraPaths = analysis['extraPaths'] as string[];
+      if (extraPaths?.length) {
+        analysis['extraPaths'] = extraPaths.map((p) => workspace.expand(p));
+      }
+      const typeshedPaths = analysis['typeshedPaths'] as string[];
+      if (typeshedPaths?.length) {
+        analysis['typeshedPaths'] = typeshedPaths.map((p) => workspace.expand(p));
+      }
+      config['analysis'] = analysis;
       return [config];
     };
     return custom();
   }
+  const analysisItem = params.items.find((x) => x.section === 'python.analysis');
+  if (analysisItem) {
+    const custom = () => {
+      const analysis = toJSONObject(workspace.getConfiguration(analysisItem.section, analysisItem.scopeUri));
+      const extraPaths = analysis['extraPaths'] as string[];
+      if (extraPaths?.length) {
+        analysis['extraPaths'] = extraPaths.map((p) => workspace.expand(p));
+      }
+      const typeshedPaths = analysis['typeshedPaths'] as string[];
+      if (typeshedPaths?.length) {
+        analysis['typeshedPaths'] = typeshedPaths.map((p) => workspace.expand(p));
+      }
+      return [analysis];
+    };
+
+    return custom();
+  }
+
   return next(params, token);
 }
 
