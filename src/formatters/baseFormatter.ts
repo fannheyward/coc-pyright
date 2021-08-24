@@ -130,11 +130,6 @@ export abstract class BaseFormatter {
       () => {
         this.deleteTempFile(filepath, tempFile).catch(() => {});
         window.showMessage(`Formatted with ${this.Id}`);
-        const { nvim } = workspace;
-        setTimeout(async () => {
-          const line = (await nvim.call('coc#util#echo_line')) as string;
-          if (line && /Formatted/.test(line)) nvim.command('echo ""', true);
-        }, 2000);
       },
       () => {
         this.deleteTempFile(filepath, tempFile).catch(() => {});
