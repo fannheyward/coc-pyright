@@ -1,5 +1,10 @@
 # coc-pyright
 
+<!-- markdownlint-disable no-inline-html -->
+<a href="https://github.com/sponsors/fannheyward"><img src="https://user-images.githubusercontent.com/345274/133218454-014a4101-b36a-48c6-a1f6-342881974938.png" alt="GitHub Sponsors" /></a>
+<a href="https://patreon.com/fannheyward"><img src="https://c5.patreon.com/external/logo/become_a_patron_button.png" alt="Patreon donate button" /></a>
+<a href="https://paypal.me/fannheyward"><img src="https://user-images.githubusercontent.com/345274/104303610-41149f00-5505-11eb-88b2-5a95c53187b4.png" alt="PayPal donate button" /></a>
+
 [Pyright](https://github.com/microsoft/pyright) extension for coc.nvim
 
 <!-- markdownlint-disable-next-line -->
@@ -100,14 +105,6 @@ This way python from your currently activated environment will be used
 2. `source .venv/bin/activate`
 3. install modules with pip and work with Pyright
 4. `deactivate`
-
-## Supporting
-
-If this extension is helpful to you, please support me via Patreon or PayPal:
-
-<!-- markdownlint-disable no-inline-html -->
-<a href="https://patreon.com/fannheyward"><img src="https://c5.patreon.com/external/logo/become_a_patron_button.png" alt="Patreon donate button" /></a>
-<a href="https://paypal.me/fannheyward"><img src="https://user-images.githubusercontent.com/345274/104303610-41149f00-5505-11eb-88b2-5a95c53187b4.png" alt="PayPal donate button" /></a>
 
 ## License
 
