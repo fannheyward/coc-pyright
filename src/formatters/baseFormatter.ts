@@ -109,7 +109,12 @@ export abstract class BaseFormatter {
     const pythonToolsExecutionService = new PythonExecutionService();
     const promise = pythonToolsExecutionService
       .exec(executionInfo, { cwd, throwOnStdErr: false, token })
-      .then((output) => output.stdout)
+      .then((output) => {
+        if (output.stderr) {
+          throw new Error(output.stderr);
+        }
+        return output.stdout;
+      })
       .then((data) => {
         this.outputChannel.appendLine('');
         this.outputChannel.appendLine(`${'#'.repeat(10)} ${this.Id} output:`);
