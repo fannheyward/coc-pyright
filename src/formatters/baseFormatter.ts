@@ -122,7 +122,9 @@ export abstract class BaseFormatter {
         if (this.checkCancellation(filepath, tempFile, token)) {
           return [] as TextEdit[];
         }
-        return getTextEditsFromPatch(document.getText(), data);
+        const edits = getTextEditsFromPatch(document.getText(), data);
+        if (edits.length) window.showMessage(`Formatted with ${this.Id}`);
+        return edits;
       })
       .catch((error) => {
         if (this.checkCancellation(filepath, tempFile, token)) {
@@ -130,16 +132,10 @@ export abstract class BaseFormatter {
         }
         this.handleError(this.Id, error).catch(() => {});
         return [] as TextEdit[];
+      })
+      .finally(() => {
+        this.deleteTempFile(filepath, tempFile).catch(() => {});
       });
-    promise.then(
-      () => {
-        this.deleteTempFile(filepath, tempFile).catch(() => {});
-        window.showMessage(`Formatted with ${this.Id}`);
-      },
-      () => {
-        this.deleteTempFile(filepath, tempFile).catch(() => {});
-      }
-    );
     return promise;
   }
 
