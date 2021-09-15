@@ -168,7 +168,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
     window.showMessage(`Pyright needs Node.js v12+ to work, your Node.js is ${process.version}.`, 'error');
     return;
   }
-  const module = context.asAbsolutePath('node_modules/pyright/langserver.index.js');
+  const module = join(context.extensionPath, 'node_modules', 'pyright', 'langserver.index.js');
   if (!existsSync(module)) {
     window.showMessage(`Pyright file doesn't exist, please reinstall coc-pyright`, 'error');
     return;
