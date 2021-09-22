@@ -64,6 +64,7 @@ These configurations are used by `coc-pyright`, you need to set them in your `co
 | python.linting.pylintEnabled                | Whether to lint with pylint                                         | false         |
 | python.sortImports.path                     | Path to isort script, default using inner version                   | ''            |
 | python.sortImports.args                     | Arguments passed to isort                                           | []            |
+| pyright.server                              | Custom `pyright-langserver` path                                    | ''            |
 | pyright.disableDiagnostics                  | Disable diagnostics from Pyright                                    | false         |
 | pyright.completion.snippetSupport           | Enable completion snippets support                                  | true          |
 | pyright.organizeimports.provider            | Organize imports provider, `pyright` or `isort`                     | pyright       |

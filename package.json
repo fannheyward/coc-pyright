@@ -1274,6 +1274,11 @@
             "isort"
           ]
         },
+        "pyright.server": {
+          "type": "string",
+          "default": "",
+          "description": "Custom pyright-langserver path"
+        },
         "pyright.trace.server": {
           "type": "string",
           "scope": "window",
