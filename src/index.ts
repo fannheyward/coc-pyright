@@ -6,9 +6,11 @@ import {
   CompletionItemKind,
   CompletionItemProvider,
   ConfigurationParams,
+  Diagnostic,
   DocumentSelector,
   ExtensionContext,
   extensions,
+  HandleDiagnosticsSignature,
   InsertTextFormat,
   LanguageClient,
   LanguageClientOptions,
@@ -154,6 +156,13 @@ async function provideHover(document: TextDocument, position: Position, token: C
   return hover;
 }
 
+async function handleDiagnostics(uri: string, diagnostics: Diagnostic[], next: HandleDiagnosticsSignature) {
+  next(
+    uri,
+    diagnostics.filter((d) => d.message !== '"__" is not accessed')
+  );
+}
+
 export async function activate(context: ExtensionContext): Promise<void> {
   const pyrightCfg = workspace.getConfiguration('pyright');
   const isEnable = pyrightCfg.get<boolean>('enable', true);
@@ -200,6 +209,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
         configuration,
       },
       provideHover,
+      handleDiagnostics,
       provideCompletionItem,
       resolveCompletionItem,
     },
