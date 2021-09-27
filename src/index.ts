@@ -178,12 +178,14 @@ export async function activate(context: ExtensionContext): Promise<void> {
     return;
   }
   let module = pyrightCfg.get<string>('server');
-  if (!module) {
+  if (module) {
+    module = workspace.expand(module);
+  } else {
     module = join(context.extensionPath, 'node_modules', 'pyright', 'langserver.index.js');
-    if (!existsSync(module)) {
-      window.showMessage(`Pyright file doesn't exist, please reinstall coc-pyright`, 'error');
-      return;
-    }
+  }
+  if (!existsSync(module)) {
+    window.showMessage(`Pyright langserver doesn't exist, please reinstall coc-pyright`, 'error');
+    return;
   }
 
   const serverOptions: NodeModule = {
