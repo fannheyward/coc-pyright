@@ -875,6 +875,7 @@
           "type": "array",
           "description": "Arguments passed in. Each argument is a separate item in the array.",
           "default": [
+            "--no-pretty",
             "--ignore-missing-imports",
             "--follow-imports=silent",
             "--show-column-numbers"
