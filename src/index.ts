@@ -33,6 +33,7 @@ import {
 import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 import { lt } from 'semver';
+import which from 'which';
 import { PythonCodeActionProvider } from './codeActionsProvider';
 import { PythonSettings } from './configSettings';
 import { PythonFormattingEditProvider } from './formatProvider';
@@ -179,7 +180,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
   }
   let module = pyrightCfg.get<string>('server');
   if (module) {
-    module = workspace.expand(module);
+    module = which.sync(workspace.expand(module), { nothrow: true }) || '';
   } else {
     module = join(context.extensionPath, 'node_modules', 'pyright', 'langserver.index.js');
   }
