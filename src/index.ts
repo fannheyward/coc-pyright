@@ -180,7 +180,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
   }
   let module = pyrightCfg.get<string>('server');
   if (module) {
-    module = which.sync(workspace.expand(module), { nothrow: true }) || '';
+    module = which.sync(workspace.expand(module), { nothrow: true }) || module;
   } else {
     module = join(context.extensionPath, 'node_modules', 'pyright', 'langserver.index.js');
   }
