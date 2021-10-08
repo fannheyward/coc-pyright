@@ -137,7 +137,6 @@ export interface ILintingSettings {
   banditEnabled: boolean;
   banditArgs: string[];
   banditPath: string;
-  readonly pylintUseMinimalCheckers: boolean;
 }
 export interface IFormattingSettings {
   readonly provider: FormatterId;
