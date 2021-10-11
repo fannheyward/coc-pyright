@@ -1261,6 +1261,11 @@
           },
           "scope": "resource"
         },
+        "pyright.disableCompletion": {
+          "type": "boolean",
+          "default": false,
+          "description": "Disable completion from Pyright"
+        },
         "pyright.disableDiagnostics": {
           "type": "boolean",
           "default": false,

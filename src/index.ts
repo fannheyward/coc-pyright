@@ -194,6 +194,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
     transport: TransportKind.ipc,
   };
 
+  const disableCompletion = pyrightCfg.get<boolean>('disableCompletion');
   const disableDiagnostics = pyrightCfg.get<boolean>('disableDiagnostics');
   const outputChannel = window.createOutputChannel('Pyright');
   const pythonSettings = PythonSettings.getInstance();
@@ -205,6 +206,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
       configurationSection: ['python', 'pyright'],
     },
     outputChannel,
+    disableCompletion,
     disableDiagnostics,
     progressOnInitialization: true,
     middleware: {
