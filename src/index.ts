@@ -126,9 +126,12 @@ async function provideCompletionItem(document: TextDocument, position: Position,
   const result = await next(document, position, context, token);
   if (!result) return;
 
+  const items = Array.isArray(result) ? result : result.items;
+  items.map((x) => delete x.sortText);
+  items.sort((a, b) => (a.kind && b.kind ? a.kind - b.kind : 0));
+
   const snippetSupport = workspace.getConfiguration('pyright').get<boolean>('completion.snippetSupport');
   if (snippetSupport) {
-    const items = Array.isArray(result) ? result : result.items;
     for (const item of items) {
       if (item.data?.funcParensDisabled) continue;
       if (item.kind === CompletionItemKind.Method || item.kind === CompletionItemKind.Function) {
@@ -138,7 +141,7 @@ async function provideCompletionItem(document: TextDocument, position: Position,
     }
   }
 
-  return result;
+  return Array.isArray(result) ? items : { items, isIncomplete: result.isIncomplete };
 }
 
 async function resolveCompletionItem(item: CompletionItem, token: CancellationToken, next: ResolveCompletionItemSignature) {
