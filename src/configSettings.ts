@@ -8,7 +8,6 @@ import { SystemVariables } from './systemVariables';
 import { IFormattingSettings, ILintingSettings, IPythonSettings, ISortImportSettings } from './types';
 
 export class PythonSettings implements IPythonSettings {
-  protected readonly isWindows = process.platform === 'win32';
   private workspaceRoot: string;
 
   private static pythonSettings: Map<string, PythonSettings> = new Map<string, PythonSettings>();
@@ -47,6 +46,10 @@ export class PythonSettings implements IPythonSettings {
   }
 
   private resolvePythonFromVENV(): string | undefined {
+    function pythonBinFromPath(p: string): string {
+      return process.platform === 'win32' ? path.join(p, 'Scripts', 'python.exe') : path.join(p, 'bin', 'python');
+    }
+
     try {
       // `pyenv local` creates `.python-version`, but not `PYENV_VERSION`
       let p = path.join(this.workspaceRoot, '.python-version');
@@ -77,23 +80,23 @@ export class PythonSettings implements IPythonSettings {
           info = item;
         }
         if (info) {
-          if (this.isWindows) {
-            return path.join(info, 'Scripts', 'python.exe');
-          }
-          return path.join(info, 'bin', 'python');
+          return pythonBinFromPath(info);
         }
+      }
+
+      if (process.env.VIRTUAL_ENV && fs.existsSync(path.join(process.env.VIRTUAL_ENV, 'pyvenv.cfg'))) {
+        return pythonBinFromPath(process.env.VIRTUAL_ENV);
+      }
+      if (process.env.CONDA_PREFIX) {
+        return pythonBinFromPath(process.env.CONDA_PREFIX);
       }
 
       // virtualenv in the workspace root
       const files = fs.readdirSync(this.workspaceRoot);
       for (const file of files) {
-        const p = path.join(this.workspaceRoot, file);
-
-        if (fs.existsSync(path.join(p, 'pyvenv.cfg'))) {
-          if (this.isWindows) {
-            return path.join(p, 'Scripts', 'python.exe');
-          }
-          return path.join(p, 'bin', 'python');
+        const x = path.join(this.workspaceRoot, file);
+        if (fs.existsSync(path.join(x, 'pyvenv.cfg'))) {
+          return pythonBinFromPath(x);
         }
       }
     } catch (e) {
