@@ -237,7 +237,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
   context.subscriptions.push(languages.registerCodeActionProvider(documentSelector, codeActionProvider, 'Pyright'));
 
   const provider = new ImportCompletionProvider();
-  context.subscriptions.push(languages.registerCompletionItemProvider('python-import', 'PY', 'python', provider, [' ']));
+  context.subscriptions.push(languages.registerCompletionItemProvider('python-import', 'PY', ['python'], provider, [' ']));
 
   const textEditorCommands = ['pyright.organizeimports', 'pyright.addoptionalforparam'];
   textEditorCommands.forEach((commandName: string) => {
@@ -348,7 +348,7 @@ class ImportCompletionProvider implements CompletionItemProvider {
     const items: CompletionItem[] = [];
     for (const o of result.items) {
       // @ts-ignore
-      items.push({ label: o.word, sortText: o.sortText });
+      items.push({ label: o.word, sortText: o.sortText, kind: CompletionItemKind.Module, filterText: o.filterText });
     }
     return items;
   }
