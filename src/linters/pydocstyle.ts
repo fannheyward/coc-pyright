@@ -70,9 +70,13 @@ export class PyDocStyle extends BaseLinter {
               type: '',
               provider: this.info.id,
             } as ILintMessage;
-          } catch (ex) {
+          } catch (err) {
             this.outputChannel.appendLine(`Failed to parse pydocstyle line '${line}'`);
-            this.outputChannel.appendLine(ex.message);
+            if (typeof err === 'string') {
+              this.outputChannel.appendLine(err);
+            } else if (err instanceof Error) {
+              this.outputChannel.appendLine(err.message);
+            }
             return;
           }
         })

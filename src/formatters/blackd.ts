@@ -38,8 +38,11 @@ export class BlackdFormatter extends BaseFormatter {
       window.showErrorMessage('blackd request error');
       this.outputChannel.appendLine('');
       this.outputChannel.appendLine(`${'#'.repeat(10)} blackd request error:`);
-      this.outputChannel.appendLine(e);
-
+      if (typeof e === 'string') {
+        this.outputChannel.appendLine(e);
+      } else if (e instanceof Error) {
+        this.outputChannel.appendLine(e.message);
+      }
       return [];
     }
   }

@@ -91,7 +91,7 @@ export abstract class BaseLinter implements ILinter {
           return LintMessageSeverity.Warning;
         default: {
           if (LintMessageSeverity[severityName]) {
-            return (LintMessageSeverity[severityName] as any) as LintMessageSeverity;
+            return LintMessageSeverity[severityName] as any as LintMessageSeverity;
           }
         }
       }
@@ -118,7 +118,9 @@ export abstract class BaseLinter implements ILinter {
       return await this.parseMessages(result.stdout, document, cancellation, regEx);
     } catch (error) {
       this.outputChannel.appendLine(`Linting with ${this.info.id} failed:`);
-      this.outputChannel.appendLine(error.message.toString());
+      if (error instanceof Error) {
+        this.outputChannel.appendLine(error.message.toString());
+      }
       return [];
     }
   }
@@ -135,10 +137,14 @@ export abstract class BaseLinter implements ILinter {
             break;
           }
         }
-      } catch (ex) {
+      } catch (err) {
         this.outputChannel.appendLine(`${'#'.repeat(10)} Linter ${this.info.id} failed to parse the line:`);
         this.outputChannel.appendLine(line);
-        this.outputChannel.appendLine(ex);
+        if (typeof err === 'string') {
+          this.outputChannel.appendLine(err);
+        } else if (err instanceof Error) {
+          this.outputChannel.appendLine(err.message);
+        }
       }
     }
     return messages;

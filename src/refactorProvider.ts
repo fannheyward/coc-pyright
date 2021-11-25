@@ -126,7 +126,7 @@ async function applyImports(doc: Document, resp: Promise<string>, outputChannel:
     if (typeof error === 'string') {
       errorMessage = error;
     }
-    if (typeof error === 'object' && error.message) {
+    if (error instanceof Error) {
       errorMessage = error.message;
     }
     outputChannel.appendLine(`${'#'.repeat(10)}Rope Output${'#'.repeat(10)}`);
@@ -177,7 +177,7 @@ async function extractName(textEditor: Document, newName: string, renameResponse
     if (typeof error === 'string') {
       errorMessage = error;
     }
-    if (typeof error === 'object' && error.message) {
+    if (error instanceof Error) {
       errorMessage = error.message;
     }
     outputChannel.appendLine(`${'#'.repeat(10)}Refactor Output${'#'.repeat(10)}`);

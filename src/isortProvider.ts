@@ -51,7 +51,12 @@ export async function sortImports(extensionRoot: string, outputChannel: OutputCh
     const edits = getTextEditsFromPatch(doc.getDocumentContent(), patch);
     await doc.applyEdits(edits);
   } catch (err) {
-    const message = typeof err === 'string' ? err : err.message ? err.message : err;
+    let message = '';
+    if (typeof err === 'string') {
+      message = err;
+    } else if (err instanceof Error) {
+      message = err.message;
+    }
     outputChannel.appendLine(`${'#'.repeat(10)} isort Output ${'#'.repeat(10)}`);
     outputChannel.appendLine(`Error from isort:\n${message}`);
     window.showMessage(`Failed to format import by isort`, 'error');
