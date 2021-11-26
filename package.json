@@ -1271,6 +1271,11 @@
           "default": false,
           "description": "Disable diagnostics from Pyright"
         },
+        "pyright.completion.importSupport": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable `python-import` completion source, will list suggestions after input `import`"
+        },
         "pyright.completion.snippetSupport": {
           "type": "boolean",
           "default": true,

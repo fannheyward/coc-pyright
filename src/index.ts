@@ -236,8 +236,11 @@ export async function activate(context: ExtensionContext): Promise<void> {
   const codeActionProvider = new PythonCodeActionProvider();
   context.subscriptions.push(languages.registerCodeActionProvider(documentSelector, codeActionProvider, 'Pyright'));
 
-  const provider = new ImportCompletionProvider();
-  context.subscriptions.push(languages.registerCompletionItemProvider('python-import', 'PY', ['python'], provider, [' ']));
+  const importSupport = pyrightCfg.get<boolean>('completion.importSupport');
+  if (importSupport) {
+    const provider = new ImportCompletionProvider();
+    context.subscriptions.push(languages.registerCompletionItemProvider('python-import', 'PY', ['python'], provider, [' ']));
+  }
 
   const textEditorCommands = ['pyright.organizeimports', 'pyright.addoptionalforparam'];
   textEditorCommands.forEach((commandName: string) => {
