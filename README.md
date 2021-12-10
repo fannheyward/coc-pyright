@@ -52,7 +52,7 @@ These configurations are used by `coc-pyright`, you need to set them in your `co
 | python.formatting.yapfArgs                  | Arguments passed to yapf                                            | []            |
 | python.formatting.autopep8Path              | Custom path to autopep8                                             | autopep8      |
 | python.formatting.autopep8Args              | Arguments passed to autopep8                                        | []            |
-| python.linting.enabled                      | Whether to lint Python files                                        | true          |
+| python.linting.enabled                      | Whether to lint Python files with external linters                  | true          |
 | python.linting.flake8Enabled                | Whether to lint with flake8                                         | false         |
 | python.linting.banditEnabled                | Whether to lint with bandit                                         | false         |
 | python.linting.mypyEnabled                  | Whether to lint with mypy                                           | false         |

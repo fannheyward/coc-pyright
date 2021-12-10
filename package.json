@@ -777,7 +777,7 @@
         "python.linting.enabled": {
           "type": "boolean",
           "default": true,
-          "description": "Whether to lint Python files.",
+          "description": "Whether to lint Python files with external linters, you can also disable diagnostics from Pyright by `pyright.disableDiagnostics` to use external linters only.",
           "scope": "resource"
         },
         "python.linting.flake8Args": {
