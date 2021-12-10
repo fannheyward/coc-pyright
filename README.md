@@ -71,6 +71,8 @@ These configurations are used by `coc-pyright`, you need to set them in your `co
 | pyright.completion.snippetSupport           | Enable completion snippets support                                  | true          |
 | pyright.organizeimports.provider            | Organize imports provider, `pyright` or `isort`                     | pyright       |
 
+Additional configuration options can be found in [package.json](./package.json).
+
 ## pyrightconfig.json
 
 Pyright supports [pyrightconfig.json](https://github.com/microsoft/pyright/blob/master/docs/configuration.md) that provide granular control over settings.
