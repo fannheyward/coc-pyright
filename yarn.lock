@@ -291,9 +291,9 @@ charenc@0.0.2:
   integrity sha1-wKHS86cJLgN3S/qD8UwPxXkKhmc=
 
 coc.nvim@^0.0.81-next.7:
-  version "0.0.81-next.7"
-  resolved "https://registry.yarnpkg.com/coc.nvim/-/coc.nvim-0.0.81-next.7.tgz#adbdb62034468ad1ae9dd27af8d1e87e64a219b6"
-  integrity sha512-/e8FUIpC97j6wbOy9V79s62aNBMXvMuUvA5LdIyd0Z0itaA+DND7jJIY9UwrRMkMg7BgwJgwVo13oOdMHrRMWQ==
+  version "0.0.81-next.8"
+  resolved "https://registry.yarnpkg.com/coc.nvim/-/coc.nvim-0.0.81-next.8.tgz#7c0ec46cfab29d41ebdb9e3e9cabf1cb5cc2b920"
+  integrity sha512-1dk2j571Gxk4lXw2GVdGfOJeZAhfZ5HgmtA/p4NW5gorNVnCcC6qe2sp0LiecgiWfah3o+BsOTahr+Vjwj6GYA==
 
 color-convert@^2.0.1:
   version "2.0.1"
