@@ -765,6 +765,17 @@
                 "error"
               ]
             },
+            "reportMatchNotExhaustive": {
+              "type": "string",
+              "description": "Diagnostics for 'match' statements that do not exhaustively match all possible values.",
+              "default": "none",
+              "enum": [
+                "none",
+                "information",
+                "warning",
+                "error"
+              ]
+            },
             "reportUnnecessaryTypeIgnoreComment": {
               "type": "string",
               "description": "Diagnostics for '# type: ignore' comments that have no effect.",
