@@ -15,6 +15,7 @@ import {
   LanguageClient,
   LanguageClientOptions,
   languages,
+  LinesTextDocument,
   NodeModule,
   Position,
   ProvideCompletionItemsSignature,
@@ -122,7 +123,7 @@ function configuration(params: ConfigurationParams, token: CancellationToken, ne
   return next(params, token);
 }
 
-async function provideCompletionItem(document: TextDocument, position: Position, context: CompletionContext, token: CancellationToken, next: ProvideCompletionItemsSignature) {
+async function provideCompletionItem(document: LinesTextDocument, position: Position, context: CompletionContext, token: CancellationToken, next: ProvideCompletionItemsSignature) {
   const result = await next(document, position, context, token);
   if (!result) return;
 
@@ -152,7 +153,7 @@ async function resolveCompletionItem(item: CompletionItem, token: CancellationTo
   return result;
 }
 
-async function provideHover(document: TextDocument, position: Position, token: CancellationToken, next: ProvideHoverSignature) {
+async function provideHover(document: LinesTextDocument, position: Position, token: CancellationToken, next: ProvideHoverSignature) {
   const hover = await next(document, position, token);
   if (hover && typeof hover.contents === 'object' && 'kind' in hover.contents && hover.contents.kind === 'markdown') {
     hover.contents.value = hover.contents.value.replace(/&nbsp;/g, ' ');
@@ -197,8 +198,13 @@ export async function activate(context: ExtensionContext): Promise<void> {
     transport: TransportKind.ipc,
   };
 
-  const disableCompletion = pyrightCfg.get<boolean>('disableCompletion');
-  const disableDiagnostics = pyrightCfg.get<boolean>('disableDiagnostics');
+  const disabledFeatures: string[] = [];
+  if (pyrightCfg.get<boolean>('disableCompletion')) {
+    disabledFeatures.push('completion');
+  }
+  if (pyrightCfg.get<boolean>('disableDiagnostics')) {
+    disabledFeatures.push('diagnostics');
+  }
   const outputChannel = window.createOutputChannel('Pyright');
   const pythonSettings = PythonSettings.getInstance();
   outputChannel.appendLine(`Workspace: ${workspace.root}`);
@@ -209,8 +215,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
       configurationSection: ['python', 'pyright'],
     },
     outputChannel,
-    disableCompletion,
-    disableDiagnostics,
+    disabledFeatures,
     progressOnInitialization: true,
     middleware: {
       workspace: {
@@ -332,7 +337,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
 }
 
 class ImportCompletionProvider implements CompletionItemProvider {
-  async provideCompletionItems(document: TextDocument, position: Position, token: CancellationToken, context: CompletionContext): Promise<CompletionItem[]> {
+  async provideCompletionItems(document: LinesTextDocument, position: Position, token: CancellationToken, context: CompletionContext): Promise<CompletionItem[]> {
     if (context.triggerCharacter !== ' ') return [];
     const line = document.getText(Range.create(position.line, 0, position.line, position.character)).trim();
     if (!line.includes('from') && !line.includes('import')) return [];
