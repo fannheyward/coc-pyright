@@ -1,6 +1,6 @@
 {
   "name": "coc-pyright",
-  "version": "1.1.215",
+  "version": "1.1.219",
   "description": "Pyright extension for coc.nvim, static type checker for Python",
   "author": "Heyward Fann <fannheyward@gmail.com>",
   "license": "MIT",
@@ -1391,6 +1391,6 @@
     ]
   },
   "dependencies": {
-    "pyright": "^1.1.218"
+    "pyright": "^1.1.219"
   }
 }
