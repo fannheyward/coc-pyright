@@ -128,9 +128,7 @@ async function provideCompletionItem(document: LinesTextDocument, position: Posi
   if (!result) return;
 
   const items = Array.isArray(result) ? result : result.items;
-  items.map((x) => delete x.sortText);
-  const privateLevel = (x) => (x.insertText || x.label).match(/^_*/)[0].length;
-  items.sort((a, b) => (privateLevel(a) - privateLevel(b) || (a.kind && b.kind ? a.kind - b.kind : 0)));
+  items.map((x) => x.sortText ? x.sortText = x.sortText.toLowerCase() : x.sortText = x.label.toLowerCase());
 
   const snippetSupport = workspace.getConfiguration('pyright').get<boolean>('completion.snippetSupport');
   if (snippetSupport) {
