@@ -1,5 +1,5 @@
 import * as child_process from 'child_process';
-import { ConfigurationChangeEvent, Disposable, Uri, workspace, WorkspaceConfiguration } from 'coc.nvim';
+import { ConfigurationChangeEvent, Disposable, workspace, WorkspaceConfiguration } from 'coc.nvim';
 import fs from 'fs-extra';
 import path from 'path';
 import untildify from 'untildify';
