@@ -25,8 +25,7 @@ export class PythonSettings implements IPythonSettings {
 
   public static getInstance(): PythonSettings {
     const workspaceFolder = workspace.workspaceFolders.length > 0 ? workspace.workspaceFolders[0] : undefined;
-    const workspaceFolderUri: Uri | undefined = workspaceFolder ? Uri.parse(workspaceFolder.uri) : undefined;
-    const workspaceFolderKey = workspaceFolderUri ? workspaceFolderUri.fsPath : '';
+    const workspaceFolderKey = workspaceFolder ? workspaceFolder.name : 'unknown';
 
     if (!PythonSettings.pythonSettings.has(workspaceFolderKey)) {
       const settings = new PythonSettings();
