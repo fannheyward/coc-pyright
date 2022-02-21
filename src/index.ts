@@ -16,12 +16,12 @@ import {
   LanguageClientOptions,
   languages,
   LinesTextDocument,
-  NodeModule,
   Position,
   ProvideCompletionItemsSignature,
   ProvideHoverSignature,
   Range,
   ResolveCompletionItemSignature,
+  ServerOptions,
   services,
   sources,
   StaticFeature,
@@ -41,6 +41,8 @@ import { PythonFormattingEditProvider } from './formatProvider';
 import { sortImports } from './isortProvider';
 import { LinterProvider } from './linterProvider';
 import { addImport, extractMethod, extractVariable } from './refactorProvider';
+
+const defaultHeapSize = 3072;
 
 const method = 'workspace/executeCommand';
 const documentSelector: DocumentSelector = [
@@ -192,9 +194,12 @@ export async function activate(context: ExtensionContext): Promise<void> {
     return;
   }
 
-  const serverOptions: NodeModule = {
-    module,
-    transport: TransportKind.ipc,
+  const runOptions = { execArgv: [`--max-old-space-size=${defaultHeapSize}`] };
+  const debugOptions = { execArgv: ['--nolazy', '--inspect=6600', `--max-old-space-size=${defaultHeapSize}`] };
+
+  const serverOptions: ServerOptions = {
+    run: { module: module, transport: TransportKind.ipc, options: runOptions },
+    debug: { module: module, transport: TransportKind.ipc, options: debugOptions },
   };
 
   const disabledFeatures: string[] = [];
