@@ -84,10 +84,10 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-14.14.20.tgz#f7974863edd21d1f8a494a73e8e2b3658615c340"
   integrity sha512-Y93R97Ouif9JEOWPIUyU+eyIdyRqQR0I8Ez1dzku4hDx34NWh4HbtIc3WNzwB1Y9ULvNGeu5B8h8bVL5cAk4/A==
 
-"@types/node@12.12":
-  version "12.12.70"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.12.70.tgz#adf70b179c3ee17620215ee4cb5c68c95f7c37ec"
-  integrity sha512-i5y7HTbvhonZQE+GnUM2rz1Bi8QkzxdQmEv1LKOv4nWyaQk/gdeiTApuQR3PDJHX7WomAbpx2wlWSEpxXGZ/UQ==
+"@types/node@12.20":
+  version "12.20.46"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.20.46.tgz#7e49dee4c54fd19584e6a9e0da5f3dc2e9136bc7"
+  integrity sha512-cPjLXj8d6anFPzFvOPxS3fvly3Shm5nTfl6g8X5smexixbuGUf7hfr21J5tX9JW+UPStp/5P5R8qrKL5IyVJ+A==
 
 "@types/semver@^7.3.9":
   version "7.3.9"
