@@ -1,33 +1,44 @@
-import { CancellationToken, FormattingOptions, fetch, OutputChannel, Range, TextDocument, TextEdit, Thenable, window } from 'coc.nvim';
+import { spawn } from 'child_process';
+import { CancellationToken, fetch, FormattingOptions, OutputChannel, Range, TextDocument, TextEdit, Thenable, window } from 'coc.nvim';
+import getPort from 'get-port';
+import { getTextEditsFromPatch } from '../common';
 import { IPythonSettings } from '../types';
 import { BaseFormatter } from './baseFormatter';
-import { spawn, ChildProcess } from 'child_process';
-import { getTextEditsFromPatch } from '../common';
 
 export class BlackdFormatter extends BaseFormatter {
-  private blackdServer: ChildProcess | null = null;
   private blackdHTTPURL = '';
+
   constructor(public readonly pythonSettings: IPythonSettings, public readonly outputChannel: OutputChannel) {
     super('blackd', pythonSettings, outputChannel);
 
     this.blackdHTTPURL = this.pythonSettings.formatting.blackdHTTPURL;
     if (!this.blackdHTTPURL.length) {
-      const blackdPath = this.pythonSettings.formatting.blackdPath;
-      this.blackdServer = spawn(blackdPath).on('error', (e) => {
-        this.outputChannel.appendLine('');
-        this.outputChannel.appendLine('spawn blackd HTTP server error');
-        this.outputChannel.appendLine(e.message);
-        this.outputChannel.appendLine('make sure you have installed blackd by `pip install "black[d]"`');
-        this.blackdServer = null;
-      });
+      this.lauchServer();
     }
   }
 
+  private async lauchServer(): Promise<void> {
+    const port = await getPort({ port: 45484 });
+    this.blackdHTTPURL = `http://127.0.0.1:${port}`;
+
+    const blackdPath = this.pythonSettings.formatting.blackdPath;
+    spawn(blackdPath, ['--bind-port', String(port)]).on('error', (e) => {
+      this.outputChannel.appendLine('');
+      this.outputChannel.appendLine('spawn blackd HTTP server error');
+      this.outputChannel.appendLine(e.message);
+      this.outputChannel.appendLine('make sure you have installed blackd by `pip install "black[d]"`');
+      this.blackdHTTPURL = '';
+    });
+  }
+
   private async handle(document: TextDocument): Promise<TextEdit[]> {
+    if (!this.blackdHTTPURL.length) {
+      return Promise.resolve([]);
+    }
+
     try {
-      const _url = this.blackdHTTPURL || 'http://127.0.0.1:45484';
       const headers = Object.assign({ 'X-Diff': 1 }, this.pythonSettings.formatting.blackdHTTPHeaders);
-      const patch = await fetch(_url, { method: 'POST', data: document.getText(), headers });
+      const patch = await fetch(this.blackdHTTPURL, { method: 'POST', data: document.getText(), headers });
 
       this.outputChannel.appendLine('');
       this.outputChannel.appendLine(`${'#'.repeat(10)} ${this.Id} output:`);
@@ -48,15 +59,11 @@ export class BlackdFormatter extends BaseFormatter {
   }
 
   public formatDocument(document: TextDocument, _options: FormattingOptions, _token: CancellationToken, range?: Range): Thenable<TextEdit[]> {
-    const errorMessage = async (msg: string) => {
+    if (range) {
+      const msg = 'blackd does not support range formatting';
       this.outputChannel.appendLine(msg);
       window.showErrorMessage(msg);
-      return [] as TextEdit[];
-    };
-
-    if (range) return errorMessage('Black does not support the "Format Selection" command');
-    if (!this.blackdServer && !this.blackdHTTPURL) {
-      return errorMessage('blackd server error');
+      return Promise.resolve([]);
     }
 
     return this.handle(document);
