@@ -1274,7 +1274,7 @@
         "python.formatting.blackdHTTPHeaders": {
           "type": "object",
           "default": {},
-          "description": "Custom headers POST to blackd server, checkout https://github.com/psf/black/blob/master/docs/blackd.md#protocol",
+          "description": "Custom headers POST to blackd server, checkout https://black.readthedocs.io/en/stable/usage_and_configuration/black_as_a_server.html#protocol",
           "scope": "resource"
         },
         "python.formatting.provider": {
