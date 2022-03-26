@@ -50,6 +50,16 @@ export class PythonSettings implements IPythonSettings {
     }
 
     try {
+      // virtualenv
+      if (process.env.VIRTUAL_ENV && fs.existsSync(path.join(process.env.VIRTUAL_ENV, 'pyvenv.cfg'))) {
+        return pythonBinFromPath(process.env.VIRTUAL_ENV);
+      }
+
+      // conda
+      if (process.env.CONDA_PREFIX) {
+        return pythonBinFromPath(process.env.CONDA_PREFIX);
+      }
+
       // `pyenv local` creates `.python-version`, but not `PYENV_VERSION`
       let p = path.join(this.workspaceRoot, '.python-version');
       if (fs.existsSync(p)) {
@@ -81,13 +91,6 @@ export class PythonSettings implements IPythonSettings {
         if (info) {
           return pythonBinFromPath(info);
         }
-      }
-
-      if (process.env.VIRTUAL_ENV && fs.existsSync(path.join(process.env.VIRTUAL_ENV, 'pyvenv.cfg'))) {
-        return pythonBinFromPath(process.env.VIRTUAL_ENV);
-      }
-      if (process.env.CONDA_PREFIX) {
-        return pythonBinFromPath(process.env.CONDA_PREFIX);
       }
 
       // virtualenv in the workspace root
