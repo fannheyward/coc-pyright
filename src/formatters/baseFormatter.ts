@@ -96,7 +96,7 @@ export abstract class BaseFormatter {
     // to be done here in node (extension), i.e. extension CPU, i.e. less responsive solution.
     const filepath = Uri.parse(document.uri).fsPath;
     const tempFile = await this.createTempFile(document);
-    if (this.checkCancellation(filepath, tempFile, token)) {
+    if (this.checkCancellation(filepath, tempFile, 'start', token)) {
       return [];
     }
     args.push(tempFile);
@@ -119,7 +119,7 @@ export abstract class BaseFormatter {
         this.outputChannel.appendLine('');
         this.outputChannel.appendLine(`${'#'.repeat(10)} ${this.Id} output:`);
         this.outputChannel.appendLine(data);
-        if (this.checkCancellation(filepath, tempFile, token)) {
+        if (this.checkCancellation(filepath, tempFile, 'success', token)) {
           return [] as TextEdit[];
         }
         const edits = getTextEditsFromPatch(document.getText(), data);
@@ -127,10 +127,10 @@ export abstract class BaseFormatter {
         return edits;
       })
       .catch((error) => {
-        if (this.checkCancellation(filepath, tempFile, token)) {
+        this.handleError(this.Id, error).catch(() => {});
+        if (this.checkCancellation(filepath, tempFile, 'error', token)) {
           return [] as TextEdit[];
         }
-        this.handleError(this.Id, error).catch(() => {});
         return [] as TextEdit[];
       })
       .finally(() => {
@@ -161,9 +161,9 @@ export abstract class BaseFormatter {
     return Promise.resolve();
   }
 
-  private checkCancellation(originalFile: string, tempFile: string, token?: CancellationToken): boolean {
+  private checkCancellation(originalFile: string, tempFile: string, state: string, token?: CancellationToken): boolean {
     if (token && token.isCancellationRequested) {
-      this.outputChannel.appendLine(`${'#'.repeat(10)} ${this.Id} formatting action is canceled.`);
+      this.outputChannel.appendLine(`${'#'.repeat(10)} ${this.Id} formatting action is canceled on ${state}`);
       this.deleteTempFile(originalFile, tempFile).catch(() => {});
       return true;
     }
