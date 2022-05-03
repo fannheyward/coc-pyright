@@ -45,8 +45,9 @@ export class PythonSettings implements IPythonSettings {
   }
 
   private resolvePythonFromVENV(): string | undefined {
-    function pythonBinFromPath(p: string): string {
-      return process.platform === 'win32' ? path.join(p, 'Scripts', 'python.exe') : path.join(p, 'bin', 'python');
+    function pythonBinFromPath(p: string): string | undefined {
+      const fullPath = process.platform === 'win32' ? path.join(p, 'Scripts', 'python.exe') : path.join(p, 'bin', 'python');
+      return fs.existsSync(fullPath) ? fullPath : undefined;
     }
 
     try {
