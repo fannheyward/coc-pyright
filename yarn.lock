@@ -916,9 +916,9 @@ punycode@^2.1.0:
   integrity sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==
 
 pyright@^1.1.250:
-  version "1.1.250"
-  resolved "https://registry.yarnpkg.com/pyright/-/pyright-1.1.250.tgz#a1fd41e241e9912288b703dea5f2b7ea39db95df"
-  integrity sha512-LZl5ZzE5P4YkobJTpUvDmxreNFhFUgyYnKwDdSEneP4ZtKI4rIi5AvQ9lEsr/uXdzO/w+P+XRWbmderC0Cc/Pw==
+  version "1.1.251"
+  resolved "https://registry.yarnpkg.com/pyright/-/pyright-1.1.251.tgz#e4e2104b99bb8ce803e2c36281cbc4da3a26e551"
+  integrity sha512-0HttecsAvvpiWNZET0Y6rVZZDjr3omyyJ60Ghto71nlqWa6OEIsd1EGqcCDlebBXSU5OGKL0G9z78xRsaZWntg==
 
 regexpp@^3.2.0:
   version "3.2.0"
