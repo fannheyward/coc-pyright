@@ -59,6 +59,6 @@ export async function sortImports(extensionRoot: string, outputChannel: OutputCh
     }
     outputChannel.appendLine(`${'#'.repeat(10)} isort Output ${'#'.repeat(10)}`);
     outputChannel.appendLine(`Error from isort:\n${message}`);
-    window.showMessage(`Failed to format import by isort`, 'error');
+    window.showErrorMessage(`Failed to format import by isort`);
   }
 }

@@ -176,11 +176,11 @@ export async function activate(context: ExtensionContext): Promise<void> {
 
   const state = extensions.getExtensionState('coc-python');
   if (state.toString() === 'activated') {
-    window.showMessage(`coc-python is installed and activated, coc-pyright will be disabled`, 'warning');
+    window.showWarningMessage(`coc-python is installed and activated, coc-pyright will be disabled`);
     return;
   }
   if (lt(process.versions.node, '12.0.0')) {
-    window.showMessage(`Pyright needs Node.js v12+ to work, your Node.js is ${process.version}.`, 'error');
+    window.showErrorMessage(`Pyright needs Node.js v12+ to work, your Node.js is ${process.version}.`);
     return;
   }
   let module = pyrightCfg.get<string>('server');
@@ -190,7 +190,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
     module = join(context.extensionPath, 'node_modules', 'pyright', 'langserver.index.js');
   }
   if (!existsSync(module)) {
-    window.showMessage(`Pyright langserver doesn't exist, please reinstall coc-pyright`, 'error');
+    window.showErrorMessage(`Pyright langserver doesn't exist, please reinstall coc-pyright`);
     return;
   }
 
@@ -275,7 +275,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
   command = 'pyright.createtypestub';
   disposable = commands.registerCommand(command, async (...args: any[]) => {
     if (!args.length) {
-      window.showMessage(`Module name is missing`, 'warning');
+      window.showWarningMessage(`Module name is missing`);
       return;
     }
     const doc = await workspace.document;
@@ -335,7 +335,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
     const pyrightPackage = JSON.parse(readFileSync(pyrightJSON, 'utf8'));
     const cocPyrightJSON = join(context.extensionPath, 'package.json');
     const cocPyrightPackage = JSON.parse(readFileSync(cocPyrightJSON, 'utf8'));
-    window.showMessage(`coc-pyright ${cocPyrightPackage.version} with Pyright ${pyrightPackage.version}`);
+    window.showInformationMessage(`coc-pyright ${cocPyrightPackage.version} with Pyright ${pyrightPackage.version}`);
   });
   context.subscriptions.push(disposable);
 }

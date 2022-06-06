@@ -13,7 +13,7 @@ async function checkDocument(doc: Document): Promise<boolean> {
 
   const modified = await doc.buffer.getOption('modified');
   if (modified != 0) {
-    window.showMessage('Buffer not saved, please save the buffer first!', 'warning');
+    window.showWarningMessage('Buffer not saved, please save the buffer first!');
     return false;
   }
 
@@ -40,7 +40,7 @@ export async function extractVariable(root: string, document: TextDocument, rang
   const pythonToolsExecutionService = new PythonExecutionService();
   const rope = await pythonToolsExecutionService.isModuleInstalled('rope');
   if (!rope) {
-    window.showMessage(`Module rope not installed`, 'warning');
+    window.showWarningMessage(`Module rope not installed`);
     return;
   }
 
@@ -67,7 +67,7 @@ export async function extractMethod(root: string, document: TextDocument, range:
   const pythonToolsExecutionService = new PythonExecutionService();
   const rope = await pythonToolsExecutionService.isModuleInstalled('rope');
   if (!rope) {
-    window.showMessage(`Module rope not installed`, 'warning');
+    window.showWarningMessage(`Module rope not installed`);
     return;
   }
 
@@ -94,7 +94,7 @@ export async function addImport(root: string, document: TextDocument, name: stri
   const pythonToolsExecutionService = new PythonExecutionService();
   const rope = await pythonToolsExecutionService.isModuleInstalled('rope');
   if (!rope) {
-    window.showMessage(`Module rope not installed`, 'warning');
+    window.showWarningMessage(`Module rope not installed`);
     return;
   }
 
@@ -132,7 +132,7 @@ async function applyImports(doc: Document, resp: Promise<string>, outputChannel:
     outputChannel.appendLine(`${'#'.repeat(10)}Rope Output${'#'.repeat(10)}`);
     outputChannel.appendLine(`Error in add import:\n${errorMessage}`);
     outputChannel.appendLine('');
-    window.showMessage(`Cannot perform addImport using selected element(s).`, 'error');
+    window.showErrorMessage(`Cannot perform addImport using selected element(s).`);
     return await Promise.reject(error);
   }
 }
@@ -183,7 +183,7 @@ async function extractName(textEditor: Document, newName: string, renameResponse
     outputChannel.appendLine(`${'#'.repeat(10)}Refactor Output${'#'.repeat(10)}`);
     outputChannel.appendLine(`Error in refactoring:\n${errorMessage}`);
     outputChannel.appendLine('');
-    window.showMessage(`Cannot perform refactoring using selected element(s).`, 'error');
+    window.showErrorMessage(`Cannot perform refactoring using selected element(s).`);
     return await Promise.reject(error);
   }
 }

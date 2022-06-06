@@ -123,7 +123,7 @@ export abstract class BaseFormatter {
           return [] as TextEdit[];
         }
         const edits = getTextEditsFromPatch(document.getText(), data);
-        if (edits.length) window.showMessage(`Formatted with ${this.Id}`);
+        if (edits.length) window.showInformationMessage(`Formatted with ${this.Id}`);
         return edits;
       })
       .catch((error) => {
@@ -147,7 +147,7 @@ export abstract class BaseFormatter {
     if (isNotInstalledError(error)) {
       customError = `${customError}: ${this.Id} module is not installed.`;
     }
-    window.showMessage(customError, 'warning');
+    window.showWarningMessage(customError);
   }
 
   protected createTempFile(document: TextDocument): Promise<string> {

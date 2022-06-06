@@ -54,16 +54,16 @@ export class PythonFormattingEditProvider implements DocumentFormattingEditProvi
 
   private async _provideEdits(document: TextDocument, options: FormattingOptions, token: CancellationToken, range?: Range): Promise<TextEdit[]> {
     const provider = this.pythonSettings.formatting.provider;
-    const formater = this.formatters.get(provider);
-    if (!formater) {
-      window.showMessage(`No formatter is set. You need to set "python.formatting.provider" in your coc-settings.json`);
+    const formatter = this.formatters.get(provider);
+    if (!formatter) {
+      window.showWarningMessage(`No formatter is set. You need to set "python.formatting.provider" in your coc-settings.json`);
       this.outputChannel.appendLine(`${'#'.repeat(10)} Error: python.formatting.provider is ${provider}, which is not supported`);
       return [];
     }
 
     this.outputChannel.appendLine(`Using python from ${this.pythonSettings.pythonPath}\n`);
-    this.outputChannel.appendLine(`${'#'.repeat(10)} active formattor: ${formater.Id}`);
-    return await formater.formatDocument(document, options, token, range);
+    this.outputChannel.appendLine(`${'#'.repeat(10)} active formattor: ${formatter.Id}`);
+    return await formatter.formatDocument(document, options, token, range);
   }
 
   provideDocumentFormattingEdits(document: TextDocument, options: FormattingOptions, token: CancellationToken): ProviderResult<TextEdit[]> {
