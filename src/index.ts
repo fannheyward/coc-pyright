@@ -209,6 +209,8 @@ export async function activate(context: ExtensionContext): Promise<void> {
   if (pyrightCfg.get<boolean>('disableDiagnostics')) {
     disabledFeatures.push('diagnostics');
   }
+  const disableProgressWindow = pyrightCfg.get<boolean>('disableProgressWindow');
+  if (disableProgressWindow) disabledFeatures.push('progress');
   const outputChannel = window.createOutputChannel('Pyright');
   const pythonSettings = PythonSettings.getInstance();
   outputChannel.appendLine(`Workspace: ${workspace.root}`);
@@ -220,7 +222,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
     },
     outputChannel,
     disabledFeatures,
-    progressOnInitialization: true,
+    progressOnInitialization: !disableProgressWindow,
     middleware: {
       workspace: {
         configuration,
