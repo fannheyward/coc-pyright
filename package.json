@@ -1327,10 +1327,10 @@
           "default": false,
           "description": "Disable diagnostics from Pyright"
         },
-        "pyright.disableProgressWindow": {
+        "pyright.disableProgressNotifications": {
           "type": "boolean",
           "default": false,
-          "description": "Disable the initialization and workdone progress window"
+          "description": "Disable the initialization and workdone progress notifications"
         },
         "pyright.completion.importSupport": {
           "type": "boolean",

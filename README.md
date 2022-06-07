@@ -67,7 +67,7 @@ These configurations are used by `coc-pyright`, you need to set them in your `co
 | pyright.server                              | Custom `pyright-langserver` path                                    | ''            |
 | pyright.disableCompletion                   | Disables completion from Pyright, left other LSP features work      | false         |
 | pyright.disableDiagnostics                  | Disable diagnostics from Pyright                                    | false         |
-| pyright.disableProgressWindow               | Disable the initialization and workdone progress window             | false         |
+| pyright.disableProgressNotifications        | Disable the initialization and workdone progress notifications      | false         |
 | pyright.completion.importSupport            | Enable `python-import` completion source support                    | true          |
 | pyright.completion.snippetSupport           | Enable completion snippets support                                  | true          |
 | pyright.organizeimports.provider            | Organize imports provider, `pyright` or `isort`                     | pyright       |
