@@ -67,6 +67,17 @@
         "pattern": "^(.*)$"
       }
     },
+    "defineConstant": {
+      "$id": "#/properties/defineConstant",
+      "type": "object",
+      "title": "Identifiers that should be treated as constants",
+      "properties": {
+      },
+      "additionalProperties": {
+          "type": ["string", "boolean"],
+          "title": "Value of constant (boolean or string)"
+      }
+    },
     "typeCheckingMode": {
       "$id": "#/properties/typeCheckingMode",
       "type": "string",
@@ -279,6 +290,12 @@
       "$id": "#/properties/reportPrivateUsage",
       "$ref": "#/definitions/diagnostic",
       "title": "Controls reporting of private variables and functions used outside of the owning class or module and usage of protected members outside of subclasses",
+      "default": "none"
+    },
+    "reportTypeCommentUsage": {
+      "$id": "#/properties/reportTypeCommentUsage",
+      "$ref": "#/definitions/diagnostic",
+      "title": "Controls reporting of deprecated type comment usage",
       "default": "none"
     },
     "reportPrivateImportUsage": {
