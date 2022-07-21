@@ -914,10 +914,10 @@ punycode@^2.1.0:
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
   integrity sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==
 
-pyright@^1.1.260:
-  version "1.1.260"
-  resolved "https://registry.yarnpkg.com/pyright/-/pyright-1.1.260.tgz#66400bfb2c11189dcf704cb635548e56401c7baf"
-  integrity sha512-oammrZ+NRJ9n0RITMl5/8sJlQmEtix0mQllMoMuCgZGQkjci5AZ59iVAnzGLRRUuaPNrJ0PYTtk4Ady6S6SuoA==
+pyright@^1.1.262:
+  version "1.1.262"
+  resolved "https://registry.yarnpkg.com/pyright/-/pyright-1.1.262.tgz#fbed37bec16ef9408b9090420f5610803cd68e9f"
+  integrity sha512-4wFmSUzFRs01b1Eau7EnH8yq91ADraeT1EUX+D05nDho53a9u+GAMOCT3v4XD2qASS2tnDkSPmqn4ziF24esXA==
 
 regexpp@^3.2.0:
   version "3.2.0"
