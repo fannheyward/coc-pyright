@@ -1349,6 +1349,11 @@
           "default": false,
           "description": "Disable diagnostics from Pyright"
         },
+        "pyright.disableDocumentation": {
+          "type": "boolean",
+          "default": false,
+          "description": "Disable hover documentation from Pyright"
+        },
         "pyright.disableProgressNotifications": {
           "type": "boolean",
           "default": false,

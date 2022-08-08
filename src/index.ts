@@ -209,6 +209,9 @@ export async function activate(context: ExtensionContext): Promise<void> {
   if (pyrightCfg.get<boolean>('disableDiagnostics')) {
     disabledFeatures.push('diagnostics');
   }
+  if (pyrightCfg.get<boolean>('disableDocumentation')) {
+    disabledFeatures.push('hover');
+  }
   const disableProgress = pyrightCfg.get<boolean>('disableProgressNotifications');
   if (disableProgress) disabledFeatures.push('progress');
   const outputChannel = window.createOutputChannel('Pyright');
