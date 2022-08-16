@@ -1,4 +1,4 @@
-import { CodeAction, CodeActionContext, CodeActionKind, CodeActionProvider, Document, Position, ProviderResult, Range, TextDocument, TextEdit, workspace } from 'coc.nvim';
+import { CodeActionProvider, Document, Range, CodeAction, workspace, CodeActionKind, Position, TextEdit, TextDocument, CodeActionContext, ProviderResult } from 'coc.nvim';
 
 export class PythonCodeActionProvider implements CodeActionProvider {
   private wholeRange(doc: Document, range: Range): boolean {
