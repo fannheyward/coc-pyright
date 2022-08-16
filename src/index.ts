@@ -24,7 +24,7 @@ import { PythonSettings } from './configSettings';
 import { PythonCodeActionProvider } from './features/codeAction';
 import { PythonFormattingEditProvider } from './features/formatting';
 import { ImportCompletionProvider } from './features/importCompletion';
-import { sortImports } from './isortProvider';
+import { sortImports } from './features/isort';
 import { LinterProvider } from './linterProvider';
 import { configuration, handleDiagnostics, provideCompletionItem, provideHover, resolveCompletionItem } from './middleware';
 import { addImport, extractMethod, extractVariable } from './refactorProvider';
