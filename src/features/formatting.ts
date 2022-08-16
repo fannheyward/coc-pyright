@@ -1,24 +1,24 @@
 import {
-  CancellationToken,
-  Disposable,
   DocumentFormattingEditProvider,
   DocumentRangeFormattingEditProvider,
-  FormattingOptions,
+  Disposable,
   OutputChannel,
-  ProviderResult,
-  Range,
-  TextDocument,
-  TextEdit,
   window,
+  TextDocument,
+  FormattingOptions,
+  CancellationToken,
+  Range,
+  TextEdit,
+  ProviderResult,
 } from 'coc.nvim';
-import { PythonSettings } from './configSettings';
+import { PythonSettings } from '../configSettings';
+import { FormatterId } from '../types';
 import { AutoPep8Formatter } from './formatters/autopep8';
 import { BaseFormatter } from './formatters/baseFormatter';
 import { BlackFormatter } from './formatters/black';
-import { YapfFormatter } from './formatters/yapf';
-import { DarkerFormatter } from './formatters/darker';
 import { BlackdFormatter } from './formatters/blackd';
-import { FormatterId } from './types';
+import { DarkerFormatter } from './formatters/darker';
+import { YapfFormatter } from './formatters/yapf';
 
 export class PythonFormattingEditProvider implements DocumentFormattingEditProvider, DocumentRangeFormattingEditProvider {
   private formatters = new Map<FormatterId, BaseFormatter>();

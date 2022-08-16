@@ -1,8 +1,8 @@
 import { spawn } from 'child_process';
 import { CancellationToken, fetch, FormattingOptions, OutputChannel, Range, TextDocument, TextEdit, Thenable, window } from 'coc.nvim';
 import getPort from 'get-port';
-import { getTextEditsFromPatch } from '../common';
-import { IPythonSettings } from '../types';
+import { getTextEditsFromPatch } from '../../common';
+import { IPythonSettings } from '../../types';
 import { BaseFormatter } from './baseFormatter';
 
 export class BlackdFormatter extends BaseFormatter {
@@ -13,11 +13,11 @@ export class BlackdFormatter extends BaseFormatter {
 
     this.blackdHTTPURL = this.pythonSettings.formatting.blackdHTTPURL;
     if (!this.blackdHTTPURL.length) {
-      this.lauchServer();
+      this.launchServer();
     }
   }
 
-  private async lauchServer(): Promise<void> {
+  private async launchServer(): Promise<void> {
     const port = await getPort({ port: 45484 });
     this.blackdHTTPURL = `http://127.0.0.1:${port}`;
 

@@ -1,5 +1,5 @@
 import { CancellationToken, FormattingOptions, OutputChannel, TextDocument, TextEdit, Thenable, Uri } from 'coc.nvim';
-import { IPythonSettings } from '../types';
+import { IPythonSettings } from '../../types';
 import { BaseFormatter } from './baseFormatter';
 
 export class DarkerFormatter extends BaseFormatter {

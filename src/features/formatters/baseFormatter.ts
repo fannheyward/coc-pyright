@@ -4,9 +4,9 @@ import md5 from 'md5';
 import path from 'path';
 import { SemVer } from 'semver';
 import { promisify } from 'util';
-import { getTextEditsFromPatch } from '../common';
-import { isNotInstalledError, PythonExecutionService } from '../processService';
-import { ExecutionInfo, FormatterId, IPythonSettings } from '../types';
+import { getTextEditsFromPatch } from '../../common';
+import { PythonExecutionService, isNotInstalledError } from '../../processService';
+import { FormatterId, IPythonSettings, ExecutionInfo } from '../../types';
 
 export function parsePythonVersion(version: string): SemVer | undefined {
   if (!version || version.trim().length === 0) {

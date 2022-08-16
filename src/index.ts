@@ -22,8 +22,8 @@ import { lt } from 'semver';
 import which from 'which';
 import { PythonCodeActionProvider } from './codeActionsProvider';
 import { PythonSettings } from './configSettings';
+import { PythonFormattingEditProvider } from './features/formatting';
 import { ImportCompletionProvider } from './features/importCompletion';
-import { PythonFormattingEditProvider } from './formatProvider';
 import { sortImports } from './isortProvider';
 import { LinterProvider } from './linterProvider';
 import { configuration, handleDiagnostics, provideCompletionItem, provideHover, resolveCompletionItem } from './middleware';
@@ -94,7 +94,9 @@ export async function activate(context: ExtensionContext): Promise<void> {
     disabledFeatures.push('hover');
   }
   const disableProgress = pyrightCfg.get<boolean>('disableProgressNotifications');
-  if (disableProgress) disabledFeatures.push('progress');
+  if (disableProgress) {
+    disabledFeatures.push('progress');
+  }
   const outputChannel = window.createOutputChannel('Pyright');
   const pythonSettings = PythonSettings.getInstance();
   outputChannel.appendLine(`Workspace: ${workspace.root}`);

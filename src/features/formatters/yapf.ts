@@ -1,5 +1,5 @@
 import { TextDocument, FormattingOptions, CancellationToken, Range, Thenable, TextEdit, OutputChannel } from 'coc.nvim';
-import { IPythonSettings } from '../types';
+import { IPythonSettings } from '../../types';
 import { BaseFormatter } from './baseFormatter';
 
 export class YapfFormatter extends BaseFormatter {
