@@ -1,5 +1,5 @@
 import { CancellationToken, OutputChannel, TextDocument, Uri } from 'coc.nvim';
-import { ILinterInfo, ILintMessage, LintMessageSeverity } from '../types';
+import { ILinterInfo, ILintMessage, LintMessageSeverity } from '../../types';
 import { BaseLinter } from './baseLinter';
 
 const REGEX = '(?<file>.py):(?<line>\\d+):(?<column>\\d+): \\[(?<type>\\w+)\\] (?<code>\\w\\d+):? (?<message>.*)\\r?(\\n|$)';

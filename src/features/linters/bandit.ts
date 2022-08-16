@@ -4,7 +4,7 @@
 'use strict';
 
 import { CancellationToken, OutputChannel, TextDocument, Uri } from 'coc.nvim';
-import { ILinterInfo, ILintMessage, LintMessageSeverity } from '../types';
+import { LintMessageSeverity, ILinterInfo, ILintMessage } from '../../types';
 import { BaseLinter } from './baseLinter';
 
 const severityMapping: Record<string, LintMessageSeverity | undefined> = {

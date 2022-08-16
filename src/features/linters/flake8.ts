@@ -1,5 +1,5 @@
 import { CancellationToken, OutputChannel, TextDocument, Uri } from 'coc.nvim';
-import { ILinterInfo, ILintMessage } from '../types';
+import { ILinterInfo, ILintMessage } from '../../types';
 import { BaseLinter } from './baseLinter';
 
 const COLUMN_OFF_SET = 1;

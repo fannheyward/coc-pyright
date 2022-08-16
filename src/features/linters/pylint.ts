@@ -2,7 +2,7 @@
 // Licensed under the MIT License.
 
 import { CancellationToken, OutputChannel, TextDocument, Uri } from 'coc.nvim';
-import { ILinterInfo, ILintMessage } from '../types';
+import { ILinterInfo, ILintMessage } from '../../types';
 import { BaseLinter } from './baseLinter';
 
 const REGEX = '(?<line>\\d+),(?<column>-?\\d+),(?<type>\\w+),(?<code>[\\w-]+):(?<message>.*)\\r?(\\n|$)';

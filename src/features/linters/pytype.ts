@@ -1,7 +1,7 @@
 import { CancellationToken, OutputChannel, TextDocument, Uri, workspace } from 'coc.nvim';
 import fs from 'fs-extra';
 import * as path from 'path';
-import { ILinterInfo, ILintMessage, LintMessageSeverity } from '../types';
+import { ILinterInfo, ILintMessage, LintMessageSeverity } from '../../types';
 import { BaseLinter } from './baseLinter';
 
 const pytypecfg = 'pytype.cfg';

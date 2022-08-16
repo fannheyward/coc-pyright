@@ -1,6 +1,6 @@
 import { CancellationToken, OutputChannel, TextDocument, Uri, workspace } from 'coc.nvim';
 import * as path from 'path';
-import { ILinterInfo, ILintMessage, LintMessageSeverity } from '../types';
+import { ILinterInfo, ILintMessage, LintMessageSeverity } from '../../types';
 import { BaseLinter } from './baseLinter';
 
 export class PyDocStyle extends BaseLinter {

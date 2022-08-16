@@ -1,6 +1,6 @@
 import { CancellationToken, OutputChannel, TextDocument, Uri, workspace } from 'coc.nvim';
 import path from 'path';
-import { ILinterInfo, ILintMessage } from '../types';
+import { ILinterInfo, ILintMessage } from '../../types';
 import { BaseLinter } from './baseLinter';
 
 interface IProspectorResponse {

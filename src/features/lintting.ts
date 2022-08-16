@@ -1,5 +1,5 @@
-import { commands, ConfigurationChangeEvent, DiagnosticCollection, Disposable, ExtensionContext, TextDocument, Uri, workspace } from 'coc.nvim';
-import { PythonSettings } from './configSettings';
+import { Disposable, ExtensionContext, workspace, commands, DiagnosticCollection, ConfigurationChangeEvent, TextDocument, Uri } from 'coc.nvim';
+import { PythonSettings } from '../configSettings';
 import { LintingEngine } from './linters/lintingEngine';
 
 export class LinterProvider implements Disposable {

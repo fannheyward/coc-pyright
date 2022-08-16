@@ -4,10 +4,10 @@
 
 import { CancellationToken, OutputChannel, TextDocument, Uri, workspace } from 'coc.nvim';
 import namedRegexp from 'named-js-regexp';
-import { splitLines } from '../common';
-import { PythonSettings } from '../configSettings';
-import { PythonExecutionService } from '../processService';
-import { ILinter, ILinterInfo, ILintMessage, IPythonSettings, LinterId, LintMessageSeverity } from '../types';
+import { splitLines } from '../../common';
+import { PythonSettings } from '../../configSettings';
+import { PythonExecutionService } from '../../processService';
+import { LinterId, ILintMessage, ILinter, IPythonSettings, ILinterInfo, LintMessageSeverity } from '../../types';
 
 // Allow negative column numbers (https://github.com/PyCQA/pylint/issues/1822)
 const REGEX = '(?<line>\\d+),(?<column>-?\\d+),(?<type>\\w+),(?<code>\\w+\\d+):(?<message>.*)\\r?(\\n|$)';

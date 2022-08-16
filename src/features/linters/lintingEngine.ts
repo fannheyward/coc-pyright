@@ -21,8 +21,8 @@ import {
 import fs from 'fs-extra';
 import { Minimatch } from 'minimatch';
 import path from 'path';
-import { PythonSettings } from '../configSettings';
-import { ILinter, ILinterInfo, ILintMessage, LinterErrors, LintMessageSeverity, Product } from '../types';
+import { PythonSettings } from '../../configSettings';
+import { LintMessageSeverity, ILinter, Product, ILintMessage, ILinterInfo, LinterErrors } from '../../types';
 import { Bandit } from './bandit';
 import { Flake8 } from './flake8';
 import { LinterInfo } from './linterInfo';

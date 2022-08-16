@@ -3,8 +3,8 @@
 
 import { Uri } from 'coc.nvim';
 import * as path from 'path';
-import { PythonSettings } from '../configSettings';
-import { ExecutionInfo, ILinterInfo, LinterId, Product } from '../types';
+import { PythonSettings } from '../../configSettings';
+import { ILinterInfo, LinterId, Product, ExecutionInfo } from '../../types';
 
 export class LinterInfo implements ILinterInfo {
   private _id: LinterId;
