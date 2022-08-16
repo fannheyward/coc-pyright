@@ -1,22 +1,14 @@
 import {
-  CancellationToken,
   commands,
-  CompletionContext,
-  CompletionItem,
-  CompletionItemKind,
-  CompletionItemProvider,
   DocumentSelector,
   ExtensionContext,
   extensions,
   LanguageClient,
   LanguageClientOptions,
   languages,
-  LinesTextDocument,
-  Position,
   Range,
   ServerOptions,
   services,
-  sources,
   StaticFeature,
   TextDocument,
   TransportKind,
@@ -30,6 +22,7 @@ import { lt } from 'semver';
 import which from 'which';
 import { PythonCodeActionProvider } from './codeActionsProvider';
 import { PythonSettings } from './configSettings';
+import { ImportCompletionProvider } from './features/importCompletion';
 import { PythonFormattingEditProvider } from './formatProvider';
 import { sortImports } from './isortProvider';
 import { LinterProvider } from './linterProvider';
@@ -231,30 +224,4 @@ export async function activate(context: ExtensionContext): Promise<void> {
     window.showInformationMessage(`coc-pyright ${cocPyrightPackage.version} with Pyright ${pyrightPackage.version}`);
   });
   context.subscriptions.push(disposable);
-}
-
-class ImportCompletionProvider implements CompletionItemProvider {
-  async provideCompletionItems(document: LinesTextDocument, position: Position, token: CancellationToken, context: CompletionContext): Promise<CompletionItem[]> {
-    if (context.triggerCharacter !== ' ') return [];
-    const line = document.getText(Range.create(position.line, 0, position.line, position.character)).trim();
-    if (!line.includes('from') && !line.includes('import')) return [];
-
-    const parts = line.split(' ');
-    const first = parts[0];
-    const last = parts[parts.length - 1];
-    if (first !== last && first === 'from' && last !== 'import' && !last.endsWith(',')) {
-      return [{ label: 'import' }];
-    }
-    const source = sources.sources.find((s) => s.name.includes('pyright'));
-    if (!source) return [];
-    // @ts-ignore
-    const result = await source.doComplete(context.option, token);
-    if (!result) return [];
-    const items: CompletionItem[] = [];
-    for (const o of result.items) {
-      // @ts-ignore
-      items.push({ label: o.word, sortText: o.sortText, kind: CompletionItemKind.Module, filterText: o.filterText });
-    }
-    return items;
-  }
 }
