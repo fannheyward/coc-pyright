@@ -26,8 +26,8 @@ import { PythonFormattingEditProvider } from './features/formatting';
 import { ImportCompletionProvider } from './features/importCompletion';
 import { sortImports } from './features/isort';
 import { LinterProvider } from './features/lintting';
+import { addImport, extractMethod, extractVariable } from './features/refactor';
 import { configuration, handleDiagnostics, provideCompletionItem, provideHover, resolveCompletionItem } from './middleware';
-import { addImport, extractMethod, extractVariable } from './refactorProvider';
 
 const defaultHeapSize = 3072;
 
