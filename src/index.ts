@@ -24,6 +24,7 @@ import { PythonSettings } from './configSettings';
 import { PythonCodeActionProvider } from './features/codeAction';
 import { PythonFormattingEditProvider } from './features/formatting';
 import { ImportCompletionProvider } from './features/importCompletion';
+import { TypeInlayHintsProvider } from './features/inlayHints';
 import { sortImports } from './features/isort';
 import { LinterProvider } from './features/lintting';
 import { addImport, extractMethod, extractVariable } from './features/refactor';
@@ -137,6 +138,11 @@ export async function activate(context: ExtensionContext): Promise<void> {
   if (importSupport) {
     const provider = new ImportCompletionProvider();
     context.subscriptions.push(languages.registerCompletionItemProvider('python-import', 'PY', ['python'], provider, [' ']));
+  }
+  const inlayHints = pyrightCfg.get<boolean>('inlayHints.enable');
+  if (inlayHints) {
+    const provider = new TypeInlayHintsProvider(client);
+    context.subscriptions.push(languages.registerInlayHintsProvider(documentSelector, provider));
   }
 
   const textEditorCommands = ['pyright.organizeimports', 'pyright.addoptionalforparam'];

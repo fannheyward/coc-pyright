@@ -44,6 +44,7 @@
     "@types/which": "^2.0.0",
     "@typescript-eslint/eslint-plugin": "^5.6.0",
     "@typescript-eslint/parser": "^5.6.0",
+    "@zzzen/pyright-internal": "^1.2.0-dev.20220821",
     "coc.nvim": "^0.0.82",
     "diff-match-patch": "^1.0.5",
     "esbuild": "^0.14.2",
@@ -95,6 +96,21 @@
           "type": "boolean",
           "default": true,
           "description": "Enable coc-pyright extension"
+        },
+        "pyright.inlayHints.enable": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable/disable inlay hints feature"
+        },
+        "pyright.inlayHints.functionReturnTypes": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable/disable inlay hints for function return types"
+        },
+        "pyright.inlayHints.variableTypes": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable/disable inlay hints for variable types"
         },
         "python.analysis.extraPaths": {
           "type": "array",
