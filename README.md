@@ -72,6 +72,9 @@ These configurations are used by `coc-pyright`, you need to set them in your `co
 | pyright.completion.importSupport            | Enable `python-import` completion source support                    | true          |
 | pyright.completion.snippetSupport           | Enable completion snippets support                                  | true          |
 | pyright.organizeimports.provider            | Organize imports provider, `pyright` or `isort`                     | pyright       |
+| pyright.inlayHints.enable                   | Enable inlay hints feature                                          | true          |
+| pyright.inlayHints.functionReturnTypes      | Enable inlay hints for function return types                        | true          |
+| pyright.inlayHints.variableTypes            | Enable inlay hints for variable types                               | true          |
 
 Additional configuration options can be found in [package.json](./package.json).
 
