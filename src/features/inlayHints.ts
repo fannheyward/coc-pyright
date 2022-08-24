@@ -62,7 +62,7 @@ export class TypeInlayHintsProvider implements InlayHintsProvider {
 
           switch (item.inlayHintType) {
             case 'variable':
-              inlayHintPosition = startPosition;
+              inlayHintPosition = Position.create(startPosition.line, endPosition.character + 1);
               break;
             case 'functionReturn':
               inlayHintPosition = endPosition;
@@ -75,6 +75,8 @@ export class TypeInlayHintsProvider implements InlayHintsProvider {
             const inlayHint: InlayHint = {
               label: inlayHintLabelPart,
               position: inlayHintPosition,
+              paddingLeft: item.inlayHintType === 'functionReturn' ?? true,
+              paddingRight: item.inlayHintType === 'variable' ?? true,
             };
 
             inlayHints.push(inlayHint);
