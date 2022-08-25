@@ -28,7 +28,7 @@ import { TypeInlayHintsProvider } from './features/inlayHints';
 import { sortImports } from './features/isort';
 import { LinterProvider } from './features/lintting';
 import { addImport, extractMethod, extractVariable } from './features/refactor';
-import { configuration, handleDiagnostics, provideCompletionItem, provideHover, resolveCompletionItem } from './middleware';
+import { configuration, handleDiagnostics, provideCompletionItem, provideHover, provideSignatureHelp, resolveCompletionItem } from './middleware';
 
 const defaultHeapSize = 3072;
 
@@ -115,8 +115,9 @@ export async function activate(context: ExtensionContext): Promise<void> {
         configuration,
       },
       provideHover,
-      handleDiagnostics,
+      provideSignatureHelp,
       provideCompletionItem,
+      handleDiagnostics,
       resolveCompletionItem,
     },
   };

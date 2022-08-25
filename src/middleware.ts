@@ -11,7 +11,9 @@ import {
   Position,
   ProvideCompletionItemsSignature,
   ProvideHoverSignature,
+  ProvideSignatureHelpSignature,
   ResolveCompletionItemSignature,
+  SignatureHelpContext,
   workspace,
 } from 'coc.nvim';
 import { PythonSettings } from './configSettings';
@@ -119,6 +121,25 @@ export async function provideHover(document: LinesTextDocument, position: Positi
     hover.contents.value = hover.contents.value.replace(/&nbsp;/g, ' ');
   }
   return hover;
+}
+
+export async function provideSignatureHelp(
+  document: LinesTextDocument,
+  position: Position,
+  context: SignatureHelpContext,
+  token: CancellationToken,
+  next: ProvideSignatureHelpSignature
+) {
+  const sign = await next(document, position, context, token);
+  if (sign && sign.signatures.length) {
+    sign.signatures.forEach((info) => {
+      if (info.documentation && typeof info.documentation === 'object' && info.documentation.kind === 'markdown') {
+        info.documentation.value = info.documentation.value.replace(/&nbsp;/g, ' ');
+      }
+    });
+  }
+
+  return sign;
 }
 
 export async function handleDiagnostics(uri: string, diagnostics: Diagnostic[], next: HandleDiagnosticsSignature) {
