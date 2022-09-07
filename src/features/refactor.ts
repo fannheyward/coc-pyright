@@ -2,7 +2,7 @@ import { ChildProcess } from 'child_process';
 import { commands, Disposable, Document, OutputChannel, Position, Range, TextDocument, Uri, window, workspace } from 'coc.nvim';
 import * as path from 'path';
 import { Deferred, createDeferred } from '../async';
-import { getWindowsLineEndingCount, splitLines, getTextEditsFromPatch } from '../common';
+import { getWindowsLineEndingCount, splitLines, getTextEditsFromPatch } from '../utils';
 import { PythonSettings } from '../configSettings';
 import { PythonExecutionService } from '../processService';
 import { IPythonSettings } from '../types';
@@ -35,7 +35,7 @@ class RefactorProxy implements Disposable {
 
     // get line count
     // Rope always uses LF, instead of CRLF on windows, funny isn't it
-    // So for each line, reduce one characer (for CR)
+    // So for each line, reduce one character (for CR)
     // But Not all Windows users use CRLF
     const offset = document.offsetAt(position);
     const winEols = getWindowsLineEndingCount(document, offset);

@@ -1,7 +1,7 @@
 import { spawn } from 'child_process';
 import { CancellationToken, fetch, FormattingOptions, OutputChannel, Range, TextDocument, TextEdit, Thenable, window } from 'coc.nvim';
 import getPort from 'get-port';
-import { getTextEditsFromPatch } from '../../common';
+import { getTextEditsFromPatch } from '../../utils';
 import { IPythonSettings } from '../../types';
 import { BaseFormatter } from './baseFormatter';
 

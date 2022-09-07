@@ -4,7 +4,7 @@
 
 import { CancellationToken, OutputChannel, TextDocument, Uri, workspace } from 'coc.nvim';
 import namedRegexp from 'named-js-regexp';
-import { splitLines } from '../../common';
+import { splitLines } from '../../utils';
 import { PythonSettings } from '../../configSettings';
 import { PythonExecutionService } from '../../processService';
 import { LinterId, ILintMessage, ILinter, IPythonSettings, ILinterInfo, LintMessageSeverity } from '../../types';

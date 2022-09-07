@@ -4,7 +4,7 @@ import md5 from 'md5';
 import path from 'path';
 import { SemVer } from 'semver';
 import { promisify } from 'util';
-import { getTextEditsFromPatch } from '../../common';
+import { getTextEditsFromPatch } from '../../utils';
 import { PythonExecutionService, isNotInstalledError } from '../../processService';
 import { FormatterId, IPythonSettings, ExecutionInfo } from '../../types';
 

@@ -2,7 +2,7 @@ import { OutputChannel, TextDocument, Uri, window, workspace } from 'coc.nvim';
 import fs from 'fs-extra';
 import md5 from 'md5';
 import * as path from 'path';
-import { getTextEditsFromPatch } from '../common';
+import { getTextEditsFromPatch } from '../utils';
 import { PythonSettings } from '../configSettings';
 import { PythonExecutionService } from '../processService';
 import { ExecutionInfo } from '../types';
