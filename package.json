@@ -1399,6 +1399,31 @@
           "default": "",
           "description": "Custom pyright-langserver path"
         },
+        "pyright.testing.provider": {
+          "type": "string",
+          "default": "unittest",
+          "enum": [
+            "unittest",
+            "pytest"
+          ],
+          "description": "Provider for testing, supports 'unittest' and 'pytest'."
+        },
+        "pyright.testing.pytestArgs": {
+          "type": "array",
+          "description": "Arguments passed in. Each argument is a separate item in the array.",
+          "default": [],
+          "items": {
+            "type": "string"
+          }
+        },
+        "pyright.testing.unittestArgs": {
+          "type": "array",
+          "description": "Arguments passed in. Each argument is a separate item in the array.",
+          "default": [],
+          "items": {
+            "type": "string"
+          }
+        },
         "pyright.trace.server": {
           "type": "string",
           "scope": "window",

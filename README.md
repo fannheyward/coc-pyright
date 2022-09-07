@@ -1,6 +1,7 @@
 # coc-pyright
 
 <!-- markdownlint-disable no-inline-html -->
+
 <a href="https://github.com/sponsors/fannheyward"><img src="https://user-images.githubusercontent.com/345274/133218454-014a4101-b36a-48c6-a1f6-342881974938.png" alt="GitHub Sponsors" /></a>
 <a href="https://patreon.com/fannheyward"><img src="https://c5.patreon.com/external/logo/become_a_patron_button.png" alt="Patreon donate button" /></a>
 <a href="https://paypal.me/fannheyward"><img src="https://user-images.githubusercontent.com/345274/104303610-41149f00-5505-11eb-88b2-5a95c53187b4.png" alt="PayPal donate button" /></a>
@@ -14,7 +15,7 @@
 
 `:CocInstall coc-pyright`
 
-Note: Pyright may not work as expected if can't detect *project root* correctly, check [#521](https://github.com/fannheyward/coc-pyright/issues/521#issuecomment-858530052) and [Using workspaceFolders](https://github.com/neoclide/coc.nvim/wiki/Using-workspaceFolders#resolve-workspace-folder) in coc.nvim.
+Note: Pyright may not work as expected if can't detect _project root_ correctly, check [#521](https://github.com/fannheyward/coc-pyright/issues/521#issuecomment-858530052) and [Using workspaceFolders](https://github.com/neoclide/coc.nvim/wiki/Using-workspaceFolders#resolve-workspace-folder) in coc.nvim.
 
 ## Commands
 
@@ -75,6 +76,9 @@ These configurations are used by `coc-pyright`, you need to set them in your `co
 | pyright.inlayHints.enable                   | Enable inlay hints feature                                          | true          |
 | pyright.inlayHints.functionReturnTypes      | Enable inlay hints for function return types                        | true          |
 | pyright.inlayHints.variableTypes            | Enable inlay hints for variable types                               | true          |
+| pyright.testing.provider                    | Provider for testing, supports `unittest` and `pytest`              | unittest      |
+| pyright.testing.unittestArgs                | Arguments passed to unittest                                        | []            |
+| pyright.testing.pytestArgs                  | Arguments passed to pytest                                          | []            |
 
 Additional configuration options can be found in [package.json](./package.json).
 
@@ -96,15 +100,14 @@ files for well-known packages may also be obtained from 3rd party, for example:
 ## Conda setup
 
 1. Create the following file:
-```
-#!/bin/bash
-python "$@"
-```
+
+   ```sh
+   #!/bin/bash
+   python "$@"
+   ```
+
 2. Make it executable: `chmod +x $path`
-3. Add the following to your `coc-settings.json`:
-```
-"python.pythonPath": "<PUT PATH HERE>"
-```
+3. Set `python.pythonPath` in your `coc-settings.json`: `"python.pythonPath": "<PUT PATH HERE>"`
 4. Activate the environment before starting vim
 
 This way python from your currently activated environment will be used

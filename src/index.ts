@@ -20,6 +20,7 @@ import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 import { lt } from 'semver';
 import which from 'which';
+import { runFileTest, runSingleTest } from './commands';
 import { PythonSettings } from './configSettings';
 import { PythonCodeActionProvider } from './features/codeAction';
 import { PythonFormattingEditProvider } from './features/formatting';
@@ -222,6 +223,16 @@ export async function activate(context: ExtensionContext): Promise<void> {
 
   disposable = commands.registerCommand('python.sortImports', async () => {
     await sortImports(context.extensionPath, outputChannel).catch(() => {});
+  });
+  context.subscriptions.push(disposable);
+
+  disposable = commands.registerCommand('pyright.fileTest', async () => {
+    await runFileTest();
+  });
+  context.subscriptions.push(disposable);
+
+  disposable = commands.registerCommand('pyright.singleTest', async () => {
+    await runSingleTest();
   });
   context.subscriptions.push(disposable);
 
