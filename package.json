@@ -1469,6 +1469,16 @@
         "category": "Pyright"
       },
       {
+        "command": "pyright.fileTest",
+        "title": "Run Test for Current File",
+        "category": "Pyright"
+      },
+      {
+        "command": "pyright.singleTest",
+        "title": "Run Test for Single (nearest) Test",
+        "category": "Pyright"
+      },
+      {
         "command": "pyright.createtypestub",
         "title": "Creates Type Stubs with given module name",
         "category": "Pyright"
