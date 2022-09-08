@@ -149,7 +149,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
   }
   const testProvider = new TestFrameworkProvider();
   context.subscriptions.push(languages.registerCodeActionProvider(documentSelector, testProvider, 'Pyright'));
-  const codeLens = pyrightCfg.get<boolean>('codeLens.enable', true);
+  const codeLens = workspace.getConfiguration('codeLens').get<boolean>('enable', false);
   if (codeLens) context.subscriptions.push(languages.registerCodeLensProvider(documentSelector, testProvider));
 
   const textEditorCommands = ['pyright.organizeimports', 'pyright.addoptionalforparam'];
