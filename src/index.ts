@@ -29,6 +29,7 @@ import { TypeInlayHintsProvider } from './features/inlayHints';
 import { sortImports } from './features/isort';
 import { LinterProvider } from './features/lintting';
 import { addImport, extractMethod, extractVariable } from './features/refactor';
+import { TestFrameworkProvider } from './features/testing';
 import { configuration, handleDiagnostics, provideCompletionItem, provideHover, provideSignatureHelp, resolveCompletionItem } from './middleware';
 
 const defaultHeapSize = 3072;
@@ -146,6 +147,10 @@ export async function activate(context: ExtensionContext): Promise<void> {
     const provider = new TypeInlayHintsProvider(client);
     context.subscriptions.push(languages.registerInlayHintsProvider(documentSelector, provider));
   }
+  const testProvider = new TestFrameworkProvider();
+  context.subscriptions.push(languages.registerCodeActionProvider(documentSelector, testProvider, 'Pyright'));
+  const codeLens = pyrightCfg.get<boolean>('codeLens.enable', true);
+  if (codeLens) context.subscriptions.push(languages.registerCodeLensProvider(documentSelector, testProvider));
 
   const textEditorCommands = ['pyright.organizeimports', 'pyright.addoptionalforparam'];
   textEditorCommands.forEach((commandName: string) => {

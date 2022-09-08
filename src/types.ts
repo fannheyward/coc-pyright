@@ -45,6 +45,7 @@ export enum Product {
 
 export type LinterId = 'flake8' | 'mypy' | 'pycodestyle' | 'prospector' | 'pydocstyle' | 'pylama' | 'pylint' | 'bandit' | 'pytype';
 export type FormatterId = 'yapf' | 'black' | 'autopep8' | 'darker' | 'blackd';
+export type TestingFramework = 'unittest' | 'pytest';
 
 export interface ILinterInfo {
   readonly id: LinterId;

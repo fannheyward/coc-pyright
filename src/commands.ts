@@ -3,11 +3,11 @@ import { Terminal, Uri, window, workspace } from 'coc.nvim';
 import path from 'path';
 import { PythonSettings } from './configSettings';
 import * as testParser from './parsers/testFramework';
+import { TestingFramework } from './types';
 
 let terminal: Terminal | undefined;
 
-type TestFramework = 'pytest' | 'unittest';
-const framework = workspace.getConfiguration('pyright').get<TestFramework>('testing.provider', 'unittest');
+const framework = workspace.getConfiguration('pyright').get<TestingFramework>('testing.provider', 'unittest');
 
 function validPythonModule(pythonPath: string, moduleName: string) {
   try {

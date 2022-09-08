@@ -3,6 +3,7 @@ import { ParseTreeWalker } from '@zzzen/pyright-internal/dist/analyzer/parseTree
 import { DiagnosticSink } from '@zzzen/pyright-internal/dist/common/diagnosticSink';
 import { ClassNode, FunctionNode, SuiteNode } from '@zzzen/pyright-internal/dist/parser/parseNodes';
 import { ParseOptions, Parser, ParseResults } from '@zzzen/pyright-internal/dist/parser/parser';
+import { TestingFramework } from '../types';
 
 export function parse(source: string) {
   let result: ParseResults | undefined = undefined;
@@ -15,8 +16,6 @@ export function parse(source: string) {
   return result;
 }
 
-export type TestFramework = 'unittest' | 'pytest';
-
 export type FunctionFormatItemType = {
   value: string;
   startOffset: number;
@@ -25,9 +24,9 @@ export type FunctionFormatItemType = {
 
 export class TestFrameworkWalker extends ParseTreeWalker {
   public featureItems: FunctionFormatItemType[] = [];
-  private testFramework: TestFramework;
+  private testFramework: TestingFramework;
 
-  constructor(testFramework: TestFramework) {
+  constructor(testFramework: TestingFramework) {
     super();
     this.testFramework = testFramework;
   }
