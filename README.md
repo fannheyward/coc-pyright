@@ -6,10 +6,18 @@
 <a href="https://patreon.com/fannheyward"><img src="https://c5.patreon.com/external/logo/become_a_patron_button.png" alt="Patreon donate button" /></a>
 <a href="https://paypal.me/fannheyward"><img src="https://user-images.githubusercontent.com/345274/104303610-41149f00-5505-11eb-88b2-5a95c53187b4.png" alt="PayPal donate button" /></a>
 
-[Pyright](https://github.com/microsoft/pyright) extension for coc.nvim
+[Pyright](https://github.com/microsoft/pyright) extension for coc.nvim, with additional features:
+
+- codeActions to add imports, ignore typing check, run tests and more
+- linting with `bandit`, `flake8`, `mypy`, `prospector`, `pycodestyle`, `pydocstyle`, `pylama`, `pylint`, `bandit`, `pytype`
+- formatting with `yapf`, `black`, `autopep8`, `darker`, `blackd`
+- testing with `unittest` or `pytest`, supports codeLens
+- sort imports with `isort` or `pyright`
+- extract method and variables with `rope`
+- inlayHints supports
 
 <!-- markdownlint-disable-next-line -->
-<img width="603" alt="1" src="https://user-images.githubusercontent.com/345274/64470245-bda9a780-d172-11e9-9fda-48af0617a2ee.png">
+<img width="906" alt="10" src="https://user-images.githubusercontent.com/345274/189340707-1d9a87c0-807f-4679-899e-8d6500b6a77a.png">
 
 ## Install
 
