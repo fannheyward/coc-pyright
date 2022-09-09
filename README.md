@@ -17,7 +17,7 @@
 - inlayHints supports
 
 <!-- markdownlint-disable-next-line -->
-<img width="906" alt="10" src="https://user-images.githubusercontent.com/345274/189340707-1d9a87c0-807f-4679-899e-8d6500b6a77a.png">
+<img width="906" alt="10" src="https://user-images.githubusercontent.com/345274/189342412-c80fc8a9-c3d7-4a8b-bbfc-75e5cbddb9a7.png">
 
 ## Install
 
