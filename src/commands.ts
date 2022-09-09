@@ -42,7 +42,14 @@ async function runTest(uri: string, testFunction?: string) {
   }
 
   terminal = await window.createTerminal({ name: framework, cwd: workspace.root });
-  const args = workspace.getConfiguration('pyright').get<string[]>(`test.${framework}Args`, []);
+  const args: string[] = [];
+
+  const testArgs = workspace.getConfiguration('pyright').get<string[]>(`testing.${framework}Args`, []);
+  if (testArgs) {
+    if (Array.isArray(testArgs)) {
+      args.push(...testArgs);
+    }
+  }
 
   // MEMO: pytest is string concatenation with '::'
   // MEMO: unittest is string concatenation with '.'
