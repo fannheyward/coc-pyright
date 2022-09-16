@@ -1,4 +1,4 @@
-import { CancellationToken, CompletionContext, CompletionItem, CompletionItemProvider, LinesTextDocument, Position, Range, sources } from 'coc.nvim';
+import { CancellationToken, CompletionContext, CompletionItem, CompletionItemKind, CompletionItemProvider, LinesTextDocument, Position, Range, sources } from 'coc.nvim';
 
 export class ImportCompletionProvider implements CompletionItemProvider {
   async provideCompletionItems(document: LinesTextDocument, position: Position, token: CancellationToken, context: CompletionContext): Promise<CompletionItem[]> {
