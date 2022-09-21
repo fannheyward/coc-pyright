@@ -200,10 +200,10 @@
     "@typescript-eslint/types" "5.36.1"
     eslint-visitor-keys "^3.3.0"
 
-"@yarnpkg/fslib@2.7.0":
-  version "2.7.0"
-  resolved "https://registry.yarnpkg.com/@yarnpkg/fslib/-/fslib-2.7.0.tgz#8693241e9049ca70796dddb3c3403f578b6b614a"
-  integrity sha512-uLVuKd/i19v2c1OMg8H9sH8o5QAKlrLQYXdOk7ZFzUPDTmb8tHrSO1IKUijqItKAUi8RkrqsVgDHZmYFUEWMfQ==
+"@yarnpkg/fslib@2.7.1":
+  version "2.7.1"
+  resolved "https://registry.yarnpkg.com/@yarnpkg/fslib/-/fslib-2.7.1.tgz#5b47f1b88e03fbcf19dd77ebab7bbc45703dbe0c"
+  integrity sha512-xUf0KTuTfVgWWW33sa7SopIPjpq1K7c8Ta/vYLI5FmEHTZ3uBc8FssEjXDXVkIv6HwO3DVI+5mhRfqlTrQSSNw==
   dependencies:
     "@yarnpkg/libzip" "^2.2.4"
     tslib "^1.13.0"
@@ -216,18 +216,18 @@
     "@types/emscripten" "^1.38.0"
     tslib "^1.13.0"
 
-"@zzzen/pyright-internal@^1.2.0-dev.20220911":
-  version "1.2.0-dev.20220911"
-  resolved "https://registry.yarnpkg.com/@zzzen/pyright-internal/-/pyright-internal-1.2.0-dev.20220911.tgz#66a5060b28866f093b508825888a4fb1a9ad1990"
-  integrity sha512-xiC1yjR6kZNNN9y0K2lOimYGXmUuASGkVpPGYyxLyr+ABcWvnJkYwomEfwGnjBSsev0OVEfqJyI6CITmktHnkA==
+"@zzzen/pyright-internal@^1.2.0-dev.20220918":
+  version "1.2.0-dev.20220918"
+  resolved "https://registry.yarnpkg.com/@zzzen/pyright-internal/-/pyright-internal-1.2.0-dev.20220918.tgz#617676976e86e7a802d777edc3d990a079a04b53"
+  integrity sha512-MQ/VlbhCy0zaoMrJOIUeuBQEsPwogJ7lDX78mwwnhpKxghMYVor9h6q1Vt7xwCAG7uDettq5DNl4Q9//Ct+2+Q==
   dependencies:
     "@iarna/toml" "2.2.5"
-    "@yarnpkg/fslib" "2.7.0"
+    "@yarnpkg/fslib" "2.7.1"
     "@yarnpkg/libzip" "2.2.4"
     chalk "^4.1.2"
     chokidar "^3.5.3"
     command-line-args "^5.2.1"
-    jsonc-parser "^3.1.0"
+    jsonc-parser "^3.2.0"
     leven "^3.1.0"
     source-map-support "^0.5.21"
     tmp "^0.2.1"
@@ -934,10 +934,10 @@ json-stable-stringify-without-jsonify@^1.0.1:
   resolved "https://registry.yarnpkg.com/json-stable-stringify-without-jsonify/-/json-stable-stringify-without-jsonify-1.0.1.tgz#9db7b59496ad3f3cfef30a75142d2d930ad72651"
   integrity sha1-nbe1lJatPzz+8wp1FC0tkwrXJlE=
 
-jsonc-parser@^3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/jsonc-parser/-/jsonc-parser-3.1.0.tgz#73b8f0e5c940b83d03476bc2e51a20ef0932615d"
-  integrity sha512-DRf0QjnNeCUds3xTjKlQQ3DpJD51GvDjJfnxUVWg6PZTo2otSm+slzNAxU/35hF8/oJIKoG9slq30JYOsF2azg==
+jsonc-parser@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/jsonc-parser/-/jsonc-parser-3.2.0.tgz#31ff3f4c2b9793f89c67212627c51c6394f88e76"
+  integrity sha512-gfFQZrcTc8CnKXp6Y4/CBT3fTc0OVuDofpre4aEeEpSBPV5X5v4+Vmx+8snU7RLPrNHPKSgLxGo9YuQzz20o+w==
 
 jsonfile@^6.0.1:
   version "6.0.1"
@@ -1109,10 +1109,10 @@ punycode@^2.1.0:
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
   integrity sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==
 
-pyright@^1.1.271:
-  version "1.1.271"
-  resolved "https://registry.yarnpkg.com/pyright/-/pyright-1.1.271.tgz#3bd4d1c88776708d10dc74bb38a463d96b2500b8"
-  integrity sha512-46QQLQLT5U+wmKqG9R193loBASqqcIZYwWrwTCWNTHIRYTxEbaHwGWDlmX19R3lmlIBDu9I9m5MyPmYs/2v5dg==
+pyright@^1.1.272:
+  version "1.1.272"
+  resolved "https://registry.yarnpkg.com/pyright/-/pyright-1.1.272.tgz#1717751f4ce0a3d5ad9757d8b287f41e69ddbf45"
+  integrity sha512-32AEfp7JwZ7aaSFoAObvw9CRNyctZT7UIs+4O2bBhAg1+2UaVRXUTbBeKqJD+hTuA9I+HYOLaCJWcGug70R7LA==
 
 readdirp@~3.6.0:
   version "3.6.0"
