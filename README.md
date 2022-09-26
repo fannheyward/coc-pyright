@@ -70,7 +70,7 @@ These configurations are used by `coc-pyright`, you need to set them in your `co
 | python.linting.pytypeEnabled                | Whether to lint with pytype                                         | false         |
 | python.linting.pycodestyleEnabled           | Whether to lint with pycodestyle                                    | false         |
 | python.linting.prospectorEnabled            | Whether to lint with prospector                                     | false         |
-| python.linting.pydocstyleEnabled            | Whether to lint with pydocstyleEnabled                              | false         |
+| python.linting.pydocstyleEnabled            | Whether to lint with pydocstyle                                     | false         |
 | python.linting.pylamaEnabled                | Whether to lint with pylama                                         | false         |
 | python.linting.pylintEnabled                | Whether to lint with pylint                                         | false         |
 | python.sortImports.path                     | Path to isort script, default using inner version                   | ''            |
