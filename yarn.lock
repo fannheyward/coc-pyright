@@ -216,9 +216,9 @@
     tslib "^1.13.0"
 
 "@zzzen/pyright-internal@^1.2.0-dev.20220918":
-  version "1.2.0-dev.20220918"
-  resolved "https://registry.yarnpkg.com/@zzzen/pyright-internal/-/pyright-internal-1.2.0-dev.20220918.tgz#617676976e86e7a802d777edc3d990a079a04b53"
-  integrity sha512-MQ/VlbhCy0zaoMrJOIUeuBQEsPwogJ7lDX78mwwnhpKxghMYVor9h6q1Vt7xwCAG7uDettq5DNl4Q9//Ct+2+Q==
+  version "1.2.0-dev.20220925"
+  resolved "https://registry.yarnpkg.com/@zzzen/pyright-internal/-/pyright-internal-1.2.0-dev.20220925.tgz#3c266b73bb61a5a16a626f418465f7bb34ba3638"
+  integrity sha512-4HO+yT7+1MoK6U92LLszAh7k4x3AhpHdNeq7iPtAIvD7x0muimQ615hxWbM4F/jXROFwMmMSG5HpQs4uvRk9hg==
   dependencies:
     "@iarna/toml" "2.2.5"
     "@yarnpkg/fslib" "2.7.1"
