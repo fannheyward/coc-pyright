@@ -2,7 +2,7 @@ import { CancellationToken, OutputChannel, TextDocument, Uri } from 'coc.nvim';
 import { ILinterInfo, ILintMessage, LintMessageSeverity } from '../../types';
 import { BaseLinter } from './baseLinter';
 
-const REGEX = '(?<file>.py):(?<line>\\d+):(?<column>\\d+): (?<message>.*)\\r?(\\n|$)';
+const REGEX = '(?<file>.*.py):(?<line>\\d+):(?<column>\\d+): (?<message>.*)\\r?(\\n|$)';
 
 export class Pyflakes extends BaseLinter {
   constructor(info: ILinterInfo, outputChannel: OutputChannel) {

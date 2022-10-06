@@ -127,6 +127,7 @@ export class PythonSettings implements IPythonSettings {
     this.linting.pydocstylePath = this.getAbsolutePath(systemVariables.resolveAny(this.linting.pydocstylePath));
     this.linting.mypyPath = this.getAbsolutePath(systemVariables.resolveAny(this.linting.mypyPath));
     this.linting.banditPath = this.getAbsolutePath(systemVariables.resolveAny(this.linting.banditPath));
+    this.linting.ruffPath = this.getAbsolutePath(systemVariables.resolveAny(this.linting.ruffPath));
 
     const formattingSettings = systemVariables.resolveAny(pythonSettings.get<IFormattingSettings>('formatting'))!;
     if (this.formatting) {

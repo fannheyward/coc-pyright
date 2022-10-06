@@ -34,6 +34,7 @@ import { Pyflakes } from './pyflakes';
 import { Pylama } from './pylama';
 import { Pylint } from './pylint';
 import { Pytype } from './pytype';
+import { Ruff } from './ruff';
 
 const PYTHON: DocumentFilter = { language: 'python' };
 
@@ -75,6 +76,7 @@ export class LintingEngine {
       new LinterInfo(Product.pyflakes, 'pyflakes', this.configService),
       new LinterInfo(Product.pylama, 'pylama', this.configService),
       new LinterInfo(Product.pytype, 'pytype', this.configService),
+      new LinterInfo(Product.ruff, 'ruff', this.configService),
     ];
   }
 
@@ -252,6 +254,8 @@ export class LintingEngine {
         return new Pytype(info, outputChannel);
       case Product.pyflakes:
         return new Pyflakes(info, outputChannel);
+      case Product.ruff:
+        return new Ruff(info, outputChannel);
       default:
         break;
     }

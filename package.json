@@ -1146,6 +1146,27 @@
           "description": "Path to pyflakes, you can use a custom version of pyflakes by modifying this setting to include the full path.",
           "scope": "resource"
         },
+        "python.linting.ruffEnabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to lint Python files using ruff.",
+          "scope": "resource"
+        },
+        "python.linting.ruffPath": {
+          "type": "string",
+          "default": "ruff",
+          "description": "Path to ruff, you can use a custom version of ruff by modifying this setting to include the full path.",
+          "scope": "resource"
+        },
+        "python.linting.ruffArgs": {
+          "type": "array",
+          "description": "Arguments passed in. Each argument is a separate item in the array.",
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "scope": "resource"
+        },
         "python.linting.pylamaArgs": {
           "type": "array",
           "description": "Arguments passed in. Each argument is a separate item in the array.",

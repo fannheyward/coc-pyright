@@ -42,9 +42,10 @@ export enum Product {
   rope = 14,
   blackd = 15,
   pyflakes = 16,
+  ruff = 17,
 }
 
-export type LinterId = 'flake8' | 'mypy' | 'pycodestyle' | 'prospector' | 'pydocstyle' | 'pyflakes' | 'pylama' | 'pylint' | 'bandit' | 'pytype';
+export type LinterId = 'bandit' | 'flake8' | 'mypy' | 'ruff' | 'pycodestyle' | 'prospector' | 'pydocstyle' | 'pyflakes' | 'pylama' | 'pylint' | 'pytype';
 export type FormatterId = 'yapf' | 'black' | 'autopep8' | 'darker' | 'blackd';
 export type TestingFramework = 'unittest' | 'pytest';
 
@@ -108,39 +109,41 @@ export interface MypyCategorySeverity {
 
 export interface ILintingSettings {
   readonly enabled: boolean;
+  readonly lintOnSave: boolean;
   readonly ignorePatterns: string[];
+  readonly maxNumberOfProblems: number;
+  readonly banditEnabled: boolean;
+  readonly banditArgs: string[];
+  readonly flake8Enabled: boolean;
+  readonly flake8Args: string[];
+  readonly flake8CategorySeverity: Flake8CategorySeverity;
+  readonly mypyEnabled: boolean;
+  readonly mypyArgs: string[];
+  readonly mypyCategorySeverity: MypyCategorySeverity;
+  readonly ruffEnabled: boolean;
   readonly prospectorEnabled: boolean;
   readonly prospectorArgs: string[];
   readonly pylintEnabled: boolean;
   readonly pylintArgs: string[];
+  readonly pylintCategorySeverity: PylintCategorySeverity;
   readonly pycodestyleEnabled: boolean;
   readonly pycodestyleArgs: string[];
+  readonly pycodestyleCategorySeverity: PycodestyleCategorySeverity;
   readonly pyflakesEnabled: boolean;
   readonly pylamaEnabled: boolean;
   readonly pylamaArgs: string[];
-  readonly flake8Enabled: boolean;
-  readonly flake8Args: string[];
   readonly pydocstyleEnabled: boolean;
   readonly pydocstyleArgs: string[];
-  readonly lintOnSave: boolean;
-  readonly maxNumberOfProblems: number;
-  readonly pylintCategorySeverity: PylintCategorySeverity;
-  readonly pycodestyleCategorySeverity: PycodestyleCategorySeverity;
-  readonly flake8CategorySeverity: Flake8CategorySeverity;
-  readonly mypyCategorySeverity: MypyCategorySeverity;
+  banditPath: string;
+  flake8Path: string;
+  mypyPath: string;
+  ruffPath: string;
   prospectorPath: string;
   pylintPath: string;
   pycodestylePath: string;
   pyflakesPath: string;
   pylamaPath: string;
-  flake8Path: string;
   pydocstylePath: string;
-  mypyEnabled: boolean;
-  mypyArgs: string[];
-  mypyPath: string;
-  banditEnabled: boolean;
-  banditArgs: string[];
-  banditPath: string;
 }
 export interface IFormattingSettings {
   readonly provider: FormatterId;
