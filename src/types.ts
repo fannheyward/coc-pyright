@@ -41,9 +41,10 @@ export enum Product {
   darker = 13,
   rope = 14,
   blackd = 15,
+  pyflakes = 16,
 }
 
-export type LinterId = 'flake8' | 'mypy' | 'pycodestyle' | 'prospector' | 'pydocstyle' | 'pylama' | 'pylint' | 'bandit' | 'pytype';
+export type LinterId = 'flake8' | 'mypy' | 'pycodestyle' | 'prospector' | 'pydocstyle' | 'pyflakes' | 'pylama' | 'pylint' | 'bandit' | 'pytype';
 export type FormatterId = 'yapf' | 'black' | 'autopep8' | 'darker' | 'blackd';
 export type TestingFramework = 'unittest' | 'pytest';
 
@@ -114,6 +115,7 @@ export interface ILintingSettings {
   readonly pylintArgs: string[];
   readonly pycodestyleEnabled: boolean;
   readonly pycodestyleArgs: string[];
+  readonly pyflakesEnabled: boolean;
   readonly pylamaEnabled: boolean;
   readonly pylamaArgs: string[];
   readonly flake8Enabled: boolean;
@@ -129,6 +131,7 @@ export interface ILintingSettings {
   prospectorPath: string;
   pylintPath: string;
   pycodestylePath: string;
+  pyflakesPath: string;
   pylamaPath: string;
   flake8Path: string;
   pydocstylePath: string;

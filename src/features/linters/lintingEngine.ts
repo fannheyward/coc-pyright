@@ -30,6 +30,7 @@ import { MyPy } from './mypy';
 import { Prospector } from './prospector';
 import { PyCodeStyle } from './pycodestyle';
 import { PyDocStyle } from './pydocstyle';
+import { Pyflakes } from './pyflakes';
 import { Pylama } from './pylama';
 import { Pylint } from './pylint';
 import { Pytype } from './pytype';
@@ -71,6 +72,7 @@ export class LintingEngine {
       new LinterInfo(Product.pycodestyle, 'pycodestyle', this.configService),
       new LinterInfo(Product.prospector, 'prospector', this.configService),
       new LinterInfo(Product.pydocstyle, 'pydocstyle', this.configService),
+      new LinterInfo(Product.pyflakes, 'pyflakes', this.configService),
       new LinterInfo(Product.pylama, 'pylama', this.configService),
       new LinterInfo(Product.pytype, 'pytype', this.configService),
     ];
@@ -248,6 +250,8 @@ export class LintingEngine {
         return new PyCodeStyle(info, outputChannel);
       case Product.pytype:
         return new Pytype(info, outputChannel);
+      case Product.pyflakes:
+        return new Pyflakes(info, outputChannel);
       default:
         break;
     }

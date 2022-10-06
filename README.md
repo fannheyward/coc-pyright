@@ -9,7 +9,7 @@
 [Pyright](https://github.com/microsoft/pyright) extension for coc.nvim, with additional features:
 
 - codeActions to add imports, ignore typing check, run tests and more
-- linting with `bandit`, `flake8`, `mypy`, `prospector`, `pycodestyle`, `pydocstyle`, `pylama`, `pylint`, `bandit`, `pytype`
+- linting with `bandit`, `flake8`, `mypy`, `prospector`, `pycodestyle`, `pydocstyle`, `pyflakes`, `pylama`, `pylint`, `bandit`, `pytype`
 - formatting with `yapf`, `black`, `autopep8`, `darker`, `blackd`
 - testing with `unittest` or `pytest`, supports codeLens
 - sort imports with `isort` or `pyright`
@@ -73,6 +73,7 @@ These configurations are used by `coc-pyright`, you need to set them in your `co
 | python.linting.pydocstyleEnabled            | Whether to lint with pydocstyle                                     | false         |
 | python.linting.pylamaEnabled                | Whether to lint with pylama                                         | false         |
 | python.linting.pylintEnabled                | Whether to lint with pylint                                         | false         |
+| python.linting.pyflakesEnabled              | Whether to lint with pyflakes                                       | false         |
 | python.sortImports.path                     | Path to isort script, default using inner version                   | ''            |
 | python.sortImports.args                     | Arguments passed to isort                                           | []            |
 | pyright.server                              | Custom `pyright-langserver` path                                    | ''            |

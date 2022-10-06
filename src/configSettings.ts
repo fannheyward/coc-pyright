@@ -121,6 +121,7 @@ export class PythonSettings implements IPythonSettings {
     this.linting.pylintPath = this.getAbsolutePath(systemVariables.resolveAny(this.linting.pylintPath));
     this.linting.flake8Path = this.getAbsolutePath(systemVariables.resolveAny(this.linting.flake8Path));
     this.linting.pycodestylePath = this.getAbsolutePath(systemVariables.resolveAny(this.linting.pycodestylePath));
+    this.linting.pyflakesPath = this.getAbsolutePath(systemVariables.resolveAny(this.linting.pyflakesPath));
     this.linting.pylamaPath = this.getAbsolutePath(systemVariables.resolveAny(this.linting.pylamaPath));
     this.linting.prospectorPath = this.getAbsolutePath(systemVariables.resolveAny(this.linting.prospectorPath));
     this.linting.pydocstylePath = this.getAbsolutePath(systemVariables.resolveAny(this.linting.pydocstylePath));
