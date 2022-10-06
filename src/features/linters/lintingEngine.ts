@@ -30,7 +30,7 @@ import { MyPy } from './mypy';
 import { Prospector } from './prospector';
 import { PyCodeStyle } from './pycodestyle';
 import { PyDocStyle } from './pydocstyle';
-import { PyLama } from './pylama';
+import { Pylama } from './pylama';
 import { Pylint } from './pylint';
 import { Pytype } from './pytype';
 
@@ -241,7 +241,7 @@ export class LintingEngine {
       case Product.prospector:
         return new Prospector(info, outputChannel);
       case Product.pylama:
-        return new PyLama(info, outputChannel);
+        return new Pylama(info, outputChannel);
       case Product.pydocstyle:
         return new PyDocStyle(info, outputChannel);
       case Product.pycodestyle:
