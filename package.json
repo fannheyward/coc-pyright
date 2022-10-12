@@ -97,11 +97,6 @@
           "default": true,
           "description": "Enable coc-pyright extension"
         },
-        "pyright.inlayHints.enable": {
-          "type": "boolean",
-          "default": true,
-          "description": "Enable/disable inlay hints feature"
-        },
         "pyright.inlayHints.functionReturnTypes": {
           "type": "boolean",
           "default": true,

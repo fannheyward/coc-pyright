@@ -142,8 +142,8 @@ export async function activate(context: ExtensionContext): Promise<void> {
     const provider = new ImportCompletionProvider();
     context.subscriptions.push(languages.registerCompletionItemProvider('python-import', 'PY', ['python'], provider, [' ']));
   }
-  const inlayHints = pyrightCfg.get<boolean>('inlayHints.enable');
-  if (inlayHints) {
+  const inlayHintEnable = workspace.getConfiguration('inlayHint').get('enable', true);
+  if (inlayHintEnable && typeof languages.registerInlayHintsProvider === 'function') {
     const provider = new TypeInlayHintsProvider(client);
     context.subscriptions.push(languages.registerInlayHintsProvider(documentSelector, provider));
   }
