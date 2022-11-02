@@ -1167,9 +1167,9 @@ punycode@^2.1.0:
   integrity sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==
 
 pyright@^1.1.275:
-  version "1.1.275"
-  resolved "https://registry.yarnpkg.com/pyright/-/pyright-1.1.275.tgz#76a6ff8964a1c3493081e557314c5619728237cc"
-  integrity sha512-3P3nzHFmZBa8JN/sI6R92RZW0My+kipU6YXfqIPSfZjaamHSSKCGtJnBZqzZTpzGod4+e/yhBPONtcymbTrGSA==
+  version "1.1.277"
+  resolved "https://registry.yarnpkg.com/pyright/-/pyright-1.1.277.tgz#859ec25422f2edb3260a0ff722c9da4f013b7013"
+  integrity sha512-a/hl2eLgoIFvFKBJOwKH63RgTMJvH5iwvgQOGVesj1QPKgYtRyde5lh+jLH/2aObxWkVgGPqkxtC1MZee3wfNA==
 
 readdirp@~3.6.0:
   version "3.6.0"
