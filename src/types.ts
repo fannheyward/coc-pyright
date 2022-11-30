@@ -72,6 +72,8 @@ export enum LintMessageSeverity {
 export interface ILintMessage {
   line: number;
   column: number;
+  endLine?: number;
+  endColumn?: number;
   code: string | undefined;
   message: string;
   type: string;
