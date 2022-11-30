@@ -1,5 +1,5 @@
 import { spawnSync } from 'child_process';
-import { CancellationToken, OutputChannel, TextDocument, Uri, workspace } from 'coc.nvim';
+import { OutputChannel, TextDocument, Uri, workspace } from 'coc.nvim';
 import { ILinterInfo, ILintMessage, LintMessageSeverity } from '../../types';
 import { BaseLinter } from './baseLinter';
 
@@ -24,7 +24,7 @@ export class Ruff extends BaseLinter {
     super(info, outputChannel, COLUMN_OFF_SET);
   }
 
-  protected async runLinter(document: TextDocument, _cancellation: CancellationToken): Promise<ILintMessage[]> {
+  protected async runLinter(document: TextDocument): Promise<ILintMessage[]> {
     if (!this.info.isEnabled(Uri.parse(document.uri))) return [];
 
     const args = [...this.info.linterArgs(), '--format=json', Uri.parse(document.uri).fsPath];
