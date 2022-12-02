@@ -184,6 +184,8 @@ export class LintingEngine {
     const diagnostic = Diagnostic.create(range, message.message, severity);
     diagnostic.code = message.code;
     diagnostic.source = message.provider;
+    // @ts-ignore
+    diagnostic.fix = message.fix;
     return diagnostic;
   }
 

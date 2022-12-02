@@ -80,6 +80,7 @@ export interface ILintMessage {
   severity?: LintMessageSeverity;
   provider: string;
   file?: string;
+  fix?: any;
 }
 
 export interface ILinter {

@@ -1,5 +1,5 @@
 import { spawnSync } from 'child_process';
-import { OutputChannel, TextDocument, Uri, workspace } from 'coc.nvim';
+import { OutputChannel, Range, TextDocument, TextEdit, Uri, workspace, WorkspaceEdit } from 'coc.nvim';
 import { ILinterInfo, ILintMessage, LintMessageSeverity } from '../../types';
 import { BaseLinter } from './baseLinter';
 
@@ -10,10 +10,42 @@ interface IRuffLocation {
   column: number;
 }
 
+interface IRuffFix {
+  content: string;
+  location: IRuffLocation;
+  end_location: IRuffLocation;
+}
+
+// {
+//   "code": "F401",
+//   "message": "`numpy` imported but unused",
+//   "fix": {
+//     "content": "",
+//     "location": {
+//       "row": 3,
+//       "column": 0
+//     },
+//     "end_location": {
+//       "row": 4,
+//       "column": 0
+//     }
+//   },
+//   "location": {
+//     "row": 3,
+//     "column": 8
+//   },
+//   "end_location": {
+//     "row": 3,
+//     "column": 19
+//   },
+//   "filename": "/path/to/bug.py"
+// },
+
 interface IRuffLintMessage {
   kind: string | { [key: string]: any[] };
   code: string;
   message: string;
+  fix: IRuffFix;
   location: IRuffLocation;
   end_location: IRuffLocation;
   filename: string;
@@ -22,6 +54,17 @@ interface IRuffLintMessage {
 export class Ruff extends BaseLinter {
   constructor(info: ILinterInfo, outputChannel: OutputChannel) {
     super(info, outputChannel, COLUMN_OFF_SET);
+  }
+
+  private fixToWorkspaceEdit(filename: string, fix: IRuffFix): WorkspaceEdit | null {
+    if (!fix) return null;
+
+    const edit: WorkspaceEdit = { changes: {} };
+    const u = Uri.parse(filename).toString();
+    const range = Range.create(fix.location.row - 1, fix.location.column, fix.end_location.row - 1, fix.end_location.column);
+    edit.changes![u] = [TextEdit.replace(range, fix.content)];
+
+    return edit;
   }
 
   protected async runLinter(document: TextDocument): Promise<ILintMessage[]> {
@@ -53,7 +96,8 @@ export class Ruff extends BaseLinter {
           severity: LintMessageSeverity.Warning, // https://github.com/charliermarsh/ruff/issues/645
           provider: this.info.id,
           file: msg.filename,
-        };
+          fix: this.fixToWorkspaceEdit(msg.filename, msg.fix),
+        } as ILintMessage;
       });
 
       return messages;

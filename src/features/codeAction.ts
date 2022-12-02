@@ -1,7 +1,7 @@
-import { CodeActionProvider, Document, Range, CodeAction, workspace, CodeActionKind, Position, TextEdit, TextDocument, CodeActionContext, ProviderResult } from 'coc.nvim';
+import { CodeAction, CodeActionContext, CodeActionKind, CodeActionProvider, Diagnostic, Position, ProviderResult, Range, TextDocument, TextEdit, workspace } from 'coc.nvim';
 
 export class PythonCodeActionProvider implements CodeActionProvider {
-  private wholeRange(doc: Document, range: Range): boolean {
+  private wholeRange(doc: TextDocument, range: Range): boolean {
     const whole = Range.create(0, 0, doc.lineCount, 0);
     return (
       whole.start.line === range.start.line && whole.start.character === range.start.character && whole.end.line === range.end.line && whole.end.character === whole.end.character
@@ -31,31 +31,34 @@ export class PythonCodeActionProvider implements CodeActionProvider {
     };
   }
 
-  private ignoreAction(doc: Document, range: Range): CodeAction | null {
+  private ignoreAction(document: TextDocument, range: Range): CodeAction | null {
+    const ignoreTxt = '# type: ignore';
+    const doc = workspace.getDocument(document.uri);
     // ignore action for whole file
-    if (this.wholeRange(doc, range) || this.cursorRange(range)) {
+    if (this.wholeRange(document, range) || this.cursorRange(range)) {
       let pos = Position.create(0, 0);
-      if (doc.getline(0).startsWith('#!')) {
-        pos = Position.create(1, 0);
-      }
-      const edit = TextEdit.insert(pos, '# type: ignore\n');
-      return {
-        title: 'Ignore Pyright typing check for whole file',
-        edit: {
-          changes: {
-            [doc.uri]: [edit],
+      if (doc.getline(0).startsWith('#!')) pos = Position.create(1, 0);
+      if (!doc.getline(pos.line).includes(ignoreTxt)) {
+        return {
+          title: 'Ignore Pyright typing check for whole file',
+          kind: CodeActionKind.Empty,
+          edit: {
+            changes: {
+              [doc.uri]: [TextEdit.insert(pos, ignoreTxt + '\n')],
+            },
           },
-        },
-      };
+        };
+      }
     }
 
     // ignore action for current line
     if (this.lineRange(range)) {
       const line = doc.getline(range.start.line);
-      if (line && line.length && !line.startsWith('#')) {
-        const edit = TextEdit.replace(range, `${line}  # type: ignore${range.start.line + 1 === range.end.line ? '\n' : ''}`);
+      if (line && line.length && !line.startsWith('#') && !line.includes(ignoreTxt)) {
+        const edit = TextEdit.replace(range, `${line}  ${ignoreTxt}${range.start.line + 1 === range.end.line ? '\n' : ''}`);
         return {
           title: 'Ignore Pyright typing check for current line',
+          kind: CodeActionKind.Empty,
           edit: {
             changes: {
               [doc.uri]: [edit],
@@ -92,51 +95,67 @@ export class PythonCodeActionProvider implements CodeActionProvider {
     ];
   }
 
-  private addImportActions(document: TextDocument, msg: string): CodeAction[] {
-    const match = msg.match(/"(.*)" is not defined/);
-    if (!match) return [];
-    return [
-      {
-        title: `Add "import ${match[1]}"`,
-        kind: CodeActionKind.Source,
-        command: {
-          title: '',
-          command: 'pyright.addImport',
-          arguments: [document, match[1], false],
-        },
-      },
+  private fixAction(document: TextDocument, diag: Diagnostic): CodeAction[] {
+    if (diag.code === 'reportUndefinedVariable') {
+      const msg = diag.message;
+      const match = msg.match(/"(.*)" is not defined/);
+      if (match) {
+        return [
+          {
+            title: `Add "import ${match[1]}"`,
+            kind: CodeActionKind.Source,
+            command: {
+              title: '',
+              command: 'pyright.addImport',
+              arguments: [document, match[1], false],
+            },
+          },
 
-      {
-        title: `Add "from _ import ${match[1]}"`,
-        kind: CodeActionKind.Source,
-        command: {
-          title: '',
-          command: 'pyright.addImport',
-          arguments: [document, match[1], true],
-        },
-      },
-    ];
+          {
+            title: `Add "from _ import ${match[1]}"`,
+            kind: CodeActionKind.Source,
+            command: {
+              title: '',
+              command: 'pyright.addImport',
+              arguments: [document, match[1], true],
+            },
+          },
+        ];
+      }
+    }
+
+    // @ts-ignore
+    if (diag.fix) {
+      const title = `Fix: ${diag.message.split(':')[0]}`;
+      const action: CodeAction = {
+        title,
+        kind: CodeActionKind.QuickFix,
+        // @ts-ignore
+        edit: diag.fix,
+      };
+      return [action];
+    }
+    return [];
   }
 
   public provideCodeActions(document: TextDocument, range: Range, context: CodeActionContext): ProviderResult<CodeAction[]> {
-    // add import actions
-    if (this.cursorRange(range) && context.diagnostics.length) {
-      const diag = context.diagnostics.find((d) => d.code === 'reportUndefinedVariable');
-      if (diag) return this.addImportActions(document, diag.message);
-    }
-
-    const doc = workspace.getDocument(document.uri);
     const actions: CodeAction[] = [];
+
+    if (context.diagnostics.length) {
+      for (const diag of context.diagnostics) {
+        actions.push(...this.fixAction(document, diag));
+      }
+    }
 
     // sort imports actions
     actions.push(this.sortImportsAction());
 
     // ignore actions
-    const ignore = this.ignoreAction(doc, range);
+    const ignore = this.ignoreAction(document, range);
     if (ignore) actions.push(ignore);
 
     // extract actions
-    if (!this.wholeRange(doc, range) && !this.cursorRange(range)) {
+    if (!this.wholeRange(document, range) && !this.cursorRange(range)) {
       actions.push(...this.extractActions(document, range));
     }
 

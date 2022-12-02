@@ -1,4 +1,4 @@
-import { CodeAction, CodeActionProvider, CodeLens, CodeLensProvider, events, LinesTextDocument, Position, Range, Uri, workspace } from 'coc.nvim';
+import { CodeAction, CodeActionKind, CodeActionProvider, CodeLens, CodeLensProvider, events, LinesTextDocument, Position, Range, Uri, workspace } from 'coc.nvim';
 import path from 'path';
 import * as testParser from '../parsers/testFramework';
 import { TestingFramework } from '../types';
@@ -59,6 +59,7 @@ export class TestFrameworkProvider implements CodeLensProvider, CodeActionProvid
         if (rangeInRange(range, Range.create(itemStartPosition, itemEndPosition))) {
           actions.push({
             title: `RUN ${item.value} with ${this.framework}`,
+            kind: CodeActionKind.Empty,
             command: {
               title: `RUN ${item.value} with ${this.framework}`,
               command: 'pyright.singleTest',
