@@ -59,12 +59,13 @@ export class Ruff extends BaseLinter {
   private fixToWorkspaceEdit(filename: string, fix: IRuffFix): WorkspaceEdit | null {
     if (!fix) return null;
 
-    const edit: WorkspaceEdit = { changes: {} };
     const u = Uri.parse(filename).toString();
     const range = Range.create(fix.location.row - 1, fix.location.column, fix.end_location.row - 1, fix.end_location.column);
-    edit.changes![u] = [TextEdit.replace(range, fix.content)];
-
-    return edit;
+    return {
+      changes: {
+        [u]: [TextEdit.replace(range, fix.content)],
+      },
+    };
   }
 
   protected async runLinter(document: TextDocument): Promise<ILintMessage[]> {
