@@ -71,7 +71,7 @@ export class Ruff extends BaseLinter {
   protected async runLinter(document: TextDocument): Promise<ILintMessage[]> {
     if (!this.info.isEnabled(Uri.parse(document.uri))) return [];
 
-    const args = [...this.info.linterArgs(), '--format=json', Uri.parse(document.uri).fsPath];
+    const args = [...this.info.linterArgs(), '--format=json', '--exit-zero', Uri.parse(document.uri).fsPath];
     const bin = this.info.pathName();
 
     try {
