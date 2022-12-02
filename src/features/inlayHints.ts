@@ -99,23 +99,20 @@ export class TypeInlayHintsProvider implements InlayHintsProvider {
 
   private getVariableHintAtHover(hover: Hover): string | undefined {
     const contents = hover.contents as MarkupContent;
-    if (contents) {
-      if (contents.value.includes('(variable)')) {
-        const text = contents.value.split(': ')[1].split('\n')[0].trim();
-        const hintText = ': ' + text;
-        return hintText;
+    if (contents && contents.value.includes('(variable)')) {
+      const firstIdx = contents.value.indexOf(': ');
+      if (firstIdx > -1) {
+        const text = contents.value.substring(firstIdx + 2).split('\n')[0].trim();
+        return ': ' + text;
       }
     }
   }
 
   private getFunctionReturnHintAtHover(hover: Hover): string | undefined {
     const contents = hover.contents as MarkupContent;
-    if (contents) {
-      if (contents.value.includes('(function)') || contents.value.includes('(method)')) {
-        const text = contents.value.split('->')[1].split('\n')[0].trim();
-        const hintText = '-> ' + text;
-        return hintText;
-      }
+    if (contents && (contents.value.includes('(function)') || contents.value.includes('(method)'))) {
+      const text = contents.value.split('->')[1].split('\n')[0].trim();
+      return '-> ' + text;
     }
   }
 
