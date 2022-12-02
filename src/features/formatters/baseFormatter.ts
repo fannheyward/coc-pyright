@@ -86,6 +86,9 @@ export abstract class BaseFormatter {
   }
 
   protected async provideDocumentFormattingEdits(document: TextDocument, _options: FormattingOptions, token: CancellationToken, args: string[], cwd?: string): Promise<TextEdit[]> {
+    if (this.pythonSettings.stdLibs.some(p => Uri.parse(document.uri).fsPath.startsWith(p))) {
+      return [];
+    }
     if (typeof cwd !== 'string' || cwd.length === 0) {
       cwd = Uri.file(workspace.root).fsPath;
     }

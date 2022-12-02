@@ -198,17 +198,22 @@ export class LintingEngine {
       return false;
     }
 
-    const relativeFileName = path.relative(workspace.root, Uri.parse(document.uri).fsPath);
+    const fsPath = Uri.parse(document.uri).fsPath;
+    if (settings.stdLibs.some(p => fsPath.startsWith(p))) {
+      return false;
+    }
+
+    const relativeFileName = path.relative(workspace.root, fsPath);
     // { dot: true } is important so dirs like `.venv` will be matched by globs
     const ignoreMinmatches = settings.linting.ignorePatterns.map((pattern) => new Minimatch(pattern, { dot: true }));
     if (ignoreMinmatches.some((matcher) => matcher.match(Uri.parse(document.uri).fsPath) || matcher.match(relativeFileName))) {
       this.outputChannel.appendLine(`${'#'.repeat(5)} linting is ignored by python.linting.ignorePatterns`);
       return false;
     }
-    const u = Uri.parse(document.uri);
-    const exists = fs.existsSync(u.fsPath);
+
+    const exists = fs.existsSync(fsPath);
     if (!exists) {
-      this.outputChannel.appendLine(`${'#'.repeat(5)} linting is disabled because file is not exists: ${u.fsPath}`);
+      this.outputChannel.appendLine(`${'#'.repeat(5)} linting is disabled because file is not exists: ${fsPath}`);
       return false;
     }
     return true;

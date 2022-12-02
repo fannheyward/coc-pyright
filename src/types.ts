@@ -168,6 +168,7 @@ export interface ISortImportSettings {
 
 export interface IPythonSettings {
   pythonPath: string;
+  readonly stdLibs: string[];
   readonly linting: ILintingSettings;
   readonly formatting: IFormattingSettings;
   readonly sortImports: ISortImportSettings;

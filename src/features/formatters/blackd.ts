@@ -1,5 +1,5 @@
 import { spawn } from 'child_process';
-import { CancellationToken, fetch, FormattingOptions, OutputChannel, Range, TextDocument, TextEdit, Thenable, window } from 'coc.nvim';
+import { CancellationToken, fetch, FormattingOptions, OutputChannel, Range, TextDocument, TextEdit, Thenable, Uri, window } from 'coc.nvim';
 import getPort from 'get-port';
 import { getTextEditsFromPatch } from '../../utils';
 import { IPythonSettings } from '../../types';
@@ -63,6 +63,9 @@ export class BlackdFormatter extends BaseFormatter {
       const msg = 'blackd does not support range formatting';
       this.outputChannel.appendLine(msg);
       window.showErrorMessage(msg);
+      return Promise.resolve([]);
+    }
+    if (this.pythonSettings.stdLibs.some(p => Uri.parse(document.uri).fsPath.startsWith(p))) {
       return Promise.resolve([]);
     }
 

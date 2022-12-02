@@ -17,6 +17,7 @@ export class PythonSettings implements IPythonSettings {
 
   private disposables: Disposable[] = [];
   private _pythonPath = '';
+  private _stdLibs: string[] = [];
 
   constructor() {
     this.workspaceRoot = workspace.root ? workspace.root : __dirname;
@@ -150,6 +151,10 @@ export class PythonSettings implements IPythonSettings {
     this.sortImports.path = this.getAbsolutePath(systemVariables.resolveAny(this.sortImports.path));
   }
 
+  public get stdLibs(): string[] {
+    return this._stdLibs;
+  }
+
   public get pythonPath(): string {
     return this._pythonPath;
   }
@@ -160,6 +165,7 @@ export class PythonSettings implements IPythonSettings {
     }
     try {
       this._pythonPath = getPythonExecutable(value);
+      this._stdLibs = getStdLibs(this._pythonPath);
     } catch (ex) {
       this._pythonPath = value;
     }
@@ -209,6 +215,20 @@ function getPythonExecutable(pythonPath: string): string {
   }
 
   return pythonPath;
+}
+
+function getStdLibs(pythonPath: string): string[] {
+  try {
+    let args = ['-c', 'import site;print(site.getsitepackages()[0])'];
+    const sitePkgs = child_process.spawnSync(pythonPath, args, { encoding: 'utf8' }).stdout.trim();
+
+    args = ['-c', 'import site;print(site.getusersitepackages())'];
+    const userPkgs = child_process.spawnSync(pythonPath, args, { encoding: 'utf8' }).stdout.trim();
+
+    return [sitePkgs, userPkgs];
+  } catch (e) {
+    return [];
+  }
 }
 
 function isValidPythonPath(pythonPath: string): boolean {
