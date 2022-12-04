@@ -1,4 +1,4 @@
-import { spawnSync } from 'child_process';
+import { spawn } from 'child_process';
 import { OutputChannel, Range, TextDocument, TextEdit, Uri, workspace, WorkspaceEdit } from 'coc.nvim';
 import { ILinterInfo, ILintMessage, LintMessageSeverity } from '../../types';
 import { BaseLinter } from './baseLinter';
@@ -68,24 +68,42 @@ export class Ruff extends BaseLinter {
     };
   }
 
+  private runRuff(document: TextDocument): Promise<string> {
+    const fsPath = Uri.parse(document.uri).fsPath;
+    const args = [...this.info.linterArgs(), '--format', 'json', '--exit-zero', '--stdin-filename', fsPath, '-'];
+    const command = this.info.pathName();
+
+    this.outputChannel.appendLine(`${'#'.repeat(10)} Run linter ${this.info.id}:`);
+    this.outputChannel.appendLine(`${command} ${args.join(' ')}`);
+    this.outputChannel.appendLine('');
+
+    const child = spawn(command, args, { cwd: workspace.root });
+    return new Promise((resolve) => {
+      child.stdin.setDefaultEncoding('utf8');
+      child.stdin.write(document.getText());
+      child.stdin.end();
+
+      let result = '';
+      child.stdout.on('data', data => {
+        result += data;
+      });
+      child.on('close', () => {
+        resolve(result);
+      });
+    });
+  }
+
   protected async runLinter(document: TextDocument): Promise<ILintMessage[]> {
     if (!this.info.isEnabled(Uri.parse(document.uri))) return [];
 
-    const args = [...this.info.linterArgs(), '--format=json', '--exit-zero', Uri.parse(document.uri).fsPath];
-    const bin = this.info.pathName();
-
     try {
-      this.outputChannel.appendLine(`${'#'.repeat(10)} Run linter ${this.info.id}:`);
-      this.outputChannel.appendLine(`${bin} ${args.join(' ')}`);
-      this.outputChannel.appendLine('');
-
-      const result = spawnSync(bin, args, { encoding: 'utf8', cwd: workspace.root });
+      const result = await this.runRuff(document);
 
       this.outputChannel.append(`${'#'.repeat(10)} Linting Output - ${this.info.id}${'#'.repeat(10)}\n`);
-      this.outputChannel.append(result.stdout);
+      this.outputChannel.append(result);
       this.outputChannel.appendLine('');
 
-      const messages: ILintMessage[] = JSON.parse(result.stdout).map((msg: IRuffLintMessage) => {
+      const messages: ILintMessage[] = JSON.parse(result).map((msg: IRuffLintMessage) => {
         return {
           line: msg.location.row,
           column: msg.location.column - COLUMN_OFF_SET,

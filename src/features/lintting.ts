@@ -1,11 +1,11 @@
-import { Disposable, ExtensionContext, workspace, commands, DiagnosticCollection, ConfigurationChangeEvent, TextDocument, Uri } from 'coc.nvim';
+import { commands, ConfigurationChangeEvent, DiagnosticCollection, DidChangeTextDocumentParams, Disposable, ExtensionContext, TextDocument, Uri, workspace } from 'coc.nvim';
 import { PythonSettings } from '../configSettings';
 import { LintingEngine } from './linters/lintingEngine';
 
 export class LinterProvider implements Disposable {
   private context: ExtensionContext;
   private disposables: Disposable[];
-  private configuration: PythonSettings;
+  private pythonSettings: PythonSettings;
   private engine: LintingEngine;
 
   public constructor(context: ExtensionContext) {
@@ -13,11 +13,12 @@ export class LinterProvider implements Disposable {
     this.disposables = [];
 
     this.engine = new LintingEngine();
-    this.configuration = PythonSettings.getInstance();
+    this.pythonSettings = PythonSettings.getInstance();
 
     workspace.onDidOpenTextDocument((e) => this.onDocumentOpened(e), this.context.subscriptions);
     workspace.onDidCloseTextDocument((e) => this.onDocumentClosed(e), this.context.subscriptions);
     workspace.onDidSaveTextDocument((e) => this.onDocumentSaved(e), this.context.subscriptions);
+    workspace.onDidChangeTextDocument(e => this.onDocumentChanged(e), this.context.subscriptions);
 
     const disposable = workspace.onDidChangeConfiguration(this.lintSettingsChangedHandler.bind(this));
     this.disposables.push(disposable);
@@ -49,10 +50,14 @@ export class LinterProvider implements Disposable {
   }
 
   private onDocumentSaved(document: TextDocument): void {
-    if (document.languageId === 'python' && this.configuration.linting.enabled && this.configuration.linting.lintOnSave) {
+    if (this.pythonSettings.linting.lintOnSave) {
       this.engine.lintDocument(document).catch(() => {});
-      return;
     }
+  }
+
+  private onDocumentChanged(e: DidChangeTextDocumentParams) {
+    const document = workspace.getDocument(e.textDocument.uri);
+    this.engine.lintDocument(document.textDocument).catch(() => {});
   }
 
   private onDocumentClosed(document: TextDocument) {
