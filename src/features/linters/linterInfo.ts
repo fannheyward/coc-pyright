@@ -36,6 +36,10 @@ export class LinterInfo implements ILinterInfo {
   public get configFileNames(): string[] {
     return this._configFileNames;
   }
+  public get stdinSupport(): boolean {
+    // only ruff suppors stdin linting for now
+    return this._id === 'ruff' ? true : false;
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public isEnabled(_resource?: Uri): boolean {

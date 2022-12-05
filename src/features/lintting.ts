@@ -57,7 +57,7 @@ export class LinterProvider implements Disposable {
 
   private onDocumentChanged(e: DidChangeTextDocumentParams) {
     const document = workspace.getDocument(e.textDocument.uri);
-    this.engine.lintDocument(document.textDocument).catch(() => {});
+    this.engine.lintDocument(document.textDocument, true).catch(() => {});
   }
 
   private onDocumentClosed(document: TextDocument) {

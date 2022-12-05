@@ -97,7 +97,7 @@ export class LintingEngine {
     return this.diagnosticCollection;
   }
 
-  public async lintDocument(document: TextDocument): Promise<void> {
+  public async lintDocument(document: TextDocument, onChange = false): Promise<void> {
     this.diagnosticCollection.set(document.uri, []);
 
     // Check if we need to lint this document
@@ -120,7 +120,7 @@ export class LintingEngine {
 
     this.pendingLintings.set(fsPath, cancelToken);
 
-    const activeLinters = await this.getActiveLinters(Uri.parse(document.uri));
+    const activeLinters = this.getActiveLinters().filter(l => onChange ? l.stdinSupport : true);
     const promises: Promise<ILintMessage[]>[] = activeLinters.map(async (info: ILinterInfo) => {
       this.outputChannel.appendLine(`Using python from ${this.configService.pythonPath}\n`);
       this.outputChannel.appendLine(`${'#'.repeat(10)} active linter: ${info.id}`);
@@ -233,7 +233,7 @@ export class LintingEngine {
     throw new Error(`Invalid linter '${Product[product]}'`);
   }
 
-  public async getActiveLinters(resource?: Uri): Promise<ILinterInfo[]> {
+  public getActiveLinters(resource?: Uri): ILinterInfo[] {
     return this.linters.filter((x) => x.isEnabled(resource));
   }
 
