@@ -85,7 +85,7 @@ export class Ruff extends BaseLinter {
 
       let result = '';
       child.stdout.on('data', data => {
-        result += data;
+        result += data.toString('utf-8').trim();
       });
       child.on('close', () => {
         resolve(result);
