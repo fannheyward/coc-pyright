@@ -228,10 +228,10 @@
     "@types/emscripten" "^1.38.0"
     tslib "^1.13.0"
 
-"@zzzen/pyright-internal@^1.2.0-dev.20221127":
-  version "1.2.0-dev.20221127"
-  resolved "https://registry.yarnpkg.com/@zzzen/pyright-internal/-/pyright-internal-1.2.0-dev.20221127.tgz#9dfc42c206d14b15d87e3176b8df554d16a1fc15"
-  integrity sha512-KorVfn1tjrGDBvdTC1xt7iHLtPK7dQx8lPm447F19tho7V85PtNYBl34hHl8Lm5DbrUM+rbckmlOzLdvlwChEg==
+"@zzzen/pyright-internal@^1.2.0-dev.20221204":
+  version "1.2.0-dev.20221204"
+  resolved "https://registry.yarnpkg.com/@zzzen/pyright-internal/-/pyright-internal-1.2.0-dev.20221204.tgz#693ed76c6ef01d048a066d9fa3546f672718d313"
+  integrity sha512-NWv+Idp0zDYCdPO2a387jdbCBbi6PFhU5/ZPBqN9MQ9GAsVrUoaM8D994Ep+/8ZC/peMwtTZY75vTtopIW3UTg==
   dependencies:
     "@iarna/toml" "2.2.5"
     "@yarnpkg/fslib" "2.9.0"
@@ -1132,10 +1132,10 @@ punycode@^2.1.0:
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
   integrity sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==
 
-pyright@^1.1.282:
-  version "1.1.282"
-  resolved "https://registry.yarnpkg.com/pyright/-/pyright-1.1.282.tgz#1b0e1d75e922f7836e0955edbf77cec602947668"
-  integrity sha512-qwlGhY/4wkZJJlxiwGzKL7Do6rVSOcXp72zplxJ76BbVIWuiKpGUeYIhLdONEAD22UwLTp8XvmARQzDnJ3EMSQ==
+pyright@^1.1.283:
+  version "1.1.283"
+  resolved "https://registry.yarnpkg.com/pyright/-/pyright-1.1.283.tgz#c492cd987ec2831f7ba1ca61edfce20b10cc9e23"
+  integrity sha512-KPJFH2qAkhQlftucpdBGF2DKdMoKO0YOqgCGvzXdQ5E1+QkT72KSfGqTSwgcKN8AQkdfgs23d9Rpb+X0k53PJA==
 
 readdirp@~3.6.0:
   version "3.6.0"
