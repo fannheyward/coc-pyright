@@ -1,5 +1,5 @@
 import { ChildProcess } from 'child_process';
-import { CancellationToken, DiagnosticSeverity, TextDocument, Uri } from 'coc.nvim';
+import { CancellationToken, DiagnosticSeverity, DiagnosticTag, TextDocument, Uri } from 'coc.nvim';
 import { Observable } from 'rxjs';
 
 export interface ExecutionInfo {
@@ -79,6 +79,7 @@ export interface ILintMessage {
   message: string;
   type: string;
   severity?: LintMessageSeverity;
+  tags?: DiagnosticTag[];
   provider: string;
   file?: string;
   fix?: any;

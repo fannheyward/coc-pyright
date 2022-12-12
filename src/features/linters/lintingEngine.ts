@@ -186,6 +186,7 @@ export class LintingEngine {
     diagnostic.source = message.provider;
     // @ts-ignore
     diagnostic.fix = message.fix;
+    diagnostic.tags = message.tags;
     return diagnostic;
   }
 

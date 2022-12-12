@@ -1,5 +1,5 @@
 import { spawn } from 'child_process';
-import { OutputChannel, Range, TextDocument, TextEdit, Uri, workspace, WorkspaceEdit } from 'coc.nvim';
+import { DiagnosticTag, OutputChannel, Range, TextDocument, TextEdit, Uri, workspace, WorkspaceEdit } from 'coc.nvim';
 import { ILinterInfo, ILintMessage, LintMessageSeverity } from '../../types';
 import { BaseLinter } from './baseLinter';
 
@@ -113,6 +113,7 @@ export class Ruff extends BaseLinter {
           message: msg.message,
           type: '',
           severity: LintMessageSeverity.Warning, // https://github.com/charliermarsh/ruff/issues/645
+          tags: ['F401', 'F841'].includes(msg.code) ? [DiagnosticTag.Unnecessary] : [],
           provider: this.info.id,
           file: msg.filename,
           fix: this.fixToWorkspaceEdit(msg.filename, msg.fix),
