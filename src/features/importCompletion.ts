@@ -20,7 +20,7 @@ export class ImportCompletionProvider implements CompletionItemProvider {
     const items: CompletionItem[] = [];
     for (const o of result.items) {
       // @ts-ignore
-      items.push({ label: o.word, sortText: o.sortText, kind: CompletionItemKind.Module, filterText: o.filterText });
+      items.push({ label: o.label || o.word, sortText: o.sortText, kind: CompletionItemKind.Module, filterText: o.filterText });
     }
     return items;
   }
