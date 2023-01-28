@@ -13,8 +13,8 @@ export class Pylint extends BaseLinter {
   }
 
   protected async runLinter(document: TextDocument, cancellation: CancellationToken): Promise<ILintMessage[]> {
-    const uri = Uri.parse(document.uri);
-    const args = ["--msg-template='{line},{column},{category},{symbol}:{msg}'", '--reports=n', '--output-format=text', uri.fsPath];
+    const fsPath = Uri.parse(document.uri).fsPath;
+    const args = ["--msg-template='{line},{column},{category},{symbol}:{msg}'", '--exit-zero', '--reports=n', '--output-format=text', '--from-stdin', fsPath];
     const messages = await this.run(args, document, cancellation, REGEX);
     messages.forEach((msg) => {
       msg.severity = this.parseMessagesSeverity(msg.type, this.pythonSettings.linting.pylintCategorySeverity);

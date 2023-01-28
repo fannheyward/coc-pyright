@@ -10,11 +10,13 @@ export class LinterInfo implements ILinterInfo {
   private _id: LinterId;
   private _product: Product;
   private _configFileNames: string[];
+  private _stdinSupport: boolean;
 
-  constructor(product: Product, id: LinterId, protected configService: PythonSettings, configFileNames: string[] = []) {
+  constructor(product: Product, id: LinterId, protected configService: PythonSettings, stdinSupport = false, configFileNames: string[] = []) {
     this._product = product;
     this._id = id;
     this._configFileNames = configFileNames;
+    this._stdinSupport = stdinSupport;
   }
 
   public get id(): LinterId {
@@ -37,8 +39,7 @@ export class LinterInfo implements ILinterInfo {
     return this._configFileNames;
   }
   public get stdinSupport(): boolean {
-    // only ruff suppors stdin linting for now
-    return this._id === 'ruff' ? true : false;
+    return this._stdinSupport;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

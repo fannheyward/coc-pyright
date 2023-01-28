@@ -1,5 +1,4 @@
-import { spawn } from 'child_process';
-import { DiagnosticTag, OutputChannel, Range, TextDocument, TextEdit, Uri, workspace, WorkspaceEdit } from 'coc.nvim';
+import { CancellationToken, DiagnosticTag, OutputChannel, Range, TextDocument, TextEdit, Uri, WorkspaceEdit } from 'coc.nvim';
 import { ILinterInfo, ILintMessage, LintMessageSeverity } from '../../types';
 import { BaseLinter } from './baseLinter';
 
@@ -68,42 +67,9 @@ export class Ruff extends BaseLinter {
     };
   }
 
-  private runRuff(document: TextDocument): Promise<string> {
-    const fsPath = Uri.parse(document.uri).fsPath;
-    const args = [...this.info.linterArgs(), '--format', 'json', '--exit-zero', '--stdin-filename', fsPath, '-'];
-    const command = this.info.pathName();
-
-    this.outputChannel.appendLine(`${'#'.repeat(10)} Run linter ${this.info.id}:`);
-    this.outputChannel.appendLine(`${command} ${args.join(' ')}`);
-    this.outputChannel.appendLine('');
-
-    const child = spawn(command, args, { cwd: workspace.root });
-    return new Promise((resolve) => {
-      child.stdin.setDefaultEncoding('utf8');
-      child.stdin.write(document.getText());
-      child.stdin.end();
-
-      let result = '';
-      child.stdout.on('data', data => {
-        result += data.toString('utf-8').trim();
-      });
-      child.on('close', () => {
-        resolve(result);
-      });
-    });
-  }
-
-  protected async runLinter(document: TextDocument): Promise<ILintMessage[]> {
-    if (!this.info.isEnabled(Uri.parse(document.uri))) return [];
-
+  protected async parseMessages(output: string): Promise<ILintMessage[]> {
     try {
-      const result = await this.runRuff(document);
-
-      this.outputChannel.append(`${'#'.repeat(10)} Linting Output - ${this.info.id}${'#'.repeat(10)}\n`);
-      this.outputChannel.append(result);
-      this.outputChannel.appendLine('');
-
-      const messages: ILintMessage[] = JSON.parse(result).map((msg: IRuffLintMessage) => {
+      const messages: ILintMessage[] = JSON.parse(output).map((msg: IRuffLintMessage) => {
         return {
           line: msg.location.row,
           column: msg.location.column - COLUMN_OFF_SET,
@@ -128,5 +94,11 @@ export class Ruff extends BaseLinter {
       }
       return [];
     }
+  }
+
+  protected async runLinter(document: TextDocument, token: CancellationToken): Promise<ILintMessage[]> {
+    const fsPath = Uri.parse(document.uri).fsPath;
+    const args = [...this.info.linterArgs(), '--format', 'json', '--exit-zero', '--stdin-filename', fsPath, '-'];
+    return this.run(args, document, token);
   }
 }

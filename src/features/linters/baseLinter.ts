@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 'use strict';
 
+import { spawn } from 'child_process';
 import { CancellationToken, OutputChannel, TextDocument, Uri, workspace } from 'coc.nvim';
 import namedRegexp from 'named-js-regexp';
 import { splitLines } from '../../utils';
@@ -99,23 +100,47 @@ export abstract class BaseLinter implements ILinter {
     return LintMessageSeverity.Information;
   }
 
-  protected async run(args: string[], document: TextDocument, cancellation: CancellationToken, regEx: string = REGEX): Promise<ILintMessage[]> {
+  private async stdinRun(args: string[], document: TextDocument): Promise<string> {
+    const child = spawn(this.info.pathName(), args, { cwd: workspace.root });
+    return new Promise((resolve) => {
+      child.stdin.setDefaultEncoding('utf8');
+      child.stdin.write(document.getText());
+      child.stdin.end();
+
+      let result = '';
+      child.stdout.on('data', data => {
+        result += data.toString('utf-8').trim();
+      });
+      child.on('close', () => {
+        resolve(result);
+      });
+    });
+  }
+
+  protected async run(args: string[], document: TextDocument, token: CancellationToken, regEx = REGEX): Promise<ILintMessage[]> {
     if (!this.info.isEnabled(Uri.parse(document.uri))) {
       return [];
     }
-    const executionInfo = this.info.getExecutionInfo(args, Uri.parse(document.uri));
-    this.outputChannel.appendLine(`${'#'.repeat(10)} Run linter ${this.info.id}:`);
-    this.outputChannel.appendLine(JSON.stringify(executionInfo));
-    this.outputChannel.appendLine('');
-    try {
-      const pythonToolsExecutionService = new PythonExecutionService();
-      const result = await pythonToolsExecutionService.exec(executionInfo, { cwd: workspace.root, token: cancellation, mergeStdOutErr: false });
 
-      this.outputChannel.append(`${'#'.repeat(10)} Linting Output - ${this.info.id}${'#'.repeat(10)}\n`);
-      this.outputChannel.append(result.stdout);
+    try {
+      this.outputChannel.appendLine(`${'#'.repeat(10)} Run linter ${this.info.id}:`);
+      this.outputChannel.appendLine(`${this.info.pathName()} ${args.join(' ')}`);
       this.outputChannel.appendLine('');
 
-      return await this.parseMessages(result.stdout, document, regEx);
+      let result = '';
+      if (this.info.stdinSupport) {
+        result = await this.stdinRun(args, document);
+      } else {
+        const executionInfo = this.info.getExecutionInfo(args, Uri.parse(document.uri));
+        const pythonToolsExecutionService = new PythonExecutionService();
+        result = (await pythonToolsExecutionService.exec(executionInfo, { cwd: workspace.root, token, mergeStdOutErr: false })).stdout;
+      }
+
+      this.outputChannel.append(`${'#'.repeat(10)} Linting Output - ${this.info.id} ${'#'.repeat(10)}\n`);
+      this.outputChannel.append(result);
+      this.outputChannel.appendLine('');
+
+      return await this.parseMessages(result, document, regEx);
     } catch (error) {
       this.outputChannel.appendLine(`Linting with ${this.info.id} failed:`);
       if (error instanceof Error) {
