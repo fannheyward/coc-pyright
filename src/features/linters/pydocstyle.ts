@@ -20,8 +20,7 @@ export class PyDocStyle extends BaseLinter {
     return messages;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected async parseMessages(output: string, document: TextDocument, _token: CancellationToken, _regEx: string) {
+  protected async parseMessages(output: string, document: TextDocument) {
     let outputLines = output.split(/\r?\n/g);
     const baseFileName = path.basename(Uri.parse(document.uri).fsPath);
 

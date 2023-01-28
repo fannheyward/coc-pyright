@@ -30,7 +30,7 @@ export class Prospector extends BaseLinter {
     return this.run(['--absolute-paths', '--output-format=json', relativePath], document, cancellation);
   }
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected async parseMessages(output: string, _document: TextDocument, _token: CancellationToken, _regEx: string) {
+  protected async parseMessages(output: string, _document: TextDocument, _regEx: string) {
     let parsedData: IProspectorResponse;
     try {
       parsedData = JSON.parse(output);

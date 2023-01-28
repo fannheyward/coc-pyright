@@ -67,10 +67,10 @@ export class Pytype extends BaseLinter {
     return await this.run(args, document, cancellation, REGEX);
   }
 
-  protected async parseMessages(output: string, document: TextDocument, token: CancellationToken, regEx: string): Promise<ILintMessage[]> {
+  protected async parseMessages(output: string, document: TextDocument, regEx: string): Promise<ILintMessage[]> {
     const outputLines = output.split(/\r?\n/g).filter((line) => line.startsWith('File'));
     const newOutput = outputLines.join('\n');
-    const messages = (await super.parseMessages(newOutput, document, token, regEx)).filter((msg) => {
+    const messages = (await super.parseMessages(newOutput, document, regEx)).filter((msg) => {
       return msg.file && msg.file === Uri.parse(document.uri).fsPath;
     });
     for (const msg of messages) {

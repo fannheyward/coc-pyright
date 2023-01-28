@@ -115,7 +115,7 @@ export abstract class BaseLinter implements ILinter {
       this.outputChannel.append(result.stdout);
       this.outputChannel.appendLine('');
 
-      return await this.parseMessages(result.stdout, document, cancellation, regEx);
+      return await this.parseMessages(result.stdout, document, regEx);
     } catch (error) {
       this.outputChannel.appendLine(`Linting with ${this.info.id} failed:`);
       if (error instanceof Error) {
@@ -125,7 +125,7 @@ export abstract class BaseLinter implements ILinter {
     }
   }
 
-  protected async parseMessages(output: string, _document: TextDocument, _token: CancellationToken, regEx: string) {
+  protected async parseMessages(output: string, _document: TextDocument, regEx: string) {
     const messages: ILintMessage[] = [];
     const outputLines = splitLines(output, { removeEmptyEntries: false, trim: false });
     for (const line of outputLines) {
