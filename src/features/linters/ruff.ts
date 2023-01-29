@@ -98,7 +98,7 @@ export class Ruff extends BaseLinter {
 
   protected async runLinter(document: TextDocument, token: CancellationToken): Promise<ILintMessage[]> {
     const fsPath = Uri.parse(document.uri).fsPath;
-    const args = [...this.info.linterArgs(), '--format', 'json', '--exit-zero', '--stdin-filename', fsPath, '-'];
+    const args = ['--format', 'json', '--exit-zero', '--stdin-filename', fsPath, '-'];
     return this.run(args, document, token);
   }
 }

@@ -5,10 +5,10 @@
 import { spawn } from 'child_process';
 import { CancellationToken, OutputChannel, TextDocument, Uri, workspace } from 'coc.nvim';
 import namedRegexp from 'named-js-regexp';
-import { splitLines } from '../../utils';
 import { PythonSettings } from '../../configSettings';
 import { PythonExecutionService } from '../../processService';
-import { LinterId, ILintMessage, ILinter, IPythonSettings, ILinterInfo, LintMessageSeverity } from '../../types';
+import { ExecutionInfo, ILinter, ILinterInfo, ILintMessage, IPythonSettings, LinterId, LintMessageSeverity } from '../../types';
+import { splitLines } from '../../utils';
 
 // Allow negative column numbers (https://github.com/PyCQA/pylint/issues/1822)
 const REGEX = '(?<line>\\d+),(?<column>-?\\d+),(?<type>\\w+),(?<code>\\w+\\d+):(?<message>.*)\\r?(\\n|$)';
@@ -100,8 +100,9 @@ export abstract class BaseLinter implements ILinter {
     return LintMessageSeverity.Information;
   }
 
-  private async stdinRun(args: string[], document: TextDocument): Promise<string> {
-    const child = spawn(this.info.pathName(), args, { cwd: workspace.root });
+  private async stdinRun(executionInfo: ExecutionInfo, document: TextDocument): Promise<string> {
+    const { execPath, args } = executionInfo;
+    const child = spawn(execPath, args, { cwd: workspace.root });
     return new Promise((resolve) => {
       child.stdin.setDefaultEncoding('utf8');
       child.stdin.write(document.getText());
@@ -123,15 +124,15 @@ export abstract class BaseLinter implements ILinter {
     }
 
     try {
+      const executionInfo = this.info.getExecutionInfo(args, Uri.parse(document.uri));
       this.outputChannel.appendLine(`${'#'.repeat(10)} Run linter ${this.info.id}:`);
-      this.outputChannel.appendLine(`${this.info.pathName()} ${args.join(' ')}`);
+      this.outputChannel.appendLine(JSON.stringify(executionInfo));
       this.outputChannel.appendLine('');
 
       let result = '';
       if (this.info.stdinSupport) {
-        result = await this.stdinRun(args, document);
+        result = await this.stdinRun(executionInfo, document);
       } else {
-        const executionInfo = this.info.getExecutionInfo(args, Uri.parse(document.uri));
         const pythonToolsExecutionService = new PythonExecutionService();
         result = (await pythonToolsExecutionService.exec(executionInfo, { cwd: workspace.root, token, mergeStdOutErr: false })).stdout;
       }
