@@ -103,7 +103,7 @@ export class PythonCodeActionProvider implements CodeActionProvider {
         return [
           {
             title: `Add "import ${match[1]}"`,
-            kind: CodeActionKind.Source,
+            kind: CodeActionKind.QuickFix,
             command: {
               title: '',
               command: 'pyright.addImport',
@@ -113,7 +113,7 @@ export class PythonCodeActionProvider implements CodeActionProvider {
 
           {
             title: `Add "from _ import ${match[1]}"`,
-            kind: CodeActionKind.Source,
+            kind: CodeActionKind.QuickFix,
             command: {
               title: '',
               command: 'pyright.addImport',
