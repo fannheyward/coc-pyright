@@ -215,9 +215,9 @@ export class PythonExecutionService {
       .catch(() => false);
   }
 
-  public execObservable(args: string[], options: SpawnOptions): ObservableExecutionResult<string> {
+  public execObservable(cmd: string, args: string[], options: SpawnOptions): ObservableExecutionResult<string> {
     const opts: SpawnOptions = { ...options };
-    return this.procService.execObservable(this.pythonSettings.pythonPath, args, opts);
+    return this.procService.execObservable(cmd, args, opts);
   }
 
   async exec(executionInfo: ExecutionInfo, options: SpawnOptions): Promise<ExecutionResult<string>> {

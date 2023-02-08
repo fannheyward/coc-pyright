@@ -103,10 +103,10 @@ class RefactorProxy implements Disposable {
     const cwd = path.join(this._extensionDir, 'pythonFiles');
     const args = ['refactor.py', this.workspaceRoot];
     const pythonToolsExecutionService = new PythonExecutionService();
-    const result = pythonToolsExecutionService.execObservable(args, { cwd });
+    const result = pythonToolsExecutionService.execObservable(this.pythonSettings.pythonPath, args, { cwd });
     this._process = result.proc;
-    result.out.subscribe(
-      (output) => {
+    result.out.subscribe({
+      next: (output) => {
         if (output.source === 'stdout') {
           if (!this._startedSuccessfully && output.out.startsWith('STARTED')) {
             this._startedSuccessfully = true;
@@ -117,8 +117,8 @@ class RefactorProxy implements Disposable {
           this.handleStdError(output.out);
         }
       },
-      (error) => this.handleError(error)
-    );
+      error: (error) => this.handleError(error),
+    });
 
     return this.initialized.promise;
   }
