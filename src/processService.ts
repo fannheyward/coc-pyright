@@ -229,10 +229,7 @@ export class PythonExecutionService {
 
       // If a module is not installed we'll have something in stderr.
       if (ErrorUtils.outputHasModuleNotInstalledError(moduleName, result.stderr)) {
-        const isInstalled = await this.isModuleInstalled(moduleName!);
-        if (!isInstalled) {
-          throw new ModuleNotInstalledError(moduleName!);
-        }
+        throw new ModuleNotInstalledError(moduleName!);
       }
 
       return result;
