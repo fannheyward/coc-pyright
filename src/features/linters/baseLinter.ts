@@ -2,12 +2,12 @@
 // Licensed under the MIT License.
 'use strict';
 
-import { spawn } from 'child_process';
 import { CancellationToken, OutputChannel, TextDocument, Uri, workspace } from 'coc.nvim';
 import namedRegexp from 'named-js-regexp';
+import { firstValueFrom } from 'rxjs';
 import { PythonSettings } from '../../configSettings';
 import { PythonExecutionService } from '../../processService';
-import { ExecutionInfo, ILinter, ILinterInfo, ILintMessage, IPythonSettings, LinterId, LintMessageSeverity } from '../../types';
+import { ExecutionInfo, ILinter, ILinterInfo, ILintMessage, IPythonSettings, LinterId, LintMessageSeverity, Output } from '../../types';
 import { splitLines } from '../../utils';
 
 // Allow negative column numbers (https://github.com/PyCQA/pylint/issues/1822)
@@ -100,22 +100,20 @@ export abstract class BaseLinter implements ILinter {
     return LintMessageSeverity.Information;
   }
 
-  private async stdinRun(executionInfo: ExecutionInfo, document: TextDocument): Promise<string> {
-    const { execPath, args } = executionInfo;
-    const child = spawn(execPath, args, { cwd: workspace.root });
-    return new Promise((resolve) => {
-      child.stdin.setDefaultEncoding('utf8');
-      child.stdin.write(document.getText());
-      child.stdin.end();
+  private async stdinRun(service: PythonExecutionService, executionInfo: ExecutionInfo, document: TextDocument): Promise<Output<string>> {
+    let command = executionInfo.execPath;
+    let args = executionInfo.args;
+    if (executionInfo.moduleName) {
+      command = this.pythonSettings.pythonPath;
+      args = ['-m', executionInfo.moduleName, ...args];
+    }
 
-      let result = '';
-      child.stdout.on('data', data => {
-        result += data.toString('utf-8').trim();
-      });
-      child.on('close', () => {
-        resolve(result);
-      });
-    });
+    const result = service.execObservable(command, args, { cwd: workspace.root });
+    result.proc?.stdin?.setDefaultEncoding('utf8');
+    result.proc?.stdin?.write(document.getText());
+    result.proc?.stdin?.end();
+
+    return firstValueFrom(result.out);
   }
 
   protected async run(args: string[], document: TextDocument, token: CancellationToken, regEx = REGEX): Promise<ILintMessage[]> {
@@ -124,24 +122,29 @@ export abstract class BaseLinter implements ILinter {
     }
 
     try {
+      const pythonToolsExecutionService = new PythonExecutionService();
       const executionInfo = this.info.getExecutionInfo(args, Uri.parse(document.uri));
       this.outputChannel.appendLine(`${'#'.repeat(10)} Run linter ${this.info.id}:`);
       this.outputChannel.appendLine(JSON.stringify(executionInfo));
       this.outputChannel.appendLine('');
 
-      let result = '';
+      let output = '';
       if (this.info.stdinSupport) {
-        result = await this.stdinRun(executionInfo, document);
+        const result = await this.stdinRun(pythonToolsExecutionService, executionInfo, document);
+        if (result.source === 'stderr') {
+          throw new Error(result.out);
+        }
+        output = result.out;
       } else {
-        const pythonToolsExecutionService = new PythonExecutionService();
-        result = (await pythonToolsExecutionService.exec(executionInfo, { cwd: workspace.root, token, mergeStdOutErr: false })).stdout;
+        const result = await pythonToolsExecutionService.exec(executionInfo, { cwd: workspace.root, token });
+        output = result.stdout;
       }
 
       this.outputChannel.append(`${'#'.repeat(10)} Linting Output - ${this.info.id} ${'#'.repeat(10)}\n`);
-      this.outputChannel.append(result);
+      this.outputChannel.append(output);
       this.outputChannel.appendLine('');
 
-      return await this.parseMessages(result, document, regEx);
+      return await this.parseMessages(output, document, regEx);
     } catch (error) {
       this.outputChannel.appendLine(`Linting with ${this.info.id} failed:`);
       if (error instanceof Error) {
