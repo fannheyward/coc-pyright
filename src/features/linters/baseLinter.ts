@@ -101,8 +101,13 @@ export abstract class BaseLinter implements ILinter {
   }
 
   private async stdinRun(executionInfo: ExecutionInfo, document: TextDocument): Promise<string> {
-    const { execPath, args } = executionInfo;
-    const child = spawn(execPath, args, { cwd: workspace.root });
+    let command = executionInfo.execPath;
+    let args = executionInfo.args;
+    if (executionInfo.moduleName) {
+      command = this.pythonSettings.pythonPath;
+      args = ['-m', executionInfo.moduleName, ...args];
+    }
+    const child = spawn(command, args, { cwd: workspace.root });
     return new Promise((resolve) => {
       child.stdin.setDefaultEncoding('utf8');
       child.stdin.write(document.getText());
