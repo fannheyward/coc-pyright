@@ -303,10 +303,10 @@
     "@typescript-eslint/types" "5.50.0"
     eslint-visitor-keys "^3.3.0"
 
-"@yarnpkg/fslib@2.10.0":
-  version "2.10.0"
-  resolved "https://registry.yarnpkg.com/@yarnpkg/fslib/-/fslib-2.10.0.tgz#f3e24f1d6fb1bfbb8aa398c26dd663b84653eb71"
-  integrity sha512-eHqvrVlzlhd4owKoLsMRaL4wTGer+r9BXi95u1omHYcAcEQbKnHH3PqYf3j7nxsc8apa09WyA1XNCiiIniFXLg==
+"@yarnpkg/fslib@2.10.1":
+  version "2.10.1"
+  resolved "https://registry.yarnpkg.com/@yarnpkg/fslib/-/fslib-2.10.1.tgz#3ed7e450f1316e535740653c2e8eff2d851c45cb"
+  integrity sha512-pVMLtOYu87N5y5G2lyPNYTY2JbTco99v7nGFI34Blx01Ct9LmoKVOc91vnLOYIMMljKr1c8xs1O2UamRdMG5Pg==
   dependencies:
     "@yarnpkg/libzip" "^2.2.4"
     tslib "^1.13.0"
@@ -319,13 +319,13 @@
     "@types/emscripten" "^1.38.0"
     tslib "^1.13.0"
 
-"@zzzen/pyright-internal@^1.2.0-dev.20230205":
-  version "1.2.0-dev.20230205"
-  resolved "https://registry.yarnpkg.com/@zzzen/pyright-internal/-/pyright-internal-1.2.0-dev.20230205.tgz#0d4c54e8fe7cfb4039811e18df3c325a02e392be"
-  integrity sha512-cFuBQcnkKfk9GI5j/RgTB+F1iw+CNr4rApCMO04ypZT0wPK3WIzb2M/dLEEMK9aSxCzdnCItzLPMxB53CC1IFw==
+"@zzzen/pyright-internal@^1.2.0-dev.20230226":
+  version "1.2.0-dev.20230226"
+  resolved "https://registry.yarnpkg.com/@zzzen/pyright-internal/-/pyright-internal-1.2.0-dev.20230226.tgz#81c93b9511fd7d386a5694f0c17ca69ebd6c9d93"
+  integrity sha512-mypFgpjHArPOlcN3ujxG/JNJ9Qku1LWuNE8dRN5OWk0I5wNdOw3KvXhWHwTTMzz6mdiyCrtNBj4VYRyULZ/9AQ==
   dependencies:
     "@iarna/toml" "2.2.5"
-    "@yarnpkg/fslib" "2.10.0"
+    "@yarnpkg/fslib" "2.10.1"
     "@yarnpkg/libzip" "2.2.4"
     chalk "^4.1.2"
     chokidar "^3.5.3"
@@ -337,7 +337,7 @@
     typescript-char "^0.0.0"
     vscode-jsonrpc "8.1.0-next.6"
     vscode-languageserver "8.1.0-next.5"
-    vscode-languageserver-textdocument "^1.0.8"
+    vscode-languageserver-textdocument "^1.0.9"
     vscode-languageserver-types "3.17.2"
     vscode-uri "^3.0.7"
 
@@ -1123,10 +1123,10 @@ punycode@^2.1.0:
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
   integrity sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==
 
-pyright@^1.1.293:
-  version "1.1.293"
-  resolved "https://registry.yarnpkg.com/pyright/-/pyright-1.1.293.tgz#d03cc3fb80e8ea8de5f0631f367c213b47d3fd5e"
-  integrity sha512-VFRGaYwRp5vMTdSpw+0ZwdSz0c/3BRYrBaoSttSelJ6RVYrDkKOE0VKRIyXkA7wxCCqd29zRPbbK4RJWpYoHjg==
+pyright@^1.1.295:
+  version "1.1.295"
+  resolved "https://registry.yarnpkg.com/pyright/-/pyright-1.1.295.tgz#e8ce4822e9bc2969ad224193e9eb887cfaff81c6"
+  integrity sha512-nBowWG3qI2+ETtbsPBOnN7S5aNFE2PXn3OfQMM2jNfSh6A9P7z6YOmV9tYt8HYQ8WHX8qcU9b4ALe7nFp0GnBg==
 
 readdirp@~3.6.0:
   version "3.6.0"
@@ -1338,10 +1338,10 @@ vscode-languageserver-protocol@3.17.3-next.5:
     vscode-jsonrpc "8.1.0-next.6"
     vscode-languageserver-types "3.17.3-next.2"
 
-vscode-languageserver-textdocument@^1.0.8:
-  version "1.0.8"
-  resolved "https://registry.yarnpkg.com/vscode-languageserver-textdocument/-/vscode-languageserver-textdocument-1.0.8.tgz#9eae94509cbd945ea44bca8dcfe4bb0c15bb3ac0"
-  integrity sha512-1bonkGqQs5/fxGT5UchTgjGVnfysL0O8v1AYMBjqTbWQTFn721zaPGDYFkOKtfDgFiSgXM3KwaG3FMGfW4Ed9Q==
+vscode-languageserver-textdocument@^1.0.9:
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/vscode-languageserver-textdocument/-/vscode-languageserver-textdocument-1.0.9.tgz#c973258b2956bd48d47d6e8769a3e533588aa1e2"
+  integrity sha512-NPfHVGFW2/fQEWHspr8x3PXhRgtFbuDZdl7p6ifuN3M7nk2Yjf5POr/NfDBuAiQG88DehDyJ7nGOT+p+edEtbw==
 
 vscode-languageserver-types@3.17.2:
   version "3.17.2"
