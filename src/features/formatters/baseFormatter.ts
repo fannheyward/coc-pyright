@@ -4,9 +4,10 @@ import md5 from 'md5';
 import path from 'path';
 import { SemVer } from 'semver';
 import { promisify } from 'util';
+import which from 'which';
+import { isNotInstalledError, PythonExecutionService } from '../../processService';
+import { ExecutionInfo, FormatterId, IPythonSettings } from '../../types';
 import { getTextEditsFromPatch } from '../../utils';
-import { PythonExecutionService, isNotInstalledError } from '../../processService';
-import { FormatterId, IPythonSettings, ExecutionInfo } from '../../types';
 
 export function parsePythonVersion(version: string): SemVer | undefined {
   if (!version || version.trim().length === 0) {
@@ -77,7 +78,8 @@ export abstract class BaseFormatter {
 
   private getExecutionInfo(args: string[]): ExecutionInfo {
     let moduleName: string | undefined;
-    const execPath = this.pythonSettings.formatting[`${this.Id}Path`] as string;
+    let execPath = this.pythonSettings.formatting[`${this.Id}Path`] as string;
+    execPath = which.sync(execPath, { nothrow: true }) || execPath;
     if (path.basename(execPath) === execPath) {
       moduleName = execPath;
     }
