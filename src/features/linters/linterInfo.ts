@@ -11,13 +11,11 @@ export class LinterInfo implements ILinterInfo {
   private _id: LinterId;
   private _product: Product;
   private _configFileNames: string[];
-  private _stdinSupport: boolean;
 
-  constructor(product: Product, id: LinterId, protected configService: PythonSettings, stdinSupport = false, configFileNames: string[] = []) {
+  constructor(product: Product, id: LinterId, protected configService: PythonSettings, configFileNames: string[] = []) {
     this._product = product;
     this._id = id;
     this._configFileNames = configFileNames;
-    this._stdinSupport = stdinSupport;
   }
 
   public get id(): LinterId {
@@ -26,38 +24,26 @@ export class LinterInfo implements ILinterInfo {
   public get product(): Product {
     return this._product;
   }
-
-  public get pathSettingName(): string {
-    return `${this.id}Path`;
-  }
-  public get argsSettingName(): string {
-    return `${this.id}Args`;
-  }
-  public get enabledSettingName(): string {
-    return `${this.id}Enabled`;
-  }
-  public get configFileNames(): string[] {
-    return this._configFileNames;
-  }
   public get stdinSupport(): boolean {
-    return this._stdinSupport;
+    const settings = this.configService;
+    return (settings.linting as any)[`${this.id}Stdin`] as boolean;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public isEnabled(_resource?: Uri): boolean {
     const settings = this.configService;
-    return (settings.linting as any)[this.enabledSettingName] as boolean;
+    return (settings.linting as any)[`${this.id}Enabled`] as boolean;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public pathName(_resource?: Uri): string {
     const settings = this.configService;
-    return (settings.linting as any)[this.pathSettingName] as string;
+    return (settings.linting as any)[`${this.id}Path`] as string;
   }
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public linterArgs(_resource?: Uri): string[] {
     const settings = this.configService;
-    const args = (settings.linting as any)[this.argsSettingName];
+    const args = (settings.linting as any)[`${this.id}Args`];
     return Array.isArray(args) ? (args as string[]) : [];
   }
   public getExecutionInfo(customArgs: string[], resource?: Uri): ExecutionInfo {

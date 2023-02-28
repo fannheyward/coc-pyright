@@ -52,10 +52,6 @@ export type TestingFramework = 'unittest' | 'pytest';
 export interface ILinterInfo {
   readonly id: LinterId;
   readonly product: Product;
-  readonly pathSettingName: string;
-  readonly argsSettingName: string;
-  readonly enabledSettingName: string;
-  readonly configFileNames: string[];
   readonly stdinSupport: boolean;
   isEnabled(resource?: Uri): boolean;
   pathName(resource?: Uri): string;

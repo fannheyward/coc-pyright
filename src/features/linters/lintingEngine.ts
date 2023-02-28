@@ -67,8 +67,8 @@ export class LintingEngine {
     this.configService = PythonSettings.getInstance();
     this.linters = [
       new LinterInfo(Product.bandit, 'bandit', this.configService),
-      new LinterInfo(Product.flake8, 'flake8', this.configService, true),
-      new LinterInfo(Product.pylint, 'pylint', this.configService, true, ['.pylintrc', 'pylintrc']),
+      new LinterInfo(Product.flake8, 'flake8', this.configService),
+      new LinterInfo(Product.pylint, 'pylint', this.configService, ['.pylintrc', 'pylintrc']),
       new LinterInfo(Product.mypy, 'mypy', this.configService),
       new LinterInfo(Product.pycodestyle, 'pycodestyle', this.configService),
       new LinterInfo(Product.prospector, 'prospector', this.configService),
@@ -76,7 +76,7 @@ export class LintingEngine {
       new LinterInfo(Product.pyflakes, 'pyflakes', this.configService),
       new LinterInfo(Product.pylama, 'pylama', this.configService),
       new LinterInfo(Product.pytype, 'pytype', this.configService),
-      new LinterInfo(Product.ruff, 'ruff', this.configService, true),
+      new LinterInfo(Product.ruff, 'ruff', this.configService),
     ];
   }
 

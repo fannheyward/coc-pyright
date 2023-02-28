@@ -11,7 +11,12 @@ export class Flake8 extends BaseLinter {
 
   protected async runLinter(document: TextDocument, cancellation: CancellationToken): Promise<ILintMessage[]> {
     const fsPath = Uri.parse(document.uri).fsPath;
-    const args = ['--format=%(row)d,%(col)d,%(code).1s,%(code)s:%(text)s', '--exit-zero', '--stdin-display-name', fsPath, '-'];
+    const args = ['--format=%(row)d,%(col)d,%(code).1s,%(code)s:%(text)s', '--exit-zero'];
+    if (this.info.stdinSupport) {
+      args.push('--stdin-display-name', fsPath, '-');
+    } else {
+      args.push(fsPath);
+    }
     const messages = await this.run(args, document, cancellation);
     messages.forEach((msg) => {
       msg.severity = this.parseMessagesSeverity(msg.type, this.pythonSettings.linting.flake8CategorySeverity);

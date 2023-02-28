@@ -943,6 +943,12 @@
           "description": "Whether to lint Python files using flake8",
           "scope": "resource"
         },
+        "python.linting.flake8Stdin": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to run flake8 via stdin.",
+          "scope": "resource"
+        },
         "python.linting.flake8Path": {
           "type": "string",
           "default": "flake8",
@@ -1170,6 +1176,12 @@
           "description": "Whether to lint Python files using ruff.",
           "scope": "resource"
         },
+        "python.linting.ruffStdin": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to run ruff via stdin.",
+          "scope": "resource"
+        },
         "python.linting.ruffPath": {
           "type": "string",
           "default": "ruff",
@@ -1273,6 +1285,12 @@
             "Information",
             "Warning"
           ],
+          "scope": "resource"
+        },
+        "python.linting.pylintStdin": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to run pylint via stdin.",
           "scope": "resource"
         },
         "python.linting.pylintEnabled": {
