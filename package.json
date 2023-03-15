@@ -75,6 +75,7 @@
         "patterns": [
           "app.py",
           "setup.py",
+          "Pipfile",
           "setup.cfg",
           "manage.py",
           "pyproject.toml",
