@@ -160,7 +160,6 @@
         },
         "python.analysis.diagnosticSeverityOverrides": {
           "type": "object",
-          "default": {},
           "description": "Allows a user to override the severity levels for individual diagnostics.",
           "properties": {
             "reportGeneralTypeIssues": {
@@ -826,6 +825,17 @@
             "reportShadowedImports": {
               "type": "string",
               "description": "Diagnostics for files that are overriding a module in the stdlib.",
+              "default": "none",
+              "enum": [
+                "none",
+                "information",
+                "warning",
+                "error"
+              ]
+            },
+            "reportImplicitOverride": {
+              "type": "string",
+              "description": "Diagnostics for overridden methods that do not include an `@override` decorator.",
               "default": "none",
               "enum": [
                 "none",
