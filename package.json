@@ -109,6 +109,12 @@
           "default": true,
           "description": "Enable/disable inlay hints for variable types"
         },
+        "python.analysis.indexing": {
+          "type": "boolean",
+          "default": true,
+          "description": "Index installed third party libraries and user files for language features such as auto-import, add import, workspace symbols and etc.",
+          "scope": "resource"
+        },
         "python.analysis.extraPaths": {
           "type": "array",
           "default": [],
