@@ -9,25 +9,35 @@ interface IRuffLocation {
   column: number;
 }
 
-interface IRuffFix {
+interface IRuffFixEdit {
   content: string;
   location: IRuffLocation;
   end_location: IRuffLocation;
+}
+
+interface IRuffFix {
+  message: string;
+  edits: IRuffFixEdit[];
 }
 
 // {
 //   "code": "F401",
 //   "message": "`numpy` imported but unused",
 //   "fix": {
-//     "content": "",
-//     "location": {
-//       "row": 3,
-//       "column": 0
-//     },
-//     "end_location": {
-//       "row": 4,
-//       "column": 0
-//     }
+//     "message": "Remove unused import: `numpy`",
+//     "edits": [
+//       {
+//         "content": "",
+//         "location": {
+//           "row": 3,
+//           "column": 0
+//         },
+//         "end_location": {
+//           "row": 4,
+//           "column": 0
+//         }
+//       }
+//     ]
 //   },
 //   "location": {
 //     "row": 3,
@@ -38,6 +48,7 @@ interface IRuffFix {
 //     "column": 19
 //   },
 //   "filename": "/path/to/bug.py"
+//   "noqa_row": 1
 // },
 
 interface IRuffLintMessage {
@@ -48,6 +59,7 @@ interface IRuffLintMessage {
   location: IRuffLocation;
   end_location: IRuffLocation;
   filename: string;
+  noqa_row: number;
 }
 
 export class Ruff extends BaseLinter {
@@ -58,11 +70,14 @@ export class Ruff extends BaseLinter {
   private fixToWorkspaceEdit(filename: string, fix: IRuffFix): WorkspaceEdit | null {
     if (!fix) return null;
 
+    // TODO: Support multiple edits.
+    const edit = fix.edits[0];
+
     const u = Uri.parse(filename).toString();
-    const range = Range.create(fix.location.row - 1, fix.location.column, fix.end_location.row - 1, fix.end_location.column);
+    const range = Range.create(edit.location.row - 1, edit.location.column, edit.end_location.row - 1, edit.end_location.column);
     return {
       changes: {
-        [u]: [TextEdit.replace(range, fix.content)],
+        [u]: [TextEdit.replace(range, fix.message)],
       },
     };
   }
