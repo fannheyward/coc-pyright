@@ -126,12 +126,12 @@ export class PythonCodeActionProvider implements CodeActionProvider {
 
     // @ts-ignore
     if (diag.fix) {
-      const title = `Fix: ${diag.message.split(':')[0]}`;
       const action: CodeAction = {
-        title,
+        // @ts-ignore
+        title: diag.fix.title,
         kind: CodeActionKind.QuickFix,
         // @ts-ignore
-        edit: diag.fix,
+        edit: diag.fix.edit,
       };
       return [action];
     }

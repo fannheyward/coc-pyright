@@ -65,7 +65,7 @@ export class Ruff extends BaseLinter {
     super(info, outputChannel, COLUMN_OFF_SET);
   }
 
-  private fixToWorkspaceEdit(filename: string, fix: IRuffFix): WorkspaceEdit | null {
+  private fixToWorkspaceEdit(filename: string, fix: IRuffFix): { title: string, edit: WorkspaceEdit } | null {
     if (!fix) return null;
 
     const u = Uri.parse(filename).toString();
@@ -75,15 +75,22 @@ export class Ruff extends BaseLinter {
         return TextEdit.replace(range, edit.content);
       });
       return {
-        changes: {
-          [u]: changes,
+        title: fix.message,
+        edit: {
+          changes: {
+            [u]: changes,
+          },
+
         },
       };
     } else if (fix.location && fix.end_location) {
       const range = Range.create(fix.location.row - 1, fix.location.column, fix.end_location.row - 1, fix.end_location.column);
       return {
-        changes: {
-          [u]: [TextEdit.replace(range, fix.content || '')],
+        title: fix.message,
+        edit: {
+          changes: {
+            [u]: [TextEdit.replace(range, fix.content || '')],
+          },
         },
       };
     }
