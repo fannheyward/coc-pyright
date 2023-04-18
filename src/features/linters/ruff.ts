@@ -75,7 +75,7 @@ export class Ruff extends BaseLinter {
         return TextEdit.replace(range, edit.content);
       });
       return {
-        title: fix.message,
+        title: `Ruff: ${fix.message}`,
         edit: {
           changes: {
             [u]: changes,
@@ -86,7 +86,7 @@ export class Ruff extends BaseLinter {
     } else if (fix.location && fix.end_location) {
       const range = Range.create(fix.location.row - 1, fix.location.column, fix.end_location.row - 1, fix.end_location.column);
       return {
-        title: fix.message,
+        title: `Ruff: ${fix.message}`,
         edit: {
           changes: {
             [u]: [TextEdit.replace(range, fix.content || '')],
