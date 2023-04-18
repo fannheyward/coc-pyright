@@ -9,36 +9,45 @@ interface IRuffLocation {
   column: number;
 }
 
-interface IRuffFix {
+interface IRuffEdit {
   content: string;
   location: IRuffLocation;
   end_location: IRuffLocation;
 }
 
+interface IRuffFix {
+  message: string;
+
+  // ruff 0.0.260 or later
+  edits?: IRuffEdit[];
+
+  // before 0.0.260
+  content?: string;
+  location?: IRuffLocation;
+  end_location?: IRuffLocation;
+}
+
+// fix format
+//
+// old
 // {
-//   "code": "F401",
-//   "message": "`numpy` imported but unused",
-//   "fix": {
-//     "content": "",
-//     "location": {
-//       "row": 3,
-//       "column": 0
-//     },
-//     "end_location": {
-//       "row": 4,
-//       "column": 0
+//   "message": "Remove unused import: `sys`",
+//   "content": "",
+//   "location": {"row": 1, "column": 0},
+//   "end_location": {"row": 2, "column": 0}
+// }
+//
+// new, from ruff 0.0.260
+// {
+//   "message": "Remove unused import: `sys`",
+//   "edits": [
+//     {
+//       "content": "",
+//       "location": {"row": 1, "column": 0},
+//       "end_location": {"row": 2, "column": 0},
 //     }
-//   },
-//   "location": {
-//     "row": 3,
-//     "column": 8
-//   },
-//   "end_location": {
-//     "row": 3,
-//     "column": 19
-//   },
-//   "filename": "/path/to/bug.py"
-// },
+//   ]
+// }
 
 interface IRuffLintMessage {
   kind: string | { [key: string]: any[] };
@@ -48,6 +57,7 @@ interface IRuffLintMessage {
   location: IRuffLocation;
   end_location: IRuffLocation;
   filename: string;
+  noqa_row: number;
 }
 
 export class Ruff extends BaseLinter {
@@ -59,12 +69,26 @@ export class Ruff extends BaseLinter {
     if (!fix) return null;
 
     const u = Uri.parse(filename).toString();
-    const range = Range.create(fix.location.row - 1, fix.location.column, fix.end_location.row - 1, fix.end_location.column);
-    return {
-      changes: {
-        [u]: [TextEdit.replace(range, fix.content)],
-      },
-    };
+    if (fix.edits && fix.edits.length) {
+      const changes = fix.edits.map((edit) => {
+        const range = Range.create(edit.location.row - 1, edit.location.column, edit.end_location.row - 1, edit.end_location.column);
+        return TextEdit.replace(range, edit.content);
+      });
+      return {
+        changes: {
+          [u]: changes,
+        },
+      };
+    } else if (fix.location && fix.end_location) {
+      const range = Range.create(fix.location.row - 1, fix.location.column, fix.end_location.row - 1, fix.end_location.column);
+      return {
+        changes: {
+          [u]: [TextEdit.replace(range, fix.content || '')],
+        },
+      };
+    }
+
+    return null;
   }
 
   protected async parseMessages(output: string): Promise<ILintMessage[]> {
