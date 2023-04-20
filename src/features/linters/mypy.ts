@@ -11,7 +11,8 @@ export class MyPy extends BaseLinter {
   }
 
   protected async runLinter(document: TextDocument, cancellation: CancellationToken): Promise<ILintMessage[]> {
-    const messages = await this.run([Uri.parse(document.uri).fsPath], document, cancellation, REGEX);
+    const args = ['--python-executable', this.pythonSettings.pythonPath, Uri.parse(document.uri).fsPath];
+    const messages = await this.run(args, document, cancellation, REGEX);
     messages.forEach((msg) => {
       msg.severity = this.parseMessagesSeverity(msg.type, this.pythonSettings.linting.mypyCategorySeverity);
       msg.code = msg.type;
