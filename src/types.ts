@@ -43,10 +43,11 @@ export enum Product {
   blackd = 15,
   pyflakes = 16,
   ruff = 17,
+  pyink = 18,
 }
 
 export type LinterId = 'bandit' | 'flake8' | 'mypy' | 'ruff' | 'pycodestyle' | 'prospector' | 'pydocstyle' | 'pyflakes' | 'pylama' | 'pylint' | 'pytype';
-export type FormatterId = 'yapf' | 'black' | 'autopep8' | 'darker' | 'blackd';
+export type FormatterId = 'yapf' | 'black' | 'autopep8' | 'darker' | 'blackd' | 'pyink';
 export type TestingFramework = 'unittest' | 'pytest';
 
 export interface ILinterInfo {
@@ -152,6 +153,8 @@ export interface IFormattingSettings {
   readonly autopep8Args: string[];
   blackPath: string;
   readonly blackArgs: string[];
+  pyinkPath: string;
+  readonly pyinkArgs: string[];
   yapfPath: string;
   readonly yapfArgs: string[];
   darkerPath: string;

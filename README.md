@@ -10,7 +10,7 @@
 
 - codeActions to add imports, ignore typing check, run tests and more
 - linting with `bandit`, `flake8`, `mypy`, `ruff`, `prospector`, `pycodestyle`, `pydocstyle`, `pyflakes`, `pylama`, `pylint`, `pytype`
-- formatting with `yapf`, `black`, `autopep8`, `darker`, `blackd`
+- formatting with `yapf`, `black`, `autopep8`, `darker`, `blackd`, `pyink`
 - testing with `unittest` or `pytest`, supports codeLens
 - sort imports with `isort` or `pyright`
 - extract method and variables with `rope`
@@ -56,6 +56,8 @@ These configurations are used by `coc-pyright`, you need to set them in your `co
 | python.formatting.provider                  | Provider for formatting                                             | autopep8      |
 | python.formatting.blackPath                 | Custom path to black                                                | black         |
 | python.formatting.blackArgs                 | Arguments passed to black                                           | []            |
+| python.formatting.pyinkPath                 | Custom path to pyink                                                | pyink         |
+| python.formatting.pyinkArgs                 | Arguments passed to pyink                                           | []            |
 | python.formatting.blackdPath                | Custom path to blackd                                               | blackd        |
 | python.formatting.blackdHTTPURL             | Custom blackd server url                                            | ""            |
 | python.formatting.blackdHTTPHeaders         | Custom blackd request headers                                       | {}            |

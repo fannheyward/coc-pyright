@@ -1,15 +1,15 @@
 import {
+  CancellationToken,
+  Disposable,
   DocumentFormattingEditProvider,
   DocumentRangeFormattingEditProvider,
-  Disposable,
-  OutputChannel,
-  window,
-  TextDocument,
   FormattingOptions,
-  CancellationToken,
-  Range,
-  TextEdit,
+  OutputChannel,
   ProviderResult,
+  Range,
+  TextDocument,
+  TextEdit,
+  window,
 } from 'coc.nvim';
 import { PythonSettings } from '../configSettings';
 import { FormatterId } from '../types';
@@ -18,6 +18,7 @@ import { BaseFormatter } from './formatters/baseFormatter';
 import { BlackFormatter } from './formatters/black';
 import { BlackdFormatter } from './formatters/blackd';
 import { DarkerFormatter } from './formatters/darker';
+import { PyinkFormatter } from './formatters/pyink';
 import { YapfFormatter } from './formatters/yapf';
 
 export class PythonFormattingEditProvider implements DocumentFormattingEditProvider, DocumentRangeFormattingEditProvider {
@@ -34,6 +35,9 @@ export class PythonFormattingEditProvider implements DocumentFormattingEditProvi
     switch (provider) {
       case 'black':
         this.formatters.set('black', new BlackFormatter(this.pythonSettings, this.outputChannel));
+        break;
+      case 'pyink':
+        this.formatters.set('pyink', new PyinkFormatter(this.pythonSettings, this.outputChannel));
         break;
       case 'blackd':
         this.formatters.set('blackd', new BlackdFormatter(this.pythonSettings, this.outputChannel));
