@@ -1,20 +1,7 @@
 import { printParseNodeType } from '@zzzen/pyright-internal/dist/analyzer/parseTreeUtils';
 import { ParseTreeWalker } from '@zzzen/pyright-internal/dist/analyzer/parseTreeWalker';
-import { DiagnosticSink } from '@zzzen/pyright-internal/dist/common/diagnosticSink';
 import { ClassNode, FunctionNode, SuiteNode } from '@zzzen/pyright-internal/dist/parser/parseNodes';
-import { ParseOptions, Parser, ParseResults } from '@zzzen/pyright-internal/dist/parser/parser';
 import { TestingFramework } from '../types';
-
-export function parse(source: string) {
-  let result: ParseResults | undefined = undefined;
-  const parserOptions = new ParseOptions();
-  const diagSink = new DiagnosticSink();
-  const parser = new Parser();
-  try {
-    result = parser.parseSourceFile(source, parserOptions, diagSink);
-  } catch (e) {}
-  return result;
-}
 
 export type FunctionFormatItemType = {
   value: string;

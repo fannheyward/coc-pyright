@@ -1,19 +1,6 @@
 import { printParseNodeType } from '@zzzen/pyright-internal/dist/analyzer/parseTreeUtils';
 import { ParseTreeWalker } from '@zzzen/pyright-internal/dist/analyzer/parseTreeWalker';
-import { DiagnosticSink } from '@zzzen/pyright-internal/dist/common/diagnosticSink';
-import { FunctionNode, MemberAccessNode, NameNode, ParseNode } from '@zzzen/pyright-internal/dist/parser/parseNodes';
-import { ParseOptions, Parser, ParseResults } from '@zzzen/pyright-internal/dist/parser/parser';
-
-export function parse(source: string) {
-  let result: ParseResults | undefined = undefined;
-  const parserOptions = new ParseOptions();
-  const diagSink = new DiagnosticSink();
-  const parser = new Parser();
-  try {
-    result = parser.parseSourceFile(source, parserOptions, diagSink);
-  } catch (e) {}
-  return result;
-}
+import { FunctionNode, MemberAccessNode, NameNode } from '@zzzen/pyright-internal/dist/parser/parseNodes';
 
 export type TypeInlayHintsItemType = {
   inlayHintType: 'variable' | 'functionReturn';
@@ -24,10 +11,6 @@ export type TypeInlayHintsItemType = {
 
 export class TypeInlayHintsWalker extends ParseTreeWalker {
   public featureItems: TypeInlayHintsItemType[] = [];
-
-  override visitNode(node: ParseNode) {
-    return super.visitNode(node);
-  }
 
   override visitName(node: NameNode): boolean {
     if (node.parent) {

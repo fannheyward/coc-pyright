@@ -2,7 +2,7 @@ import * as child_process from 'child_process';
 import { Terminal, Uri, window, workspace } from 'coc.nvim';
 import path from 'path';
 import { PythonSettings } from './configSettings';
-import * as testParser from './parsers/testFramework';
+import * as parser from './parsers';
 import { TestingFramework } from './types';
 
 let terminal: Terminal | undefined;
@@ -77,10 +77,10 @@ export async function runSingleTest() {
     return window.showErrorMessage('This file is not a python test file!');
   }
 
-  const parsed = testParser.parse(document.getText());
+  const parsed = parser.parse(document.getText());
   if (!parsed) return window.showErrorMessage('Test not found');
 
-  const walker = new testParser.TestFrameworkWalker(framework);
+  const walker = new parser.TestFrameworkWalker(framework);
   walker.walk(parsed.parseTree);
 
   let testFunction: string | undefined = undefined;

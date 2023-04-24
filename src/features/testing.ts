@@ -1,6 +1,6 @@
 import { CodeAction, CodeActionKind, CodeActionProvider, CodeLens, CodeLensProvider, events, LinesTextDocument, Position, Range, Uri, workspace } from 'coc.nvim';
 import path from 'path';
-import * as testParser from '../parsers/testFramework';
+import * as parser from '../parsers';
 import { TestingFramework } from '../types';
 
 function comparePosition(position: Position, other: Position): number {
@@ -24,7 +24,7 @@ function rangeInRange(r: Range, range: Range): boolean {
 export class TestFrameworkProvider implements CodeLensProvider, CodeActionProvider {
   private framework = workspace.getConfiguration('pyright').get<TestingFramework>('testing.provider', 'unittest');
 
-  private async parseDocument(document: LinesTextDocument): Promise<testParser.FunctionFormatItemType[]> {
+  private async parseDocument(document: LinesTextDocument): Promise<parser.FunctionFormatItemType[]> {
     if (events.insertMode) return [];
 
     const fileName = path.basename(Uri.parse(document.uri).fsPath);
@@ -33,10 +33,10 @@ export class TestFrameworkProvider implements CodeLensProvider, CodeActionProvid
     }
 
     try {
-      const parsed = testParser.parse(document.getText());
+      const parsed = parser.parse(document.getText());
       if (!parsed) return [];
 
-      const walker = new testParser.TestFrameworkWalker(this.framework);
+      const walker = new parser.TestFrameworkWalker(this.framework);
       walker.walk(parsed.parseTree);
 
       return walker.featureItems;

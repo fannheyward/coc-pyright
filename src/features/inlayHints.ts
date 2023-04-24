@@ -14,7 +14,7 @@ import {
   workspace,
 } from 'coc.nvim';
 
-import * as typeInlayHintsParser from '../parsers/typeInlayHints';
+import * as parser from '../parsers';
 
 export class TypeInlayHintsProvider implements InlayHintsProvider {
   private readonly _onDidChangeInlayHints = new Emitter<void>();
@@ -27,10 +27,10 @@ export class TypeInlayHintsProvider implements InlayHintsProvider {
     const inlayHints: InlayHint[] = [];
 
     const code = document.getText();
-    const parsed = typeInlayHintsParser.parse(code);
+    const parsed = parser.parse(code);
     if (!parsed) return [];
 
-    const walker = new typeInlayHintsParser.TypeInlayHintsWalker();
+    const walker = new parser.TypeInlayHintsWalker();
     walker.walk(parsed.parseTree);
 
     for (const item of walker.featureItems) {
