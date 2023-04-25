@@ -26,6 +26,7 @@ import { PythonCodeActionProvider } from './features/codeAction';
 import { PythonFormattingEditProvider } from './features/formatting';
 import { ImportCompletionProvider } from './features/importCompletion';
 import { TypeInlayHintsProvider } from './features/inlayHints';
+import { PythonSemanticTokensProvider } from './features/semanticTokens';
 import { sortImports } from './features/isort';
 import { LinterProvider } from './features/lintting';
 import { addImport, extractMethod, extractVariable } from './features/refactor';
@@ -146,6 +147,11 @@ export async function activate(context: ExtensionContext): Promise<void> {
   if (inlayHintEnable && typeof languages.registerInlayHintsProvider === 'function') {
     const provider = new TypeInlayHintsProvider(client);
     context.subscriptions.push(languages.registerInlayHintsProvider(documentSelector, provider));
+  }
+  const semanticTokensEnable = workspace.getConfiguration('semanticTokens').get('enable', true);
+  if (semanticTokensEnable && typeof languages.registerDocumentSemanticTokensProvider === 'function') {
+    const provider = new PythonSemanticTokensProvider();
+    context.subscriptions.push(languages.registerDocumentSemanticTokensProvider(documentSelector, provider, provider.legend));
   }
   const testProvider = new TestFrameworkProvider();
   context.subscriptions.push(languages.registerCodeActionProvider(documentSelector, testProvider, 'Pyright'));

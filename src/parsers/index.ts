@@ -1,5 +1,6 @@
 import { DiagnosticSink } from '@zzzen/pyright-internal/dist/common/diagnosticSink';
 import { ParseOptions, ParseResults, Parser } from '@zzzen/pyright-internal/dist/parser/parser';
+import { SemanticTokensWalker, TokenTypes } from './semanticTokens';
 import { FunctionFormatItemType, TestFrameworkWalker } from './testFramework';
 import { TypeInlayHintsItemType, TypeInlayHintsWalker } from './typeInlayHints';
 
@@ -14,10 +15,4 @@ function parse(source: string) {
   return result;
 }
 
-export {
-  parse,
-  TestFrameworkWalker,
-  FunctionFormatItemType,
-  TypeInlayHintsItemType,
-  TypeInlayHintsWalker,
-};
+export { parse, SemanticTokensWalker, TestFrameworkWalker, TypeInlayHintsWalker, FunctionFormatItemType, TypeInlayHintsItemType, TokenTypes };
