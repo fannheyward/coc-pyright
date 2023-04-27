@@ -1,6 +1,6 @@
 {
   "name": "coc-pyright",
-  "version": "1.1.304",
+  "version": "1.1.305",
   "description": "Pyright extension for coc.nvim, static type checker for Python",
   "author": "Heyward Fann <fannheyward@gmail.com>",
   "license": "MIT",
@@ -44,7 +44,7 @@
     "@types/which": "^2.0.0",
     "@typescript-eslint/eslint-plugin": "^5.6.0",
     "@typescript-eslint/parser": "^5.6.0",
-    "@zzzen/pyright-internal": "^1.2.0-dev.20230416",
+    "@zzzen/pyright-internal": "^1.2.0-dev.20230423",
     "coc.nvim": "^0.0.82",
     "diff-match-patch": "^1.0.5",
     "esbuild": "^0.17.10",
@@ -1588,6 +1588,6 @@
     ]
   },
   "dependencies": {
-    "pyright": "^1.1.304"
+    "pyright": "^1.1.305"
   }
 }
