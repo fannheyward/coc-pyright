@@ -93,7 +93,6 @@ export enum TokenTypes {
   'typeParameter',
   'selfParameter',
   'clsParameter',
-  'formatString',
   'magicFunction',
   'typeAnnotation',
 }
@@ -115,7 +114,7 @@ export class SemanticTokensWalker extends ParseTreeWalker {
   }
 
   visitFormatString(node: FormatStringNode): boolean {
-    node.expressions.map((f) => this.addSemanticItem(TokenTypes.formatString, f));
+    node.expressions.map((f) => this.addSemanticItem(TokenTypes.variable, f));
     return super.visitFormatString(node);
   }
 
