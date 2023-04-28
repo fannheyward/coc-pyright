@@ -27,7 +27,7 @@ import { PythonFormattingEditProvider } from './features/formatting';
 import { ImportCompletionProvider } from './features/importCompletion';
 import { TypeInlayHintsProvider } from './features/inlayHints';
 import { PythonSemanticTokensProvider } from './features/semanticTokens';
-import { sortImports } from './features/isort';
+import { sortImports } from './features/sortImports';
 import { LinterProvider } from './features/lintting';
 import { addImport, extractMethod, extractVariable } from './features/refactor';
 import { TestFrameworkProvider } from './features/testing';

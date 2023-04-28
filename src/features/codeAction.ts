@@ -18,9 +18,9 @@ export class PythonCodeActionProvider implements CodeActionProvider {
 
   private sortImportsAction(): CodeAction {
     const config = workspace.getConfiguration('pyright');
-    const provider = config.get<'pyright' | 'isort'>('organizeimports.provider', 'pyright');
+    const provider = config.get<'pyright' | 'isort' | 'ruff'>('organizeimports.provider', 'pyright');
     const command = provider === 'pyright' ? 'pyright.organizeimports' : 'python.sortImports';
-    const title = provider === 'pyright' ? 'Organize Imports by Pyright' : 'Sort Imports by isort';
+    const title = provider === 'pyright' ? 'Organize Imports by Pyright' : `Sort Imports by ${provider}`;
     return {
       title,
       kind: CodeActionKind.SourceOrganizeImports,
