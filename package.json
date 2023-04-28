@@ -31,8 +31,8 @@
     "schema": "curl -o schemas/pyrightconfig.schema.json https://raw.githubusercontent.com/microsoft/pyright/main/packages/vscode-pyright/schemas/pyrightconfig.schema.json && node diff.mjs",
     "clean": "rimraf lib",
     "lint": "eslint src --ext ts",
-    "build": "node esbuild.js",
-    "prepare": "node esbuild.js"
+    "build": "node esbuild.mjs",
+    "prepare": "node esbuild.mjs"
   },
   "devDependencies": {
     "@types/diff-match-patch": "^1.0.32",
