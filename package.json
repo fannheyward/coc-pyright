@@ -1493,6 +1493,7 @@
           "description": "Organize imports provider",
           "enum": [
             "pyright",
+            "ruff",
             "isort"
           ]
         },

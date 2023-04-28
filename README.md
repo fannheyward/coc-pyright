@@ -86,7 +86,7 @@ These configurations are used by `coc-pyright`, you need to set them in your `co
 | pyright.disableProgressNotifications        | Disable the initialization and workdone progress notifications      | false         |
 | pyright.completion.importSupport            | Enable `python-import` completion source support                    | true          |
 | pyright.completion.snippetSupport           | Enable completion snippets support                                  | true          |
-| pyright.organizeimports.provider            | Organize imports provider, `pyright` or `isort`                     | pyright       |
+| pyright.organizeimports.provider            | Organize imports provider, `pyright`, `ruff` or `isort`             | pyright       |
 | pyright.inlayHints.functionReturnTypes      | Enable inlay hints for function return types                        | true          |
 | pyright.inlayHints.variableTypes            | Enable inlay hints for variable types                               | true          |
 | pyright.testing.provider                    | Provider for testing, supports `unittest` and `pytest`              | unittest      |
