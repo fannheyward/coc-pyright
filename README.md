@@ -8,13 +8,14 @@
 
 [Pyright](https://github.com/microsoft/pyright) extension for coc.nvim, with additional features:
 
+- semanticTokens highlighting!
+- inlayHints supports
 - codeActions to add imports, ignore typing check, run tests and more
 - linting with `bandit`, `flake8`, `mypy`, `ruff`, `prospector`, `pycodestyle`, `pydocstyle`, `pyflakes`, `pylama`, `pylint`, `pytype`
 - formatting with `yapf`, `black`, `autopep8`, `darker`, `blackd`, `pyink`
 - testing with `unittest` or `pytest`, supports codeLens
-- sort imports with `isort` or `pyright`
+- sort imports with `ruff`, `isort` and `pyright`
 - extract method and variables with `rope`
-- inlayHints supports
 
 <!-- markdownlint-disable-next-line -->
 <img width="906" alt="10" src="https://user-images.githubusercontent.com/345274/189342412-c80fc8a9-c3d7-4a8b-bbfc-75e5cbddb9a7.png">
