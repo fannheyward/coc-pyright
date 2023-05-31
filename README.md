@@ -57,6 +57,8 @@ These configurations are used by `coc-pyright`, you need to set them in your `co
 | python.formatting.provider                  | Provider for formatting                                             | autopep8      |
 | python.formatting.blackPath                 | Custom path to black                                                | black         |
 | python.formatting.blackArgs                 | Arguments passed to black                                           | []            |
+| python.formatting.darkerPath                 | Custom path to darker                                                | darker         |
+| python.formatting.darkerArgs                 | Arguments passed to darker                                           | []            |
 | python.formatting.pyinkPath                 | Custom path to pyink                                                | pyink         |
 | python.formatting.pyinkArgs                 | Arguments passed to pyink                                           | []            |
 | python.formatting.blackdPath                | Custom path to blackd                                               | blackd        |
