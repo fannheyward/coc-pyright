@@ -41,7 +41,7 @@
     "@types/minimatch": "^5.1.2",
     "@types/node": "18",
     "@types/semver": "^7.3.9",
-    "@types/which": "^2.0.0",
+    "@types/which": "^3.0.0",
     "@typescript-eslint/eslint-plugin": "^5.6.0",
     "@typescript-eslint/parser": "^5.6.0",
     "@zzzen/pyright-internal": "^1.2.0-dev.20230528",
@@ -61,7 +61,7 @@
     "tree-kill": "^1.2.2",
     "typescript": "^5.0.3",
     "untildify": "^4.0.0",
-    "which": "^2.0.2"
+    "which": "^3.0.1"
   },
   "prettier": {
     "singleQuote": true,
