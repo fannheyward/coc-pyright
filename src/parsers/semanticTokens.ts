@@ -114,7 +114,7 @@ export class SemanticTokensWalker extends ParseTreeWalker {
   }
 
   visitFormatString(node: FormatStringNode): boolean {
-    node.expressions.map((f) => this.addSemanticItem(TokenTypes.variable, f));
+    node.fieldExpressions.map((f) => this.addSemanticItem(TokenTypes.variable, f));
     return super.visitFormatString(node);
   }
 
