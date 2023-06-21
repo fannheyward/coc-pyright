@@ -45,7 +45,7 @@
     "@typescript-eslint/eslint-plugin": "^5.6.0",
     "@typescript-eslint/parser": "^5.6.0",
     "@zzzen/pyright-internal": "^1.2.0-dev.20230604",
-    "coc.nvim": "^0.0.82",
+    "coc.nvim": "^0.0.83-next.17",
     "diff-match-patch": "^1.0.5",
     "esbuild": "^0.17.10",
     "eslint": "^8.4.1",

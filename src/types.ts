@@ -79,6 +79,7 @@ export interface ILintMessage {
   tags?: DiagnosticTag[];
   provider: string;
   file?: string;
+  url?: string;
   fix?: any;
 }
 

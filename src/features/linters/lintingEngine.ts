@@ -183,6 +183,9 @@ export class LintingEngine {
     const severity = lintSeverityToVSSeverity.get(message.severity!)!;
     const diagnostic = Diagnostic.create(range, message.message, severity);
     diagnostic.code = message.code;
+    if (message.url) {
+      diagnostic.codeDescription = { href: message.url };
+    }
     diagnostic.source = message.provider;
     // @ts-ignore
     diagnostic.fix = message.fix;

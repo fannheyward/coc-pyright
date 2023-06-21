@@ -58,6 +58,7 @@ interface IRuffLintMessage {
   end_location: IRuffLocation;
   filename: string;
   noqa_row: number;
+  url?: string;
 }
 
 export class Ruff extends BaseLinter {
@@ -113,6 +114,7 @@ export class Ruff extends BaseLinter {
           tags: ['F401', 'F841'].includes(msg.code) ? [DiagnosticTag.Unnecessary] : [],
           provider: this.info.id,
           file: msg.filename,
+          url: msg.url,
           fix: this.fixToWorkspaceEdit(msg.filename, msg.fix),
         } as ILintMessage;
       });
