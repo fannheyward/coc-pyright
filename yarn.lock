@@ -349,10 +349,10 @@
     "@types/emscripten" "^1.39.6"
     tslib "^1.13.0"
 
-"@zzzen/pyright-internal@^1.2.0-dev.20230604":
-  version "1.2.0-dev.20230604"
-  resolved "https://registry.yarnpkg.com/@zzzen/pyright-internal/-/pyright-internal-1.2.0-dev.20230604.tgz#d9a3c7b232633786cc89930e31c1cbc0f08df8b1"
-  integrity sha512-3KEBSLMNuem7GWrgr0PoRLGnJan+evEPVM3rNBDxuV5YgC2oPTOxW0QM4Ajs+sPjKepokeKKnON4N/LTH9NhaA==
+"@zzzen/pyright-internal@^1.2.0-dev.20230618":
+  version "1.2.0-dev.20230618"
+  resolved "https://registry.yarnpkg.com/@zzzen/pyright-internal/-/pyright-internal-1.2.0-dev.20230618.tgz#7d1a8237995f6003f97e52e6104ea83e931b2c0f"
+  integrity sha512-pm1gMahnT9oKjFkQTokOb9f0JcXB/UPf7lkCg5Eutp9KwFU1r/9p9ah/BPkfNUpW4HrhEsoEZk/jsw75neYiUg==
   dependencies:
     "@iarna/toml" "2.2.5"
     "@yarnpkg/fslib" "2.10.3"
@@ -364,7 +364,6 @@
     leven "^3.1.0"
     source-map-support "^0.5.21"
     tmp "^0.2.1"
-    typescript-char "^0.0.0"
     vscode-jsonrpc "8.1.0"
     vscode-languageserver "8.1.0"
     vscode-languageserver-textdocument "^1.0.10"
@@ -1107,15 +1106,10 @@ minimatch@^9.0.1:
   dependencies:
     brace-expansion "^2.0.1"
 
-minipass@^5.0.0:
+minipass@^5.0.0, "minipass@^5.0.0 || ^6.0.2":
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/minipass/-/minipass-5.0.0.tgz#3e9788ffb90b694a5d0ec94479a45b5d8738133d"
   integrity sha512-3FnjYuehv9k6ovOEbyOswadCDPX1piCfhV8ncmYtHOjuPwylVWsghTLo7rabjC3Rx5xD4HDx8Wm1xnMF7S5qFQ==
-
-"minipass@^5.0.0 || ^6.0.2":
-  version "6.0.2"
-  resolved "https://registry.yarnpkg.com/minipass/-/minipass-6.0.2.tgz#542844b6c4ce95b202c0995b0a471f1229de4c81"
-  integrity sha512-MzWSV5nYVT7mVyWCwn2o7JH13w2TBRmmSqSRCKzTw+lmft9X4z+3wjvs06Tzijo5z4W/kahUCDpRXTF+ZrmF/w==
 
 ms@2.1.2:
   version "2.1.2"
@@ -1225,10 +1219,10 @@ punycode@^2.1.0:
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
   integrity sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==
 
-pyright@^1.1.310:
-  version "1.1.311"
-  resolved "https://registry.yarnpkg.com/pyright/-/pyright-1.1.311.tgz#eaa515a4b9c887a5a53d07a756f0f0c528f1f25f"
-  integrity sha512-/BBt70SxXyTTfDFT4KOWSanPpytOq3qV0+qZtuxw02X0sZwvO+MpJ4mpK372isoUvr2nWqLe6gfbyqGj4wyRWw==
+pyright@^1.1.315:
+  version "1.1.315"
+  resolved "https://registry.yarnpkg.com/pyright/-/pyright-1.1.315.tgz#eb290adb81a6ce079860a673a6c3a0e0b3a76818"
+  integrity sha512-Eip/aRmEqAzWICNVSC9wgX+0N2+E5BMaCM+cvyfkVBwoUKpkF2vXm7XoE1qr/jRb+aX8XNf1RRaoRvCw0l/dtQ==
 
 readdirp@~3.6.0:
   version "3.6.0"
@@ -1405,11 +1399,6 @@ type-fest@^0.20.2:
   version "0.20.2"
   resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-0.20.2.tgz#1bf207f4b28f91583666cb5fbd327887301cd5f4"
   integrity sha512-Ne+eE4r0/iWnpAxD852z3A+N0Bt5RN//NjJwRd2VFHEmrywxf5vsZlh4R6lixl6B+wz/8d+maTSAkN1FIkI3LQ==
-
-typescript-char@^0.0.0:
-  version "0.0.0"
-  resolved "https://registry.yarnpkg.com/typescript-char/-/typescript-char-0.0.0.tgz#558feda737c765a610b737eefbb1775ee9bc8dab"
-  integrity sha512-xa7uRnqfPNgvLC5tC0b5KMoY1YanfaKQy7oEBuPnBA+J9TpkiW3JvmUlKiIcErBZqQ7VzPhPCvElMXnviQiVDw==
 
 typescript@^5.0.3:
   version "5.0.4"
