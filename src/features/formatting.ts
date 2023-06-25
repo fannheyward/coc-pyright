@@ -60,7 +60,6 @@ export class PythonFormattingEditProvider implements DocumentFormattingEditProvi
     const provider = this.pythonSettings.formatting.provider;
     const formatter = this.formatters.get(provider);
     if (!formatter) {
-      window.showWarningMessage(`No formatter is set. You need to set "python.formatting.provider" in your coc-settings.json`);
       this.outputChannel.appendLine(`${'#'.repeat(10)} Error: python.formatting.provider is ${provider}, which is not supported`);
       return [];
     }
