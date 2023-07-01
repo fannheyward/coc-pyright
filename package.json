@@ -47,7 +47,7 @@
     "@zzzen/pyright-internal": "^1.2.0-dev.20230625",
     "coc.nvim": "^0.0.83-next.17",
     "diff-match-patch": "^1.0.5",
-    "esbuild": "^0.17.10",
+    "esbuild": "^0.18.11",
     "eslint": "^8.4.1",
     "fs-extra": "^11.1.1",
     "get-port": "^6.1.2",
