@@ -60,7 +60,7 @@
     "semver": "^7.3.2",
     "tree-kill": "^1.2.2",
     "typescript": "^5.0.3",
-    "untildify": "^4.0.0",
+    "untildify": "^5.0.0",
     "which": "^3.0.1"
   },
   "prettier": {
