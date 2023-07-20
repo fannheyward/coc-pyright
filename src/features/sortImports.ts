@@ -29,8 +29,7 @@ function getSortProviderInfo(provider: 'pyright' | 'isort' | 'ruff', extensionRo
     const isortPath = pythonSettings.sortImports.path;
     const isortArgs = pythonSettings.sortImports.args;
 
-    console.error('----', isortPath);
-    if (typeof isortPath === 'string' && isortPath.length > 0) {
+    if (isortPath.length > 0) {
       execPath = isortPath;
       args = args.concat(isortArgs);
     } else {

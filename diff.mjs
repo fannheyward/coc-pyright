@@ -3,11 +3,11 @@ import { promisify } from 'util';
 
 async function diff() {
   const text = await promisify(readFile)('./package.json');
-  const config = JSON.parse(text);
+  const config = JSON.parse(text.toString());
   const overrides = config.contributes.configuration.properties['python.analysis.diagnosticSeverityOverrides'].properties;
 
   const schemaText = await promisify(readFile)('./schemas/pyrightconfig.schema.json');
-  const schema = JSON.parse(schemaText);
+  const schema = JSON.parse(schemaText.toString());
   for (const [key, val] of Object.entries(schema.properties)) {
     if (val['$ref'] === '#/definitions/diagnostic') {
       if (!overrides[key]) {

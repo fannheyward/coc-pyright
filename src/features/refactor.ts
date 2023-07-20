@@ -139,7 +139,7 @@ class RefactorProxy implements Disposable {
       // Possible we've only received part of the data, hence don't clear previousData
       return;
     }
-    if (typeof errorResponse[0].message !== 'string' || errorResponse[0].message.length === 0) {
+    if (errorResponse[0].message.length === 0) {
       errorResponse[0].message = splitLines(errorResponse[0].traceback, { trim: false, removeEmptyEntries: false }).pop()!;
     }
     const errorMessage = errorResponse[0].message + '\n' + errorResponse[0].traceback;
@@ -147,7 +147,7 @@ class RefactorProxy implements Disposable {
     if (this._startedSuccessfully) {
       this._commandReject(`Refactor failed. ${errorMessage}`);
     } else {
-      if (typeof errorResponse[0].type === 'string' && errorResponse[0].type === 'ModuleNotFoundError') {
+      if (errorResponse[0].type === 'ModuleNotFoundError') {
         this.initialized.reject('Not installed');
         return;
       }
@@ -347,13 +347,6 @@ async function extractName(textEditor: Document, newName: string, renameResponse
       }
       return workspace.jumpTo(textEditor.uri, newWordPosition).then(() => {
         return newWordPosition;
-      });
-    }
-    const newWordPosition_1 = null;
-    if (newWordPosition_1) {
-      return workspace.nvim.command('wa').then(() => {
-        // Now that we have selected the new variable, lets invoke the rename command
-        return commands.executeCommand('editor.action.rename', textEditor.uri, newWordPosition_1);
       });
     }
   } catch (error) {

@@ -1,7 +1,7 @@
 import { convertOffsetsToRange, convertTextRangeToRange } from '@zzzen/pyright-internal/dist/common/positionUtils';
 import { CancellationToken, DocumentSemanticTokensProvider, LinesTextDocument, ProviderResult, SemanticTokens, SemanticTokensBuilder, SemanticTokensLegend } from 'coc.nvim';
 import * as parser from '../parsers';
-import { SemanticTokensWalker } from '../parsers/semanticTokens';
+import { SemanticTokensWalker } from '../parsers';
 
 const tokenTypes = Object.keys(parser.TokenTypes).filter((key) => isNaN(Number(key)));
 const tokenModifiers: string[] = [];
