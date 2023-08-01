@@ -355,9 +355,9 @@
     tslib "^1.13.0"
 
 "@zzzen/pyright-internal@^1.2.0-dev.20230625":
-  version "1.2.0-dev.20230625"
-  resolved "https://registry.yarnpkg.com/@zzzen/pyright-internal/-/pyright-internal-1.2.0-dev.20230625.tgz#055e4a442e98d48e75e42c76805c0dd8b1ac348b"
-  integrity sha512-T/SefNlr3kfZKXWJTwq7Ok+e60XlSWoV5UNiMCQqZCypTgvGMCGZMvAMfrhM4ajTYtyNLkVKol1P7MIpgY3P0g==
+  version "1.2.0-dev.20230730"
+  resolved "https://registry.yarnpkg.com/@zzzen/pyright-internal/-/pyright-internal-1.2.0-dev.20230730.tgz#4cfe4417a7a12b32df5eb059ce58e3098d2cf3dd"
+  integrity sha512-LDME2rdmW98tyKhC1IihdxbqXoO1vUFxzWwBcGZy2NBAeTqK/UQZ8QeHzhJVAQjZscdmWs4oeqLUnLK1+8pxIQ==
   dependencies:
     "@iarna/toml" "2.2.5"
     "@yarnpkg/fslib" "2.10.3"
@@ -371,7 +371,7 @@
     tmp "^0.2.1"
     vscode-jsonrpc "8.1.0"
     vscode-languageserver "8.1.0"
-    vscode-languageserver-textdocument "^1.0.10"
+    vscode-languageserver-textdocument "1.0.10"
     vscode-languageserver-types "3.17.3"
     vscode-uri "^3.0.7"
 
@@ -1450,7 +1450,7 @@ vscode-languageserver-protocol@3.17.3:
     vscode-jsonrpc "8.1.0"
     vscode-languageserver-types "3.17.3"
 
-vscode-languageserver-textdocument@^1.0.10:
+vscode-languageserver-textdocument@1.0.10:
   version "1.0.10"
   resolved "https://registry.yarnpkg.com/vscode-languageserver-textdocument/-/vscode-languageserver-textdocument-1.0.10.tgz#2e281b31283d22cae06ac8a9ad8b7ce115ce7c8d"
   integrity sha512-dPA6WqtAQJ/Iopm0Hrj11VvaKxsEcm62jpqyaYbY0xuvUffeWAn77f3VKr2SCsJphSyEw4Fjkjqm2gQ24KQfrA==
