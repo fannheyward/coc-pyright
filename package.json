@@ -28,7 +28,7 @@
     "workspaceContains:pyrightconfig.json"
   ],
   "scripts": {
-    "schema": "curl -o schemas/pyrightconfig.schema.json https://raw.githubusercontent.com/microsoft/pyright/main/packages/vscode-pyright/schemas/pyrightconfig.schema.json && node diff.mjs",
+    "schema": "node diff.mjs",
     "clean": "rimraf lib",
     "lint": "eslint src --ext ts",
     "build": "node esbuild.mjs",
@@ -87,7 +87,7 @@
     "jsonValidation": [
       {
         "fileMatch": "pyrightconfig.json",
-        "url": "./schemas/pyrightconfig.schema.json"
+        "url": "https://raw.githubusercontent.com/microsoft/pyright/main/packages/vscode-pyright/schemas/pyrightconfig.schema.json"
       }
     ],
     "configuration": {

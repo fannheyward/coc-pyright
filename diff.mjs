@@ -6,8 +6,8 @@ async function diff() {
   const config = JSON.parse(text.toString());
   const overrides = config.contributes.configuration.properties['python.analysis.diagnosticSeverityOverrides'].properties;
 
-  const schemaText = await promisify(readFile)('./schemas/pyrightconfig.schema.json');
-  const schema = JSON.parse(schemaText.toString());
+  const resp = await fetch('https://raw.githubusercontent.com/microsoft/pyright/main/packages/vscode-pyright/schemas/pyrightconfig.schema.json');
+  const schema = await resp.json();
   for (const [key, val] of Object.entries(schema.properties)) {
     if (val['$ref'] === '#/definitions/diagnostic') {
       if (!overrides[key]) {
