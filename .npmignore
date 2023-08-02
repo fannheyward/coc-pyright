@@ -7,6 +7,8 @@ tsconfig.json
 .DS_Store
 .eslintrc.js
 .github
+.watchmanconfig
+.idea
 webpack.config.js
 yarn.lock
 yarn-error.log
