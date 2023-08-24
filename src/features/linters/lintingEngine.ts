@@ -18,7 +18,7 @@ import {
   window,
   workspace,
 } from 'coc.nvim';
-import fs from 'fs-extra';
+import fs from 'fs';
 import { Minimatch } from 'minimatch';
 import path from 'path';
 import { PythonSettings } from '../../configSettings';

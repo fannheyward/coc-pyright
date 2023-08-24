@@ -1,5 +1,5 @@
 import { CancellationToken, OutputChannel, TextDocument, Uri, workspace } from 'coc.nvim';
-import fs from 'fs-extra';
+import fs from 'fs';
 import * as path from 'path';
 import { ILinterInfo, ILintMessage, LintMessageSeverity } from '../../types';
 import { BaseLinter } from './baseLinter';
@@ -52,6 +52,15 @@ const pytypeErrors = [
   'wrong-keyword-args',
 ];
 
+async function pathExists(p: string) {
+  try {
+    await fs.promises.access(p);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 export class Pytype extends BaseLinter {
   constructor(info: ILinterInfo, outputChannel: OutputChannel) {
     super(info, outputChannel);
@@ -88,17 +97,17 @@ export class Pytype extends BaseLinter {
   }
 
   private async hasConfigurationFile(folder: string): Promise<boolean> {
-    if (await fs.pathExists(path.join(folder, pytypecfg))) {
+    if (await pathExists(path.join(folder, pytypecfg))) {
       return true;
     }
 
     let current = folder;
     let above = path.dirname(folder);
     do {
-      if (!(await fs.pathExists(path.join(current, '__init__.py')))) {
+      if (!(await pathExists(path.join(current, '__init__.py')))) {
         break;
       }
-      if (await fs.pathExists(path.join(current, pytypecfg))) {
+      if (await pathExists(path.join(current, pytypecfg))) {
         return true;
       }
       current = above;

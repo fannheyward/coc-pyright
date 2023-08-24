@@ -1,5 +1,5 @@
 import { OutputChannel, TextDocument, Uri, window, workspace } from 'coc.nvim';
-import fs from 'fs-extra';
+import fs from 'fs';
 import md5 from 'md5';
 import * as path from 'path';
 import which from 'which';
@@ -57,7 +57,7 @@ async function generateImportsDiff(document: TextDocument, extensionRoot: string
 
   const pythonToolsExecutionService = new PythonExecutionService();
   const result = await pythonToolsExecutionService.exec(executionInfo, { throwOnStdErr: true });
-  await fs.unlink(tempFile);
+  await fs.promises.unlink(tempFile);
   return result.stdout;
 }
 

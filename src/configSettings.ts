@@ -1,8 +1,7 @@
 import * as child_process from 'child_process';
 import { ConfigurationChangeEvent, Disposable, workspace, WorkspaceConfiguration } from 'coc.nvim';
-import fs from 'fs-extra';
+import fs from 'fs';
 import path from 'path';
-import untildify from 'untildify';
 import which from 'which';
 import { SystemVariables } from './systemVariables';
 import { IFormattingSettings, ILintingSettings, IPythonSettings, ISortImportSettings } from './types';
@@ -176,7 +175,7 @@ export class PythonSettings implements IPythonSettings {
     if (!rootDir) {
       rootDir = this.workspaceRoot;
     }
-    pathToCheck = untildify(pathToCheck) as string;
+    pathToCheck = workspace.expand(pathToCheck);
     if (pathToCheck.indexOf(path.sep) === -1) {
       return pathToCheck;
     }
@@ -201,7 +200,7 @@ export class PythonSettings implements IPythonSettings {
 }
 
 function getPythonExecutable(pythonPath: string): string {
-  pythonPath = untildify(pythonPath) as string;
+  pythonPath = workspace.expand(pythonPath);
 
   // If only 'python'.
   if (pythonPath === 'python' || pythonPath.indexOf(path.sep) === -1 || path.basename(pythonPath) === path.dirname(pythonPath)) {

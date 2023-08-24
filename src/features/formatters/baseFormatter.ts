@@ -1,5 +1,5 @@
 import { CancellationToken, FormattingOptions, OutputChannel, Range, TextDocument, TextEdit, Thenable, Uri, window, workspace } from 'coc.nvim';
-import fs from 'fs-extra';
+import fs from 'fs';
 import md5 from 'md5';
 import path from 'path';
 import { SemVer } from 'semver';
@@ -161,7 +161,7 @@ export abstract class BaseFormatter {
 
   private deleteTempFile(originalFile: string, tempFile: string): Promise<any> {
     if (originalFile !== tempFile) {
-      return promisify(fs.unlink)(tempFile);
+      return fs.promises.unlink(tempFile);
     }
     return Promise.resolve();
   }
