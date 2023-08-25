@@ -1180,9 +1180,9 @@ punycode@^2.1.0:
   integrity sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==
 
 pyright@^1.1.320:
-  version "1.1.320"
-  resolved "https://registry.yarnpkg.com/pyright/-/pyright-1.1.320.tgz#93aa0934acebce8b19cf95e9d69538f9bae08784"
-  integrity sha512-YO5GuZTJuSeQBxYPOD+Ih3vfmNcnvc/VafxTG8cObuY5Zu5y+Dq4E0gcdhyGVeg3w29tFL9OvlEO23C6+CjqNw==
+  version "1.1.324"
+  resolved "https://registry.yarnpkg.com/pyright/-/pyright-1.1.324.tgz#6a964835c0e1aabf039cb35d8587e0d9ce7b37bf"
+  integrity sha512-/Ng8G2Gb17dzQEHKgPa+Z5a6LPCLYNA4BVno1UdpDjnC9iLw0VAn5k/RNuaGkB/mhA82lV0OBcd5JEdaWcA3qg==
   optionalDependencies:
     fsevents "~2.3.2"
 
