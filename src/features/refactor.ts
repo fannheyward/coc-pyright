@@ -1,11 +1,11 @@
 import { ChildProcess } from 'child_process';
-import { commands, Disposable, Document, OutputChannel, Position, Range, TextDocument, Uri, window, workspace } from 'coc.nvim';
+import { Disposable, Document, OutputChannel, Position, Range, TextDocument, Uri, window, workspace } from 'coc.nvim';
 import * as path from 'path';
-import { Deferred, createDeferred } from '../async';
-import { getWindowsLineEndingCount, splitLines, getTextEditsFromPatch } from '../utils';
+import { createDeferred, Deferred } from '../async';
 import { PythonSettings } from '../configSettings';
 import { PythonExecutionService } from '../processService';
 import { IPythonSettings } from '../types';
+import { getTextEditsFromPatch, getWindowsLineEndingCount, splitLines } from '../utils';
 
 class RefactorProxy implements Disposable {
   protected readonly isWindows = process.platform === 'win32';

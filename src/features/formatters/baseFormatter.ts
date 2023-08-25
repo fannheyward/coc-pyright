@@ -3,7 +3,6 @@ import fs from 'fs';
 import md5 from 'md5';
 import path from 'path';
 import { SemVer } from 'semver';
-import { promisify } from 'util';
 import which from 'which';
 import { isNotInstalledError, PythonExecutionService } from '../../processService';
 import { ExecutionInfo, FormatterId, IPythonSettings } from '../../types';
