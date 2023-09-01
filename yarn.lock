@@ -496,9 +496,9 @@ cliui@^8.0.1:
     wrap-ansi "^7.0.0"
 
 coc.nvim@^0.0.83-next.17:
-  version "0.0.83-next.17"
-  resolved "https://registry.yarnpkg.com/coc.nvim/-/coc.nvim-0.0.83-next.17.tgz#a1c4baa10927886366241ca0fd3acc7c941a5546"
-  integrity sha512-VjGnxjbvBOboddNQMI5rZnS0HS0tdft9pbnwste5CncPNJaxfz5wEdWd7eFtifukE8STdLltPMNsoO0vul5r/A==
+  version "0.0.83-next.18"
+  resolved "https://registry.yarnpkg.com/coc.nvim/-/coc.nvim-0.0.83-next.18.tgz#932c273e83ec332f91972c1c37d5da79d62f5ab0"
+  integrity sha512-BZ1a+lnvQ/l7WzoRy97oYubDnYkX+vyAN2GhrKzWMc4d8YujOcOCjaeRv6Ogn7Bvoc5rM9X88CPuOoE0iP1ceQ==
 
 color-convert@^2.0.1:
   version "2.0.1"
