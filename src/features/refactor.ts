@@ -197,8 +197,9 @@ async function checkDocument(doc: Document): Promise<boolean> {
 
   const modified = await doc.buffer.getOption('modified');
   if (modified != 0) {
-    window.showWarningMessage('Buffer not saved, please save the buffer first!');
-    return false;
+    validateDocumentForRefactor(doc);
+    // window.showWarningMessage('Buffer not saved, please save the buffer first!');
+    return true;
   }
 
   return true;
