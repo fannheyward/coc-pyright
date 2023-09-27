@@ -1,6 +1,8 @@
 import { ChildProcess } from 'child_process';
 import { Disposable, Document, OutputChannel, Position, Range, TextDocument, Uri, window, workspace } from 'coc.nvim';
 import * as path from 'path';
+import md5 from 'md5';
+import fs from 'fs';
 import { createDeferred, Deferred } from '../async';
 import { PythonSettings } from '../configSettings';
 import { PythonExecutionService } from '../processService';
@@ -197,9 +199,8 @@ async function checkDocument(doc: Document): Promise<boolean> {
 
   const modified = await doc.buffer.getOption('modified');
   if (modified != 0) {
-    await validateDocumentForRefactor(doc);
-    // window.showWarningMessage('Buffer not saved, please save the buffer first!');
-    return true;
+    window.showWarningMessage('Buffer not saved, please save the buffer first!');
+    return false;
   }
 
   return true;
@@ -217,10 +218,22 @@ function validateDocumentForRefactor(doc: Document): Promise<void> {
   });
 }
 
+function getTempFileWithDocumentContents(document: TextDocument): Promise<string> {
+  return new Promise<string>((resolve, reject) => {
+    const fsPath = Uri.parse(document.uri).fsPath;
+    const fileName = `${fsPath.slice(0, -3)}${md5(document.uri)}${path.extname(fsPath)}`;
+    fs.writeFile(fileName, document.getText(), (ex) => {
+      if (ex) {
+        reject(new Error(`Failed to create a temporary file, ${ex.message}`));
+      }
+      resolve(fileName);
+    });
+  });
+}
+
 export async function extractVariable(root: string, document: TextDocument, range: Range, outputChannel: OutputChannel): Promise<any> {
   const doc = workspace.getDocument(document.uri);
-  const valid = await checkDocument(doc);
-  if (!valid) return;
+  const tempFile = await getTempFileWithDocumentContents(document);
 
   const pythonToolsExecutionService = new PythonExecutionService();
   const rope = await pythonToolsExecutionService.isModuleInstalled('rope');
@@ -236,18 +249,17 @@ export async function extractVariable(root: string, document: TextDocument, rang
   return validateDocumentForRefactor(doc).then(() => {
     const newName = `newvariable${new Date().getMilliseconds().toString()}`;
     const proxy = new RefactorProxy(root, pythonSettings, workspaceRoot);
-    const rename = proxy.extractVariable<RenameResponse>(doc.textDocument, newName, Uri.parse(doc.uri).fsPath, range).then((response) => {
+    const rename = proxy.extractVariable<RenameResponse>(doc.textDocument, newName, tempFile, range).then((response) => {
       return response.results[0].diff;
     });
 
-    return extractName(doc, newName, rename, outputChannel);
+    return extractName(doc, newName, rename, outputChannel, tempFile);
   });
 }
 
 export async function extractMethod(root: string, document: TextDocument, range: Range, outputChannel: OutputChannel): Promise<any> {
   const doc = workspace.getDocument(document.uri);
-  const valid = await checkDocument(doc);
-  if (!valid) return;
+  const tempFile = await getTempFileWithDocumentContents(document);
 
   const pythonToolsExecutionService = new PythonExecutionService();
   const rope = await pythonToolsExecutionService.isModuleInstalled('rope');
@@ -263,18 +275,17 @@ export async function extractMethod(root: string, document: TextDocument, range:
   return validateDocumentForRefactor(doc).then(() => {
     const newName = `newmethod${new Date().getMilliseconds().toString()}`;
     const proxy = new RefactorProxy(root, pythonSettings, workspaceRoot);
-    const rename = proxy.extractMethod<RenameResponse>(doc.textDocument, newName, Uri.parse(doc.uri).fsPath, range).then((response) => {
+    const rename = proxy.extractMethod<RenameResponse>(doc.textDocument, newName, tempFile, range).then((response) => {
       return response.results[0].diff;
     });
 
-    return extractName(doc, newName, rename, outputChannel);
+    return extractName(doc, newName, rename, outputChannel, tempFile);
   });
 }
 
 export async function addImport(root: string, document: TextDocument, name: string, parent: boolean, outputChannel: OutputChannel): Promise<void> {
   const doc = workspace.getDocument(document.uri);
-  const valid = await checkDocument(doc);
-  if (!valid) return;
+  const tempFile = await getTempFileWithDocumentContents(document);
 
   const pythonToolsExecutionService = new PythonExecutionService();
   const rope = await pythonToolsExecutionService.isModuleInstalled('rope');
@@ -291,21 +302,21 @@ export async function addImport(root: string, document: TextDocument, name: stri
   const pythonSettings = PythonSettings.getInstance();
   return validateDocumentForRefactor(doc).then(() => {
     const proxy = new RefactorProxy(root, pythonSettings, workspaceRoot);
-    const resp = proxy.addImport<RenameResponse>(doc.textDocument, Uri.parse(doc.uri).fsPath, name, parentModule).then((response) => {
+    const resp = proxy.addImport<RenameResponse>(doc.textDocument, tempFile, name, parentModule).then((response) => {
       return response.results[0].diff;
     });
-
-    return applyImports(doc, resp, outputChannel);
+    return applyImports(doc, resp, outputChannel, tempFile);
   });
 }
 
-async function applyImports(doc: Document, resp: Promise<string>, outputChannel: OutputChannel): Promise<any> {
+async function applyImports(doc: Document, resp: Promise<string>, outputChannel: OutputChannel, tempFile: string): Promise<any> {
   try {
     const diff = await resp;
     if (diff.length === 0) return;
 
     const edits = getTextEditsFromPatch(doc.getDocumentContent(), diff);
     await doc.applyEdits(edits);
+    await fs.promises.unlink(tempFile);
   } catch (error) {
     let errorMessage = `${error}`;
     if (typeof error === 'string') {
@@ -322,7 +333,7 @@ async function applyImports(doc: Document, resp: Promise<string>, outputChannel:
   }
 }
 
-async function extractName(textEditor: Document, newName: string, renameResponse: Promise<string>, outputChannel: OutputChannel): Promise<any> {
+async function extractName(textEditor: Document, newName: string, renameResponse: Promise<string>, outputChannel: OutputChannel, tempFile: string): Promise<any> {
   let changeStartsAtLine = -1;
   try {
     const diff = await renameResponse;
@@ -336,6 +347,8 @@ async function extractName(textEditor: Document, newName: string, renameResponse
       }
     });
     await textEditor.applyEdits(edits);
+    await fs.promises.unlink(tempFile);
+
     if (changeStartsAtLine >= 0) {
       let newWordPosition: Position | undefined;
       for (let lineNumber = changeStartsAtLine; lineNumber < textEditor.lineCount; lineNumber += 1) {
