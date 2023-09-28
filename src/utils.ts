@@ -1,7 +1,10 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { Position, Range, TextDocument, TextEdit } from 'coc.nvim';
+import { Position, Range, TextDocument, TextEdit, Uri } from 'coc.nvim';
 import { Diff, diff_match_patch } from 'diff-match-patch';
+import fs from 'fs';
+import md5 from 'md5';
 import { EOL } from 'os';
+import * as path from 'path';
 const NEW_LINE_LENGTH = EOL.length;
 
 enum EditAction {
@@ -263,3 +266,17 @@ export function getWindowsLineEndingCount(document: TextDocument, offset: number
   }
   return count;
 }
+
+export function getTempFileWithDocumentContents(document: TextDocument): Promise<string> {
+  return new Promise<string>((resolve, reject) => {
+    const fsPath = Uri.parse(document.uri).fsPath;
+    const fileName = `${fsPath.slice(0, -3)}${md5(document.uri)}${path.extname(fsPath)}`;
+    fs.writeFile(fileName, document.getText(), (ex) => {
+      if (ex) {
+        reject(new Error(`Failed to create a temporary file, ${ex.message}`));
+      }
+      resolve(fileName);
+    });
+  });
+}
+

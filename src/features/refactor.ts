@@ -1,13 +1,12 @@
 import { ChildProcess } from 'child_process';
 import { Disposable, Document, OutputChannel, Position, Range, TextDocument, Uri, window, workspace } from 'coc.nvim';
 import * as path from 'path';
-import md5 from 'md5';
 import fs from 'fs';
 import { createDeferred, Deferred } from '../async';
 import { PythonSettings } from '../configSettings';
 import { PythonExecutionService } from '../processService';
 import { IPythonSettings } from '../types';
-import { getTextEditsFromPatch, getWindowsLineEndingCount, splitLines } from '../utils';
+import { getTextEditsFromPatch, getWindowsLineEndingCount, splitLines, getTempFileWithDocumentContents } from '../utils';
 
 class RefactorProxy implements Disposable {
   protected readonly isWindows = process.platform === 'win32';
@@ -194,18 +193,6 @@ interface RenameResponse {
   results: [{ diff: string }];
 }
 
-async function checkDocument(doc: Document): Promise<boolean> {
-  if (!doc) return false;
-
-  const modified = await doc.buffer.getOption('modified');
-  if (modified != 0) {
-    window.showWarningMessage('Buffer not saved, please save the buffer first!');
-    return false;
-  }
-
-  return true;
-}
-
 function validateDocumentForRefactor(doc: Document): Promise<void> {
   if (!doc.dirty) {
     return Promise.resolve();
@@ -215,19 +202,6 @@ function validateDocumentForRefactor(doc: Document): Promise<void> {
     workspace.nvim.command('write').then(() => {
       return resolve();
     }, reject);
-  });
-}
-
-function getTempFileWithDocumentContents(document: TextDocument): Promise<string> {
-  return new Promise<string>((resolve, reject) => {
-    const fsPath = Uri.parse(document.uri).fsPath;
-    const fileName = `${fsPath.slice(0, -3)}${md5(document.uri)}${path.extname(fsPath)}`;
-    fs.writeFile(fileName, document.getText(), (ex) => {
-      if (ex) {
-        reject(new Error(`Failed to create a temporary file, ${ex.message}`));
-      }
-      resolve(fileName);
-    });
   });
 }
 
