@@ -215,9 +215,9 @@
   integrity sha512-Hr5Jfhc9eYOQNPYO5WLDq/n4jqijdHNlDXjuAQkkt+mWdQR+XJToOHrsD4cPaMXpn6KO7y2+wM8AZEs8VpBLVA==
 
 "@types/md5@^2.2.0":
-  version "2.3.2"
-  resolved "https://registry.yarnpkg.com/@types/md5/-/md5-2.3.2.tgz#529bb3f8a7e9e9f621094eb76a443f585d882528"
-  integrity sha512-v+JFDu96+UYJ3/UWzB0mEglIS//MZXgRaJ4ubUPwOM0gvLc/kcQ3TWNYwENEK7/EcXGQVrW8h/XqednSjBd/Og==
+  version "2.3.3"
+  resolved "https://registry.yarnpkg.com/@types/md5/-/md5-2.3.3.tgz#1f03ce6a9b1462981a1283777b30aaa30e319e22"
+  integrity sha512-4K40FjTW0tiIx9NfV+/DHJ56ih3fcdkDqBYz5CffKwJVWYho1FxzjkddGcgEEIs+fP2DqmQ3lujC5c4bUOESTQ==
 
 "@types/minimatch@^5.1.2":
   version "5.1.2"
