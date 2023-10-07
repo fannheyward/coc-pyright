@@ -1078,7 +1078,7 @@ punycode@^2.1.0:
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
   integrity sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==
 
-pyright@^1.1.325:
+pyright@^1.1.330:
   version "1.1.330"
   resolved "https://registry.yarnpkg.com/pyright/-/pyright-1.1.330.tgz#ec069ff708e84495bb7f4ab4ae91524a2f5be8d3"
   integrity sha512-njXmRFlcYetFdAbbmUfafwn/RLN3BL8tlGMpqa29W18ogi6Pzynxue3pH/fWl4MQnWlCwsasIpTB//841fpPEw==
