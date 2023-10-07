@@ -1,25 +1,11 @@
-import { OutputChannel, TextDocument, Uri, window, workspace } from 'coc.nvim';
+import { OutputChannel, TextDocument, window, workspace } from 'coc.nvim';
 import fs from 'fs';
-import md5 from 'md5';
 import * as path from 'path';
 import which from 'which';
 import { PythonSettings } from '../configSettings';
 import { PythonExecutionService } from '../processService';
 import { ExecutionInfo } from '../types';
-import { getTextEditsFromPatch } from '../utils';
-
-function getTempFileWithDocumentContents(document: TextDocument): Promise<string> {
-  return new Promise<string>((resolve, reject) => {
-    const fsPath = Uri.parse(document.uri).fsPath;
-    const fileName = `${fsPath}.${md5(document.uri)}${path.extname(fsPath)}`;
-    fs.writeFile(fileName, document.getText(), (ex) => {
-      if (ex) {
-        reject(new Error(`Failed to create a temporary file, ${ex.message}`));
-      }
-      resolve(fileName);
-    });
-  });
-}
+import { getTextEditsFromPatch, getTempFileWithDocumentContents } from '../utils';
 
 function getSortProviderInfo(provider: 'pyright' | 'isort' | 'ruff', extensionRoot: string): ExecutionInfo | null {
   const pythonSettings = PythonSettings.getInstance();
