@@ -20,7 +20,19 @@ export class TypeInlayHintsProvider implements InlayHintsProvider {
   private readonly _onDidChangeInlayHints = new Emitter<void>();
   public readonly onDidChangeInlayHints: Event<void> = this._onDidChangeInlayHints.event;
 
-  constructor(private client: LanguageClient) {}
+  constructor(private client: LanguageClient) {
+    workspace.onDidChangeConfiguration(e => {
+      if (e.affectsConfiguration('pyright.inlayHints')) {
+        this._onDidChangeInlayHints.fire();
+      }
+    });
+    workspace.onDidChangeTextDocument(e => {
+      const doc = workspace.getDocument(e.bufnr);
+      if (doc.languageId === 'python') {
+        this._onDidChangeInlayHints.fire();
+      }
+    });
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async provideInlayHints(document: LinesTextDocument, _range: Range, _token: CancellationToken) {
