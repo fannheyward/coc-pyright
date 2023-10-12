@@ -45,6 +45,10 @@ export function configuration(params: ConfigurationParams, token: CancellationTo
       // expand relative path
       const analysis = config['analysis'];
       analysis['stubPath'] = workspace.expand(analysis['stubPath'] as string);
+      const inspect = workspace.getConfiguration('python.analysis').inspect('stubPath');
+      if (inspect && (inspect.globalValue === undefined || inspect.workspaceValue === undefined || inspect.workspaceFolderValue === undefined)) {
+        delete analysis['stubPath'];
+      }
       const extraPaths = analysis['extraPaths'] as string[];
       if (extraPaths?.length) {
         analysis['extraPaths'] = extraPaths.map((p) => workspace.expand(p));
@@ -63,6 +67,10 @@ export function configuration(params: ConfigurationParams, token: CancellationTo
     const custom = () => {
       const analysis = toJSONObject(workspace.getConfiguration(analysisItem.section, analysisItem.scopeUri));
       analysis['stubPath'] = workspace.expand(analysis['stubPath'] as string);
+      const inspect = workspace.getConfiguration('python.analysis').inspect('stubPath');
+      if (inspect && (inspect.globalValue === undefined || inspect.workspaceValue === undefined || inspect.workspaceFolderValue === undefined)) {
+        delete analysis['stubPath'];
+      }
       const extraPaths = analysis['extraPaths'] as string[];
       if (extraPaths?.length) {
         analysis['extraPaths'] = extraPaths.map((p) => workspace.expand(p));
