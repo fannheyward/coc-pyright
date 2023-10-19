@@ -206,9 +206,6 @@ function validateDocumentForRefactor(doc: Document): Promise<void> {
 }
 
 export async function extractVariable(root: string, document: TextDocument, range: Range, outputChannel: OutputChannel): Promise<any> {
-  const doc = workspace.getDocument(document.uri);
-  const tempFile = await getTempFileWithDocumentContents(document);
-
   const pythonToolsExecutionService = new PythonExecutionService();
   const rope = await pythonToolsExecutionService.isModuleInstalled('rope');
   if (!rope) {
@@ -216,6 +213,8 @@ export async function extractVariable(root: string, document: TextDocument, rang
     return;
   }
 
+  const doc = workspace.getDocument(document.uri);
+  const tempFile = await getTempFileWithDocumentContents(document);
   const workspaceFolder = workspace.getWorkspaceFolder(doc.uri);
   const workspaceRoot = workspaceFolder ? Uri.parse(workspaceFolder.uri).fsPath : workspace.cwd;
 
@@ -232,9 +231,6 @@ export async function extractVariable(root: string, document: TextDocument, rang
 }
 
 export async function extractMethod(root: string, document: TextDocument, range: Range, outputChannel: OutputChannel): Promise<any> {
-  const doc = workspace.getDocument(document.uri);
-  const tempFile = await getTempFileWithDocumentContents(document);
-
   const pythonToolsExecutionService = new PythonExecutionService();
   const rope = await pythonToolsExecutionService.isModuleInstalled('rope');
   if (!rope) {
@@ -242,6 +238,8 @@ export async function extractMethod(root: string, document: TextDocument, range:
     return;
   }
 
+  const doc = workspace.getDocument(document.uri);
+  const tempFile = await getTempFileWithDocumentContents(document);
   const workspaceFolder = workspace.getWorkspaceFolder(doc.uri);
   const workspaceRoot = workspaceFolder ? Uri.parse(workspaceFolder.uri).fsPath : workspace.cwd;
 
@@ -258,9 +256,6 @@ export async function extractMethod(root: string, document: TextDocument, range:
 }
 
 export async function addImport(root: string, document: TextDocument, name: string, parent: boolean, outputChannel: OutputChannel): Promise<void> {
-  const doc = workspace.getDocument(document.uri);
-  const tempFile = await getTempFileWithDocumentContents(document);
-
   const pythonToolsExecutionService = new PythonExecutionService();
   const rope = await pythonToolsExecutionService.isModuleInstalled('rope');
   if (!rope) {
@@ -268,6 +263,8 @@ export async function addImport(root: string, document: TextDocument, name: stri
     return;
   }
 
+  const doc = workspace.getDocument(document.uri);
+  const tempFile = await getTempFileWithDocumentContents(document);
   let parentModule = '';
   if (parent) parentModule = await window.requestInput('Module:');
 
