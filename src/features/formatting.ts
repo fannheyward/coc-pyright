@@ -19,6 +19,7 @@ import { BlackFormatter } from './formatters/black';
 import { BlackdFormatter } from './formatters/blackd';
 import { DarkerFormatter } from './formatters/darker';
 import { PyinkFormatter } from './formatters/pyink';
+import { RuffFormatter } from './formatters/ruff';
 import { YapfFormatter } from './formatters/yapf';
 
 export class PythonFormattingEditProvider implements DocumentFormattingEditProvider, DocumentRangeFormattingEditProvider {
@@ -44,6 +45,9 @@ export class PythonFormattingEditProvider implements DocumentFormattingEditProvi
         break;
       case 'yapf':
         this.formatters.set('yapf', new YapfFormatter(this.pythonSettings, this.outputChannel));
+        break;
+      case 'ruff':
+        this.formatters.set('ruff', new RuffFormatter(this.pythonSettings, this.outputChannel));
         break;
       case 'autopep8':
         this.formatters.set('autopep8', new AutoPep8Formatter(this.pythonSettings, this.outputChannel));

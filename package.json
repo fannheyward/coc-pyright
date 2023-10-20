@@ -1344,6 +1344,21 @@
           "description": "Path to Black, you can use a custom version of Black by modifying this setting to include the full path.",
           "scope": "resource"
         },
+        "python.formatting.ruffArgs": {
+          "type": "array",
+          "description": "Arguments passed in. Each argument is a separate item in the array.",
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "scope": "resource"
+        },
+        "python.formatting.ruffPath": {
+          "type": "string",
+          "default": "ruff",
+          "description": "Path to ruff, you can use a custom version of ruff by modifying this setting to include the full path.",
+          "scope": "resource"
+        },
         "python.formatting.pyinkArgs": {
           "type": "array",
           "description": "Arguments passed in. Each argument is a separate item in the array.",
@@ -1356,7 +1371,7 @@
         "python.formatting.pyinkPath": {
           "type": "string",
           "default": "pyink",
-          "description": "Path to Pyink, you can use a custom version of Black by modifying this setting to include the full path.",
+          "description": "Path to Pyink, you can use a custom version of pyink by modifying this setting to include the full path.",
           "scope": "resource"
         },
         "python.formatting.darkerArgs": {
@@ -1433,6 +1448,7 @@
             "pyink",
             "blackd",
             "yapf",
+            "ruff",
             "none"
           ],
           "scope": "resource"
