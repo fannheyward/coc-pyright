@@ -29,7 +29,7 @@ Note: Pyright may not work as expected if can't detect _project root_ correctly,
 ## Commands
 
 - `python.runLinting`: Run linting
-- `python.sortImports`: Sort imports by `isort`
+- `python.sortImports`: Sort imports by `isort` or `ruff`
 - `pyright.version`: Show the currently used Pyright version
 - `pyright.organizeimports`: Organize imports by Pyright
 - `pyright.restartserver`: This command forces the type checker to discard all of its cached type information and restart analysis. It is useful in cases where new type stubs or libraries have been installed.

@@ -1559,7 +1559,7 @@
     "commands": [
       {
         "command": "python.sortImports",
-        "title": "Sort Imports by isort",
+        "title": "Sort Imports by isort or ruff",
         "category": "Pyright"
       },
       {
