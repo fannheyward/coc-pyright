@@ -12,7 +12,7 @@
 - inlayHints supports
 - codeActions to add imports, ignore typing check, run tests and more
 - linting with `bandit`, `flake8`, `mypy`, `ruff`, `prospector`, `pycodestyle`, `pydocstyle`, `pyflakes`, `pylama`, `pylint`, `pytype`
-- formatting with `yapf`, `black`, `autopep8`, `darker`, `blackd`, `pyink`
+- formatting with `ruff`, `yapf`, `black`, `autopep8`, `darker`, `blackd`, `pyink`
 - testing with `unittest` or `pytest`, supports codeLens
 - sort imports with `ruff`, `isort` and `pyright`
 - extract method and variables with `rope`
