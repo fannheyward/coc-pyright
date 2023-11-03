@@ -1482,8 +1482,8 @@
         },
         "python.sortImports.path": {
           "type": "string",
-          "description": "Path to isort script, default using inner version",
-          "default": "",
+          "description": "Path to isort script",
+          "default": "isort",
           "scope": "resource"
         },
         "python.sortImports.args": {

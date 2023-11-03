@@ -233,7 +233,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
   context.subscriptions.push(disposable);
 
   disposable = commands.registerCommand('python.sortImports', async () => {
-    await sortImports(context.extensionPath, outputChannel).catch(() => {});
+    await sortImports(outputChannel).catch(() => {});
   });
   context.subscriptions.push(disposable);
 

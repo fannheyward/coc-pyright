@@ -1,60 +1,61 @@
-import { OutputChannel, TextDocument, window, workspace } from 'coc.nvim';
+import { OutputChannel, TextDocument, commands, window, workspace } from 'coc.nvim';
 import fs from 'fs';
-import * as path from 'path';
 import which from 'which';
 import { PythonSettings } from '../configSettings';
 import { PythonExecutionService } from '../processService';
 import { ExecutionInfo } from '../types';
-import { getTextEditsFromPatch, getTempFileWithDocumentContents } from '../utils';
+import { getTempFileWithDocumentContents, getTextEditsFromPatch } from '../utils';
 
-function getSortProviderInfo(provider: 'pyright' | 'isort' | 'ruff', extensionRoot: string): ExecutionInfo | null {
+type SortProvider = 'pyright' | 'isort' | 'ruff';
+function getSortProviderInfo(provider: SortProvider): ExecutionInfo {
   const pythonSettings = PythonSettings.getInstance();
-  let execPath = '';
+  const modulePath = provider === 'isort' ? pythonSettings.sortImports.path : pythonSettings.linting.ruffPath;
+  const execPath = which.sync(workspace.expand(modulePath), { nothrow: true }) || '';
   let args = ['--diff'];
   if (provider === 'isort') {
-    const isortPath = pythonSettings.sortImports.path;
-    const isortArgs = pythonSettings.sortImports.args;
-
-    if (isortPath.length > 0) {
-      execPath = isortPath;
-      args = args.concat(isortArgs);
-    } else {
-      const isortScript = path.join(extensionRoot, 'pythonFiles', 'sortImports.py');
-      execPath = pythonSettings.pythonPath;
-      args = [isortScript].concat(args).concat(isortArgs);
+    for (const item of pythonSettings.sortImports.args) {
+      args.push(workspace.expand(item));
     }
   } else if (provider === 'ruff') {
-    const ruffPath = pythonSettings.linting.ruffPath;
-    execPath = which.sync(workspace.expand(ruffPath), { nothrow: true }) || '';
-    args = ['--quiet', '--diff', '--select', 'I001'];
+    args = args.concat(['--quiet', '--select', 'I001']);
   }
 
-  return execPath ? { execPath, args } : null;
+  return { execPath, args };
 }
 
-async function generateImportsDiff(document: TextDocument, extensionRoot: string): Promise<string> {
-  const config = workspace.getConfiguration('pyright');
-  const provider = config.get<'pyright' | 'isort' | 'ruff'>('organizeimports.provider', 'pyright');
-  const executionInfo = getSortProviderInfo(provider, extensionRoot);
-  if (!executionInfo) return '';
-
+async function generateImportsDiff(provider: SortProvider, document: TextDocument, outputChannel: OutputChannel): Promise<string> {
   const tempFile = await getTempFileWithDocumentContents(document);
+
+  const executionInfo = getSortProviderInfo(provider);
   executionInfo.args.push(tempFile);
 
-  const pythonToolsExecutionService = new PythonExecutionService();
-  const result = await pythonToolsExecutionService.exec(executionInfo, { throwOnStdErr: true });
-  await fs.promises.unlink(tempFile);
-  return result.stdout;
+  outputChannel.appendLine(`${'#'.repeat(10)} sortImports`);
+  outputChannel.appendLine(`execPath:   ${executionInfo.execPath}`);
+  outputChannel.appendLine(`args:       ${executionInfo.args.join(' ')} `);
+
+  try {
+    const pythonToolsExecutionService = new PythonExecutionService();
+    const result = await pythonToolsExecutionService.exec(executionInfo, { throwOnStdErr: true });
+    return result.stdout;
+  } finally {
+    await fs.promises.unlink(tempFile);
+  }
 }
 
-export async function sortImports(extensionRoot: string, outputChannel: OutputChannel): Promise<void> {
+export async function sortImports(outputChannel: OutputChannel): Promise<void> {
   const doc = await workspace.document;
   if (!doc || doc.filetype !== 'python' || doc.lineCount <= 1) {
     return;
   }
 
+  const provider = workspace.getConfiguration('pyright').get<SortProvider>('organizeimports.provider', 'pyright');
+  if (provider === 'pyright') {
+    await commands.executeCommand('pyright.organizeimports');
+    return;
+  }
+
   try {
-    const patch = await generateImportsDiff(doc.textDocument, extensionRoot);
+    const patch = await generateImportsDiff(provider, doc.textDocument, outputChannel);
     const edits = getTextEditsFromPatch(doc.getDocumentContent(), patch);
     await doc.applyEdits(edits);
 
