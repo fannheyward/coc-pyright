@@ -94,6 +94,12 @@ export class PythonSettings implements IPythonSettings {
         }
       }
 
+      // pdm
+      p = path.join(this.workspaceRoot, '.pdm-python');
+      if (fs.existsSync(p)) {
+        return child_process.spawnSync('pdm', ['info', '--python'], { encoding: 'utf8' }).stdout.trim();
+      }
+
       // virtualenv in the workspace root
       const files = fs.readdirSync(this.workspaceRoot);
       for (const file of files) {
