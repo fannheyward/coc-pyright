@@ -72,7 +72,7 @@ export class Ruff extends BaseLinter {
     const u = Uri.parse(filename).toString();
     if (fix.edits && fix.edits.length) {
       const changes = fix.edits.map((edit) => {
-        const range = Range.create(edit.location.row - 1, edit.location.column, edit.end_location.row - 1, edit.end_location.column);
+        const range = Range.create(edit.location.row - 1, edit.location.column - 1, edit.end_location.row - 1, edit.end_location.column - 1);
         return TextEdit.replace(range, edit.content);
       });
       return {
