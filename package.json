@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/fannheyward/coc-pyright.git"
+    "url": "git+https://github.com/fannheyward/coc-pyright.git"
   },
   "activationEvents": [
     "onLanguage:python",
