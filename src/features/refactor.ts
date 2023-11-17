@@ -255,55 +255,6 @@ export async function extractMethod(root: string, document: TextDocument, range:
   });
 }
 
-export async function addImport(root: string, document: TextDocument, name: string, parent: boolean, outputChannel: OutputChannel): Promise<void> {
-  const pythonToolsExecutionService = new PythonExecutionService();
-  const rope = await pythonToolsExecutionService.isModuleInstalled('rope');
-  if (!rope) {
-    window.showWarningMessage(`Module rope not installed`);
-    return;
-  }
-
-  const doc = workspace.getDocument(document.uri);
-  const tempFile = await getTempFileWithDocumentContents(document);
-  let parentModule = '';
-  if (parent) parentModule = await window.requestInput('Module:');
-
-  const workspaceFolder = workspace.getWorkspaceFolder(doc.uri);
-  const workspaceRoot = workspaceFolder ? Uri.parse(workspaceFolder.uri).fsPath : workspace.cwd;
-  const pythonSettings = PythonSettings.getInstance();
-  return validateDocumentForRefactor(doc).then(() => {
-    const proxy = new RefactorProxy(root, pythonSettings, workspaceRoot);
-    const resp = proxy.addImport<RenameResponse>(doc.textDocument, tempFile, name, parentModule).then((response) => {
-      return response.results[0].diff;
-    });
-    return applyImports(doc, resp, outputChannel, tempFile);
-  });
-}
-
-async function applyImports(doc: Document, resp: Promise<string>, outputChannel: OutputChannel, tempFile: string): Promise<any> {
-  try {
-    const diff = await resp;
-    if (diff.length === 0) return;
-
-    const edits = getTextEditsFromPatch(doc.getDocumentContent(), diff);
-    await doc.applyEdits(edits);
-    await fs.promises.unlink(tempFile);
-  } catch (error) {
-    let errorMessage = `${error}`;
-    if (typeof error === 'string') {
-      errorMessage = error;
-    }
-    if (error instanceof Error) {
-      errorMessage = error.message;
-    }
-    outputChannel.appendLine(`${'#'.repeat(10)}Rope Output${'#'.repeat(10)}`);
-    outputChannel.appendLine(`Error in add import:\n${errorMessage}`);
-    outputChannel.appendLine('');
-    window.showErrorMessage(`Cannot perform addImport using selected element(s).`);
-    return await Promise.reject(error);
-  }
-}
-
 async function extractName(textEditor: Document, newName: string, renameResponse: Promise<string>, outputChannel: OutputChannel, tempFile: string): Promise<any> {
   let changeStartsAtLine = -1;
   try {

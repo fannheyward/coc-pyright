@@ -1,4 +1,19 @@
-import { CodeAction, CodeActionContext, CodeActionKind, CodeActionProvider, Diagnostic, Position, ProviderResult, Range, TextDocument, TextEdit, workspace } from 'coc.nvim';
+import {
+  CancellationTokenSource,
+  CodeAction,
+  CodeActionContext,
+  CodeActionKind,
+  CodeActionProvider,
+  CompleteOption,
+  Diagnostic,
+  Position,
+  Range,
+  TextDocument,
+  TextEdit,
+  VimCompleteItem,
+  sources,
+  workspace,
+} from 'coc.nvim';
 
 export class PythonCodeActionProvider implements CodeActionProvider {
   private wholeRange(doc: TextDocument, range: Range): boolean {
@@ -95,55 +110,64 @@ export class PythonCodeActionProvider implements CodeActionProvider {
     ];
   }
 
-  private fixAction(document: TextDocument, diag: Diagnostic): CodeAction[] {
-    if (diag.code === 'reportUndefinedVariable') {
-      const msg = diag.message;
-      const match = msg.match(/"(.*)" is not defined/);
-      if (match) {
-        return [
-          {
-            title: `Add "import ${match[1]}"`,
-            kind: CodeActionKind.QuickFix,
-            command: {
-              title: '',
-              command: 'pyright.addImport',
-              arguments: [document, match[1], false],
-            },
-          },
+  private async fetchImportsByDiagnostic(document: TextDocument, diag: Diagnostic): Promise<ReadonlyArray<VimCompleteItem>> {
+    const match = diag.message.match(/"(.*)" is not defined/);
+    if (!match) return [];
 
-          {
-            title: `Add "from _ import ${match[1]}"`,
-            kind: CodeActionKind.QuickFix,
-            command: {
-              title: '',
-              command: 'pyright.addImport',
-              arguments: [document, match[1], true],
+    const source = sources.sources.find((s) => s.name.includes('pyright'));
+    if (!source) return [];
+
+    // @ts-ignore
+    const option: CompleteOption = { position: diag.range.end, bufnr: document.uri };
+    const tokenSource = new CancellationTokenSource();
+    const result = await source.doComplete(option, tokenSource.token);
+    tokenSource.cancel();
+
+    // @ts-ignore
+    return result ? result.items.filter(x => x.label === match[1]) : [];
+  }
+
+  private async fixAction(document: TextDocument, diag: Diagnostic): Promise<CodeAction[]> {
+    const actions: CodeAction[] = [];
+    if (diag.code === 'reportUndefinedVariable') {
+      const items = await this.fetchImportsByDiagnostic(document, diag);
+      for (const item of items) {
+        // @ts-ignore
+        const changes: TextEdit[] = [item.textEdit].concat(item.additionalTextEdits ?? []);
+        // @ts-ignore
+        const title = item.documentation?.value.replace('```\n', '').replace('\n```', '').trim();
+        actions.push({
+          title,
+          kind: CodeActionKind.QuickFix,
+          edit: {
+            changes: {
+              [document.uri]: changes,
             },
           },
-        ];
+        });
       }
     }
 
     // @ts-ignore
     if (diag.fix) {
-      const action: CodeAction = {
+      actions.push({
         // @ts-ignore
         title: diag.fix.title,
         kind: CodeActionKind.QuickFix,
         // @ts-ignore
         edit: diag.fix.edit,
-      };
-      return [action];
+      });
     }
-    return [];
+
+    return actions;
   }
 
-  public provideCodeActions(document: TextDocument, range: Range, context: CodeActionContext): ProviderResult<CodeAction[]> {
+  public async provideCodeActions(document: TextDocument, range: Range, context: CodeActionContext): Promise<CodeAction[] | null | undefined> {
     const actions: CodeAction[] = [];
 
     if (context.diagnostics.length) {
       for (const diag of context.diagnostics) {
-        actions.push(...this.fixAction(document, diag));
+        actions.push(...await this.fixAction(document, diag));
       }
     }
 

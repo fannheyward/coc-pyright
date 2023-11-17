@@ -14,7 +14,6 @@ export class ImportCompletionProvider implements CompletionItemProvider {
     }
     const source = sources.sources.find((s) => s.name.includes('pyright'));
     if (!source) return [];
-    // @ts-ignore
     const result = await source.doComplete(context.option, token);
     if (!result) return [];
     const items: CompletionItem[] = [];

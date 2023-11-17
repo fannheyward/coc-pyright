@@ -29,7 +29,7 @@ import { TypeInlayHintsProvider } from './features/inlayHints';
 import { PythonSemanticTokensProvider } from './features/semanticTokens';
 import { sortImports } from './features/sortImports';
 import { LinterProvider } from './features/lintting';
-import { addImport, extractMethod, extractVariable } from './features/refactor';
+import { extractMethod, extractVariable } from './features/refactor';
 import { TestFrameworkProvider } from './features/testing';
 import { configuration, handleDiagnostics, provideCompletionItem, provideHover, provideSignatureHelp, resolveCompletionItem } from './middleware';
 
@@ -216,16 +216,6 @@ export async function activate(context: ExtensionContext): Promise<void> {
     'python.refactorExtractMethod',
     async (document: TextDocument, range: Range) => {
       await extractMethod(context.extensionPath, document, range, outputChannel).catch(() => {});
-    },
-    null,
-    true
-  );
-  context.subscriptions.push(disposable);
-
-  disposable = commands.registerCommand(
-    'pyright.addImport',
-    async (document: TextDocument, name: string, parent: boolean) => {
-      await addImport(context.extensionPath, document, name, parent, outputChannel).catch(() => {});
     },
     null,
     true
