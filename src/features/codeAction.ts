@@ -17,7 +17,7 @@ import {
 
 export class PythonCodeActionProvider implements CodeActionProvider {
   private wholeRange(doc: TextDocument, range: Range): boolean {
-    const whole = Range.create(0, 0, doc.lineCount, 0);
+    const whole = Range.create(0, 0, doc.lineCount - 1, 0);
     return (
       whole.start.line === range.start.line && whole.start.character === range.start.character && whole.end.line === range.end.line && whole.end.character === whole.end.character
     );
@@ -50,7 +50,7 @@ export class PythonCodeActionProvider implements CodeActionProvider {
     const ignoreTxt = '# type: ignore';
     const doc = workspace.getDocument(document.uri);
     // ignore action for whole file
-    if (this.wholeRange(document, range) || this.cursorRange(range)) {
+    if (this.wholeRange(document, range)) {
       let pos = Position.create(0, 0);
       if (doc.getline(0).startsWith('#!')) pos = Position.create(1, 0);
       if (!doc.getline(pos.line).includes(ignoreTxt)) {
