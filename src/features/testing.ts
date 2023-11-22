@@ -2,24 +2,7 @@ import { CodeAction, CodeActionKind, CodeActionProvider, CodeLens, CodeLensProvi
 import path from 'path';
 import * as parser from '../parsers';
 import { TestingFramework } from '../types';
-
-function comparePosition(position: Position, other: Position): number {
-  if (position.line > other.line) return 1;
-  if (other.line == position.line && position.character > other.character) return 1;
-  if (other.line == position.line && position.character == other.character) return 0;
-  return -1;
-}
-
-function positionInRange(position: Position, range: Range): number {
-  const { start, end } = range;
-  if (comparePosition(position, start) < 0) return -1;
-  if (comparePosition(position, end) > 0) return 1;
-  return 0;
-}
-
-function rangeInRange(r: Range, range: Range): boolean {
-  return positionInRange(r.start, range) === 0 && positionInRange(r.end, range) === 0;
-}
+import { rangeInRange } from '../utils';
 
 export class TestFrameworkProvider implements CodeLensProvider, CodeActionProvider {
   private framework = workspace.getConfiguration('pyright').get<TestingFramework>('testing.provider', 'unittest');

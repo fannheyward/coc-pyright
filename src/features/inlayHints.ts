@@ -11,10 +11,12 @@ import {
   MarkupContent,
   Position,
   Range,
+  SignatureHelp,
   workspace,
 } from 'coc.nvim';
 
 import * as parser from '../parsers';
+import { positionInRange } from '../utils';
 
 export class TypeInlayHintsProvider implements InlayHintsProvider {
   private readonly _onDidChangeInlayHints = new Emitter<void>();
@@ -35,64 +37,75 @@ export class TypeInlayHintsProvider implements InlayHintsProvider {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async provideInlayHints(document: LinesTextDocument, _range: Range, _token: CancellationToken) {
+  async provideInlayHints(document: LinesTextDocument, range: Range, _token: CancellationToken) {
     const inlayHints: InlayHint[] = [];
 
     const code = document.getText();
     const parsed = parser.parse(code);
     if (!parsed) return [];
 
-    const walker = new parser.TypeInlayHintsWalker();
+    const walker = new parser.TypeInlayHintsWalker(parsed);
     walker.walk(parsed.parseTree);
 
-    for (const item of walker.featureItems) {
-      if (this.isDisableVariableTypes(item.inlayHintType)) continue;
-      if (this.isDisableFunctionReturnTypes(item.inlayHintType)) continue;
-
+    const featureItems = walker.featureItems.filter(item => this.enableForType(item.inlayHintType)).filter(item => {
       const startPosition = document.positionAt(item.startOffset);
       const endPosition = document.positionAt(item.endOffset);
-      const hoverResponse = await this.getHoverAtOffset(document, startPosition);
+      return positionInRange(startPosition, range) === 0 || positionInRange(endPosition, range) === 0;
+    });
+    if (featureItems.length === 0) return [];
 
-      if (hoverResponse) {
-        let inlayHintLabelValue: string | undefined = undefined;
-        let inlayHintPosition: Position | undefined = undefined;
+    for (const item of featureItems) {
+      const startPosition = document.positionAt(item.startOffset);
+      const endPosition = document.positionAt(item.endOffset);
+      const hover = item.inlayHintType === 'parameter' ? null : await this.getHoverAtOffset(document, startPosition);
+      const signatureInfo = item.inlayHintType === 'parameter' ? await this.getSignatureHelpAtOffset(document, startPosition) : null;
 
-        if (item.inlayHintType === 'variable') {
-          inlayHintLabelValue = this.getVariableHintAtHover(hoverResponse);
-        }
+      let inlayHintLabelValue: string | undefined = undefined;
+      switch (item.inlayHintType) {
+        case 'variable':
+          inlayHintLabelValue = this.getVariableHintFromHover(hover);
+          break;
+        case 'functionReturn':
+          inlayHintLabelValue = this.getFunctionReturnHintFromHover(hover);
+          break;
+        case 'parameter':
+          inlayHintLabelValue = this.getParameterHintFromSignature(signatureInfo);
+          break;
+        default:
+          break;
+      }
+      if (!inlayHintLabelValue) {
+        continue;
+      }
 
-        if (item.inlayHintType === 'functionReturn') {
-          inlayHintLabelValue = this.getFunctionReturnHintAtHover(hoverResponse);
-        }
+      const inlayHintLabelPart: InlayHintLabelPart[] = [
+        {
+          value: inlayHintLabelValue,
+        },
+      ];
 
-        if (inlayHintLabelValue) {
-          const inlayHintLabelPart: InlayHintLabelPart[] = [
-            {
-              value: inlayHintLabelValue,
-            },
-          ];
+      let inlayHintPosition: Position | undefined = undefined;
+      switch (item.inlayHintType) {
+        case 'variable':
+          inlayHintPosition = Position.create(startPosition.line, endPosition.character + 1);
+          break;
+        case 'functionReturn':
+          inlayHintPosition = endPosition;
+          break;
+        case 'parameter':
+          inlayHintPosition = startPosition;
+          break;
+        default:
+          break;
+      }
 
-          switch (item.inlayHintType) {
-            case 'variable':
-              inlayHintPosition = Position.create(startPosition.line, endPosition.character + 1);
-              break;
-            case 'functionReturn':
-              inlayHintPosition = endPosition;
-              break;
-            default:
-              break;
-          }
-
-          if (inlayHintPosition) {
-            const inlayHint: InlayHint = {
-              label: inlayHintLabelPart,
-              position: inlayHintPosition,
-              paddingLeft: item.inlayHintType === 'functionReturn' ?? true,
-            };
-
-            inlayHints.push(inlayHint);
-          }
-        }
+      if (inlayHintPosition) {
+        inlayHints.push({
+          label: inlayHintLabelPart,
+          position: inlayHintPosition,
+          kind: item.inlayHintType === 'parameter' ? 2 : 1,
+          paddingLeft: item.inlayHintType === 'functionReturn' ?? true,
+        });
       }
     }
 
@@ -108,36 +121,65 @@ export class TypeInlayHintsProvider implements InlayHintsProvider {
     return await this.client.sendRequest<Hover>('textDocument/hover', params);
   }
 
-  private getVariableHintAtHover(hover: Hover): string | undefined {
+  private getVariableHintFromHover(hover: Hover | null): string | undefined {
+    if (!hover) return;
     const contents = hover.contents as MarkupContent;
     if (contents && contents.value.includes('(variable)')) {
+      if (contents.value.includes('(variable) def')) {
+        return;
+      }
       const firstIdx = contents.value.indexOf(': ');
       if (firstIdx > -1) {
         const text = contents.value.substring(firstIdx + 2).split('\n')[0].trim();
+        if (text === 'Any' || text.startsWith('Literal[')) {
+          return;
+        }
         return ': ' + text;
       }
     }
   }
 
-  private getFunctionReturnHintAtHover(hover: Hover): string | undefined {
+  private getFunctionReturnHintFromHover(hover: Hover | null): string | undefined {
+    if (!hover) return;
     const contents = hover.contents as MarkupContent;
     if (contents && (contents.value.includes('(function)') || contents.value.includes('(method)'))) {
-      const text = contents.value.split('->')[1].split('\n')[0].trim();
+      const retvalIdx = contents.value.indexOf('->') + 2;
+      const text = contents.value.substring(retvalIdx).split('\n')[0].trim();
       return '-> ' + text;
     }
   }
 
-  private isDisableVariableTypes(inlayHintType: string) {
-    if (!workspace.getConfiguration('pyright').get('inlayHints.variableTypes') && inlayHintType === 'variable') {
-      return true;
-    }
-    return false;
+  private async getSignatureHelpAtOffset(document: LinesTextDocument, position: Position) {
+    const params = {
+      textDocument: { uri: document.uri },
+      position,
+    };
+
+    return await this.client.sendRequest<SignatureHelp>('textDocument/signatureHelp', params);
   }
 
-  private isDisableFunctionReturnTypes(inlayHintType: string) {
-    if (!workspace.getConfiguration('pyright').get('inlayHints.functionReturnTypes') && inlayHintType === 'functionReturn') {
-      return true;
+  private getParameterHintFromSignature(signatureInfo: SignatureHelp | null): string | undefined {
+    if (!signatureInfo) return;
+    const sig = signatureInfo.signatures[0];
+    if (typeof sig.activeParameter !== 'number') {
+      return;
     }
-    return false;
+    if (!sig.parameters || sig.parameters.length < sig.activeParameter) {
+      return;
+    }
+    const param = sig.parameters[sig.activeParameter];
+    if (typeof param.label === 'string') {
+      return param.label;
+    }
+    const label = sig.label.substring(param.label[0], param.label[1]).split(':')[0];
+    if (label.startsWith('__')) {
+      return;
+    }
+    return label + ': ';
+
+  }
+
+  private enableForType(inlayHintType: string) {
+    return workspace.getConfiguration('pyright').get(`inlayHints.${inlayHintType}Types`, true);
   }
 }

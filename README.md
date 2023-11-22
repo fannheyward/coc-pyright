@@ -92,6 +92,7 @@ These configurations are used by `coc-pyright`, you need to set them in your `co
 | pyright.organizeimports.provider            | Organize imports provider, `pyright`, `ruff` or `isort`             | pyright       |
 | pyright.inlayHints.functionReturnTypes      | Enable inlay hints for function return types                        | true          |
 | pyright.inlayHints.variableTypes            | Enable inlay hints for variable types                               | true          |
+| pyright.inlayHints.parameterTypes           | Enable inlay hints for parameter types                              | true          |
 | pyright.testing.provider                    | Provider for testing, supports `unittest` and `pytest`              | unittest      |
 | pyright.testing.unittestArgs                | Arguments passed to unittest                                        | []            |
 | pyright.testing.pytestArgs                  | Arguments passed to pytest                                          | []            |

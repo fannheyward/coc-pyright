@@ -2,7 +2,7 @@ import { DiagnosticSink } from '@zzzen/pyright-internal/dist/common/diagnosticSi
 import { ParseOptions, ParseResults, Parser } from '@zzzen/pyright-internal/dist/parser/parser';
 import { SemanticTokensWalker, TokenTypes } from './semanticTokens';
 import { FunctionFormatItemType, TestFrameworkWalker } from './testFramework';
-import { TypeInlayHintsItemType, TypeInlayHintsWalker } from './typeInlayHints';
+import { TypeInlayHintsItemType, TypeInlayHintsWalker } from './inlayHints';
 
 function parse(source: string) {
   let result: ParseResults | undefined = undefined;

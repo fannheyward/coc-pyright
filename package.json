@@ -104,6 +104,11 @@
           "default": true,
           "description": "Enable/disable inlay hints for variable types"
         },
+        "pyright.inlayHints.parameterTypes": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable/disable inlay hints for parameter types"
+        },
         "python.analysis.indexing": {
           "type": "boolean",
           "default": true,
