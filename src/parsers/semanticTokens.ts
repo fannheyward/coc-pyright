@@ -30,7 +30,9 @@ export class SemanticTokensWalker extends ParseTreeWalker {
 
   private addItem(node: ParseNodeBase, type: string, modifiers: string[] = []) {
     const item: SemanticTokenItem = { type, start: node.start, length: node.length, modifiers };
-    if (this.semanticItems.includes(item)) return;
+    if (this.semanticItems.some((x) => x.type === item.type && x.start === item.start && x.length === item.length)) {
+      return;
+    }
 
     this.semanticItems.push(item);
   }
