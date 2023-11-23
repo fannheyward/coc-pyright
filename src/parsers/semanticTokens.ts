@@ -1,128 +1,49 @@
 import { ParseTreeWalker } from '@zzzen/pyright-internal/dist/analyzer/parseTreeWalker';
-import { TextRange } from '@zzzen/pyright-internal/dist/common/textRange';
 import {
   CallNode,
   ClassNode,
-  ConstantNode,
   DecoratorNode,
   FormatStringNode,
   FunctionNode,
   ImportAsNode,
   ImportFromAsNode,
+  ImportFromNode,
+  ImportNode,
   MemberAccessNode,
-  ModuleNameNode,
   ParameterNode,
-  TypeAnnotationNode,
+  ParseNode,
+  ParseNodeBase,
+  ParseNodeType,
   TypeParameterNode,
 } from '@zzzen/pyright-internal/dist/parser/parseNodes';
+import { SemanticTokenModifiers, SemanticTokenTypes } from 'coc.nvim';
 
-export enum TokenTypes {
-  'UnKnownInvalid' = 0,
-  'UnKnownEndOfStream' = 1,
-  'UnKnownNewLine' = 2,
-  'UnKnownIndent' = 3,
-  'UnKnownDedent' = 4,
-  'string' = 5,
-  'number' = 6,
-  'UnKnownIdentifier' = 7,
-  'keyword' = 8,
-  'operator' = 9,
-  'colon' = 10,
-  'semicolon' = 11,
-  'comma' = 12,
-  'parenthesis' = 13,
-  'CloseParenthesis' = 14,
-  'bracket' = 15,
-  'CloseBracket' = 16,
-  'curlyBrace' = 17,
-  'CloseCurlyBrace' = 18,
-  'ellipsis' = 19,
-  'dot' = 20,
-  'arrow' = 21,
-  'backtick' = 22,
-
-  'and',
-  'as',
-  'assert',
-  'async',
-  'await',
-  'break',
-  'case',
-  'class',
-  'continue',
-  'debug',
-  'def',
-  'del',
-  'elif',
-  'else',
-  'except',
-  'false',
-  'finally',
-  'for',
-  'from',
-  'global',
-  'if',
-  'import',
-  'in',
-  'is',
-  'lambda',
-  'match',
-  'none',
-  'nonlocal',
-  'not',
-  'or',
-  'pass',
-  'raise',
-  'return',
-  'true',
-  'try',
-  'type',
-  'while',
-  'with',
-  'yield',
-
-  'alias',
-  'const',
-  'module',
-  'method',
-  'function',
-  'property',
-  'variable',
-  'decorator',
-  'parameter',
-  'typeParameter',
-  'selfParameter',
-  'clsParameter',
-  'magicFunction',
-  'typeAnnotation',
-}
-
-export type SemanticItem = {
-  type: TokenTypes;
+export type SemanticTokenItem = {
+  type: string;
   start: number;
   length: number;
+  modifiers: string[];
 };
 
 export class SemanticTokensWalker extends ParseTreeWalker {
-  public semanticItems: SemanticItem[] = [];
+  public semanticItems: SemanticTokenItem[] = [];
 
-  private addSemanticItem(type: TokenTypes, text: TextRange) {
-    const item: SemanticItem = { type, start: text.start, length: text.length };
+  private addItem(node: ParseNodeBase, type: string, modifiers: string[] = []) {
+    const item: SemanticTokenItem = { type, start: node.start, length: node.length, modifiers };
     if (this.semanticItems.includes(item)) return;
 
     this.semanticItems.push(item);
   }
 
-  visitFormatString(node: FormatStringNode): boolean {
-    node.fieldExpressions.map((f) => this.addSemanticItem(TokenTypes.variable, f));
-    return super.visitFormatString(node);
+  visit(node: ParseNode): boolean {
+    // ParseNodeType.Argument;
+    // console.error(node);
+    return super.visit(node);
   }
 
-  visitTypeAnnotation(node: TypeAnnotationNode): boolean {
-    if (node.typeAnnotation) {
-      this.addSemanticItem(TokenTypes.typeAnnotation, node.typeAnnotation);
-    }
-    return super.visitTypeAnnotation(node);
+  visitFormatString(node: FormatStringNode): boolean {
+    node.fieldExpressions.map((f) => this.addItem(f, SemanticTokenTypes.variable));
+    return super.visitFormatString(node);
   }
 
   visitCall(node: CallNode): boolean {
@@ -130,47 +51,66 @@ export class SemanticTokensWalker extends ParseTreeWalker {
     if (node.leftExpression.nodeType === 38) {
       const value = node.leftExpression.value;
       if (value[0] === value[0].toUpperCase()) {
-        this.addSemanticItem(TokenTypes.class, node.leftExpression);
+        this.addItem(node.leftExpression, SemanticTokenTypes.class);
       }
     }
     return super.visitCall(node);
   }
 
   visitClass(node: ClassNode): boolean {
-    this.addSemanticItem(TokenTypes.class, node.name);
+    // @ts-ignore
+    if (node.arguments.length === 1 && node.arguments[0].valueExpression.value === 'Enum') {
+      this.addItem(node.name, SemanticTokenTypes.enum);
+
+      for (const m of node.suite.statements) {
+        // @ts-ignore
+        this.addItem(m.statements[0].leftExpression, SemanticTokenTypes.enumMember);
+      }
+      return super.visitClass(node);
+    }
+
+    this.addItem(node.name, SemanticTokenTypes.class, [SemanticTokenModifiers.definition]);
     return super.visitClass(node);
   }
 
   visitMemberAccess(node: MemberAccessNode): boolean {
-    this.addSemanticItem(TokenTypes.method, node.memberName);
+    if (node.parent?.nodeType === ParseNodeType.Call) {
+      this.addItem(node.memberName, SemanticTokenTypes.function);
+      return super.visitMemberAccess(node);
+    }
+
+    this.addItem(node.memberName, SemanticTokenTypes.property);
     return super.visitMemberAccess(node);
   }
 
-  visitConstant(node: ConstantNode): boolean {
-    this.addSemanticItem(TokenTypes.const, node);
-    return super.visitConstant(node);
-  }
-
   visitDecorator(node: DecoratorNode): boolean {
-    this.addSemanticItem(TokenTypes.decorator, node.expression);
+    this.addItem(node.expression, SemanticTokenTypes.decorator);
     return super.visitDecorator(node);
   }
 
-  visitModuleName(node: ModuleNameNode): boolean {
-    node.nameParts.map((m) => this.addSemanticItem(TokenTypes.module, m));
-    return super.visitModuleName(node);
+  visitImport(node: ImportNode): boolean {
+    node.list.map((x) => this.addItem(x, SemanticTokenTypes.namespace));
+    return super.visitImport(node);
   }
 
   visitImportAs(node: ImportAsNode): boolean {
     if (node.alias && node.alias.value.length) {
-      this.addSemanticItem(TokenTypes.alias, node.alias);
+      this.addItem(node.alias, SemanticTokenTypes.namespace);
     }
+    node.module.nameParts.map((x) => this.addItem(x, SemanticTokenTypes.namespace));
     return super.visitImportAs(node);
+  }
+
+  visitImportFrom(node: ImportFromNode): boolean {
+    node.module.nameParts.map((x) => this.addItem(x, SemanticTokenTypes.namespace));
+    node.imports.map((x) => this.addItem(x, SemanticTokenTypes.namespace));
+
+    return super.visitImportFrom(node);
   }
 
   visitImportFromAs(node: ImportFromAsNode): boolean {
     if (node.alias && node.alias.value.length) {
-      this.addSemanticItem(TokenTypes.alias, node.alias);
+      this.addItem(node.alias, SemanticTokenTypes.namespace);
     }
     return super.visitImportFromAs(node);
   }
@@ -178,28 +118,34 @@ export class SemanticTokensWalker extends ParseTreeWalker {
   visitParameter(node: ParameterNode): boolean {
     if (!node.name) return super.visitParameter(node);
 
-    const type = node.name?.value === 'self' ? TokenTypes.selfParameter : TokenTypes.parameter;
-    this.addSemanticItem(type, node.name);
+    this.addItem(node.name, SemanticTokenTypes.parameter);
     if (node.typeAnnotation) {
-      this.addSemanticItem(TokenTypes.typeAnnotation, node.typeAnnotation);
+      this.addItem(node.typeAnnotation, SemanticTokenTypes.typeParameter);
     }
     return super.visitParameter(node);
   }
 
   visitTypeParameter(node: TypeParameterNode): boolean {
-    this.addSemanticItem(TokenTypes.typeParameter, node.name);
+    this.addItem(node.name, SemanticTokenTypes.typeParameter);
     return super.visitTypeParameter(node);
   }
 
   visitFunction(node: FunctionNode): boolean {
-    const type = node.parent?.parent?.nodeType === 10 ? TokenTypes.method : TokenTypes.function;
-    this.addSemanticItem(type, node.name);
+    const modifiers = [SemanticTokenModifiers.definition];
+    if (node.isAsync) {
+      modifiers.push(SemanticTokenModifiers.async);
+    }
+    const type = node.parent?.parent?.nodeType === 10 ? SemanticTokenTypes.method : SemanticTokenTypes.function;
+    this.addItem(node.name, type);
 
     for (const p of node.parameters) {
       if (!p.name) continue;
 
-      const type = p.name?.value === 'self' ? TokenTypes.selfParameter : TokenTypes.parameter;
-      this.addSemanticItem(type, p.name);
+      const modifiers = [SemanticTokenModifiers.declaration];
+      this.addItem(p.name, SemanticTokenTypes.parameter, modifiers);
+      if (p.typeAnnotation) {
+        this.addItem(p.typeAnnotation, SemanticTokenTypes.typeParameter);
+      }
     }
 
     return super.visitFunction(node);
