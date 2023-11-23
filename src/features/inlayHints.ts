@@ -106,7 +106,7 @@ export class TypeInlayHintsProvider implements InlayHintsProvider {
           label: inlayHintLabelPart,
           position: inlayHintPosition,
           kind: item.inlayHintType === 'parameter' ? 2 : 1,
-          paddingLeft: item.inlayHintType === 'functionReturn' ?? true,
+          paddingLeft: item.inlayHintType === 'functionReturn',
         });
       }
     }

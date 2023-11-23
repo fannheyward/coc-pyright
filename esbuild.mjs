@@ -3,12 +3,12 @@ import * as esbuild from 'esbuild';
 const options = {
   entryPoints: ['src/index.ts'],
   bundle: true,
-  minify: process.env.NODE_ENV === 'production',
-  sourcemap: process.env.NODE_ENV === 'development',
+  minify: true,
+  sourcemap: false,
   mainFields: ['module', 'main'],
   external: ['coc.nvim'],
   platform: 'node',
-  target: 'node14.14',
+  target: 'node16',
   outfile: 'lib/index.js',
 };
 

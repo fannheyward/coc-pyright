@@ -18,7 +18,6 @@ import {
 } from 'coc.nvim';
 import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
-import { lt } from 'semver';
 import which from 'which';
 import { runFileTest, runSingleTest } from './commands';
 import { PythonSettings } from './configSettings';
@@ -62,10 +61,6 @@ export async function activate(context: ExtensionContext): Promise<void> {
   const state = extensions.getExtensionState('coc-python');
   if (state.toString() === 'activated') {
     window.showWarningMessage(`coc-python is installed and activated, coc-pyright will be disabled`);
-    return;
-  }
-  if (lt(process.versions.node, '12.0.0')) {
-    window.showErrorMessage(`Pyright needs Node.js v12+ to work, your Node.js is ${process.version}.`);
     return;
   }
   let module = pyrightCfg.get<string>('server');
