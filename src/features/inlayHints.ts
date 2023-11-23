@@ -23,12 +23,12 @@ export class TypeInlayHintsProvider implements InlayHintsProvider {
   public readonly onDidChangeInlayHints: Event<void> = this._onDidChangeInlayHints.event;
 
   constructor(private client: LanguageClient) {
-    workspace.onDidChangeConfiguration(e => {
+    workspace.onDidChangeConfiguration((e) => {
       if (e.affectsConfiguration('pyright.inlayHints')) {
         this._onDidChangeInlayHints.fire();
       }
     });
-    workspace.onDidChangeTextDocument(e => {
+    workspace.onDidChangeTextDocument((e) => {
       const doc = workspace.getDocument(e.bufnr);
       if (doc.languageId === 'python') {
         this._onDidChangeInlayHints.fire();
@@ -47,11 +47,13 @@ export class TypeInlayHintsProvider implements InlayHintsProvider {
     const walker = new parser.TypeInlayHintsWalker(parsed);
     walker.walk(parsed.parseTree);
 
-    const featureItems = walker.featureItems.filter(item => this.enableForType(item.inlayHintType)).filter(item => {
-      const startPosition = document.positionAt(item.startOffset);
-      const endPosition = document.positionAt(item.endOffset);
-      return positionInRange(startPosition, range) === 0 || positionInRange(endPosition, range) === 0;
-    });
+    const featureItems = walker.featureItems
+      .filter((item) => this.enableForType(item.inlayHintType))
+      .filter((item) => {
+        const startPosition = document.positionAt(item.startOffset);
+        const endPosition = document.positionAt(item.endOffset);
+        return positionInRange(startPosition, range) === 0 || positionInRange(endPosition, range) === 0;
+      });
     if (featureItems.length === 0) return [];
 
     for (const item of featureItems) {
@@ -130,7 +132,10 @@ export class TypeInlayHintsProvider implements InlayHintsProvider {
       }
       const firstIdx = contents.value.indexOf(': ');
       if (firstIdx > -1) {
-        const text = contents.value.substring(firstIdx + 2).split('\n')[0].trim();
+        const text = contents.value
+          .substring(firstIdx + 2)
+          .split('\n')[0]
+          .trim();
         if (text === 'Any' || text.startsWith('Literal[')) {
           return;
         }
@@ -176,7 +181,6 @@ export class TypeInlayHintsProvider implements InlayHintsProvider {
       return;
     }
     return label + ': ';
-
   }
 
   private enableForType(inlayHintType: string) {

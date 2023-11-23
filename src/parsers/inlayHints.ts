@@ -66,7 +66,6 @@ export class TypeInlayHintsWalker extends ParseTreeWalker {
     return super.visitArgument(node);
   }
 
-
   override visitFunction(node: FunctionNode): boolean {
     // If the code describes a type, do not add the item.
     // Add item only if "node.returnTypeAnnotation" does not exist.
