@@ -138,13 +138,12 @@ export class SemanticTokensWalker extends ParseTreeWalker {
       modifiers.push(SemanticTokenModifiers.async);
     }
     const type = node.parent?.parent?.nodeType === 10 ? SemanticTokenTypes.method : SemanticTokenTypes.function;
-    this.addItem(node.name, type);
+    this.addItem(node.name, type, modifiers);
 
     for (const p of node.parameters) {
       if (!p.name) continue;
 
-      const modifiers = [SemanticTokenModifiers.declaration];
-      this.addItem(p.name, SemanticTokenTypes.parameter, modifiers);
+      this.addItem(p.name, SemanticTokenTypes.parameter);
       if (p.typeAnnotation) {
         this.addItem(p.typeAnnotation, SemanticTokenTypes.typeParameter);
       }

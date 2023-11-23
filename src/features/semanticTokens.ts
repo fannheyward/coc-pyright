@@ -1,4 +1,4 @@
-import { convertOffsetsToRange } from '@zzzen/pyright-internal/dist/common/positionUtils';
+import { convertOffsetsToRange, convertTextRangeToRange } from '@zzzen/pyright-internal/dist/common/positionUtils';
 import {
   CancellationToken,
   DocumentSemanticTokensProvider,
@@ -19,6 +19,7 @@ const tokenTypes: string[] = [
   SemanticTokenTypes.enum,
   SemanticTokenTypes.enumMember,
   SemanticTokenTypes.function,
+  SemanticTokenTypes.keyword,
   SemanticTokenTypes.method,
   SemanticTokenTypes.namespace,
   SemanticTokenTypes.parameter,
@@ -58,6 +59,14 @@ export class PythonSemanticTokensProvider implements DocumentSemanticTokensProvi
     if (token && token.isCancellationRequested) return null;
 
     const builder = new SemanticTokensBuilder(this.legend);
+    // @ts-ignore
+    for (const item of parsed.tokenizerOutput.tokens._items) {
+      if (item.type === 8 && item.keywordType) {
+        const range = convertTextRangeToRange(item, parsed.tokenizerOutput.lines);
+        builder.push(range.start.line, range.start.character, item.length, encodeTokenType(SemanticTokenTypes.keyword));
+      }
+    }
+
     const walker = new SemanticTokensWalker();
     walker.walk(parsed.parseTree);
 
