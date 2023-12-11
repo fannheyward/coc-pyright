@@ -9,3 +9,6 @@ lint:
 
 watch:
     node esbuild.mjs --watch
+
+clean:
+    rm -rf ./node_modules ./lib
