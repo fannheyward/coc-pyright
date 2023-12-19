@@ -18,7 +18,7 @@
 - extract method and variables with `rope`
 
 <!-- markdownlint-disable-next-line -->
-<img width="1186" alt="image" src="https://github.com/fannheyward/coc-pyright/assets/345274/82d6e688-b676-49ac-a614-0ce4fe78fb9d">
+<img width="1173" alt="image" src="https://github.com/fannheyward/coc-pyright/assets/345274/eb1230ec-26d0-4c2f-9b13-d6462e064559">
 
 ## Install
 
