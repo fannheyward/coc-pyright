@@ -15,3 +15,4 @@ yarn-error.log
 build_server.sh
 diff.mjs
 esbuild.mjs
+justfile
