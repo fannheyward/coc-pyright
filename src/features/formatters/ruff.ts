@@ -8,9 +8,7 @@ export class RuffFormatter extends BaseFormatter {
   }
 
   public formatDocument(document: TextDocument, options: FormattingOptions, token: CancellationToken, range?: Range): Thenable<TextEdit[]> {
-    const formatSelection = range ? range : false;
-
-    if (formatSelection) {
+    if (range) {
       const errorMessage = async () => {
         this.outputChannel.appendLine('Ruff does not support the "Format Selection" command');
         window.showErrorMessage('Ruff does not support the "Format Selection" command');

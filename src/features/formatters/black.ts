@@ -1,4 +1,4 @@
-import { CancellationToken, FormattingOptions, OutputChannel, Range, TextDocument, TextEdit, Thenable, window } from 'coc.nvim';
+import { CancellationToken, FormattingOptions, OutputChannel, Range, TextDocument, TextEdit, Thenable } from 'coc.nvim';
 import { IPythonSettings } from '../../types';
 import { BaseFormatter } from './baseFormatter';
 
@@ -8,20 +8,10 @@ export class BlackFormatter extends BaseFormatter {
   }
 
   public formatDocument(document: TextDocument, options: FormattingOptions, token: CancellationToken, range?: Range): Thenable<TextEdit[]> {
-    const formatSelection = range ? range : false;
-
-    if (formatSelection) {
-      const errorMessage = async () => {
-        this.outputChannel.appendLine('Black does not support the "Format Selection" command');
-        // Black does not support partial formatting on purpose.
-        window.showErrorMessage('Black does not support the "Format Selection" command');
-        return [] as TextEdit[];
-      };
-
-      return errorMessage();
-    }
-
     const blackArgs = ['--diff', '--quiet'];
+    if (range) {
+      blackArgs.push(`--line-ranges=${range.start.line + 1}-${range.end.line}`);
+    }
     if (this.pythonSettings.formatting.blackArgs.length > 0) {
       blackArgs.push(...this.pythonSettings.formatting.blackArgs);
     }
