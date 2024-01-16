@@ -1,6 +1,6 @@
 {
   "name": "coc-pyright",
-  "version": "1.1.345",
+  "version": "1.1.347",
   "description": "Pyright extension for coc.nvim, static type checker for Python",
   "author": "Heyward Fann <fannheyward@gmail.com>",
   "license": "MIT",
@@ -41,7 +41,7 @@
     "@types/which": "^3.0.3",
     "@typescript-eslint/eslint-plugin": "^6.13.2",
     "@typescript-eslint/parser": "^6.13.2",
-    "@zzzen/pyright-internal": "^1.2.0-dev.20240107",
+    "@zzzen/pyright-internal": "^1.2.0-dev.20240114",
     "coc.nvim": "^0.0.83-next.18",
     "diff-match-patch": "^1.0.5",
     "esbuild": "^0.19.8",
@@ -1838,6 +1838,12 @@
           "default": false,
           "description": "Disable the initialization and workdone progress notifications"
         },
+        "pyright.disableTaggedHints": {
+          "type": "boolean",
+          "default": false,
+          "description": "Disable hint diagnostics with special hints for grayed-out or strike-through text.",
+          "scope": "resource"
+        },
         "pyright.completion.importSupport": {
           "type": "boolean",
           "default": true,
@@ -1950,6 +1956,6 @@
     ]
   },
   "dependencies": {
-    "pyright": "^1.1.345"
+    "pyright": "^1.1.347"
   }
 }
