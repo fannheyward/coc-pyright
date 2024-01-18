@@ -72,7 +72,9 @@
           "manage.py",
           "pyproject.toml",
           "requirements.txt",
-          "pyrightconfig.json"
+          "pyrightconfig.json",
+          "tox.ini",
+          "pytest.ini"
         ]
       }
     ],
