@@ -66,15 +66,15 @@
         "filetype": "python",
         "patterns": [
           "app.py",
-          "setup.py",
+          "tox.ini",
           "Pipfile",
+          "setup.py",
           "setup.cfg",
           "manage.py",
+          "pytest.ini",
           "pyproject.toml",
           "requirements.txt",
-          "pyrightconfig.json",
-          "tox.ini",
-          "pytest.ini"
+          "pyrightconfig.json"
         ]
       }
     ],
