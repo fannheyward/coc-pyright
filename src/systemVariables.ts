@@ -19,7 +19,7 @@ const _typeof = {
 /**
  * @returns whether the provided parameter is a JavaScript Array or not.
  */
-export function isArray(array: any): array is any[] {
+function isArray(array: any): array is any[] {
   if (Array.isArray) {
     return Array.isArray(array);
   }
@@ -34,7 +34,7 @@ export function isArray(array: any): array is any[] {
 /**
  * @returns whether the provided parameter is a JavaScript String or not.
  */
-export function isString(str: any): str is string {
+function isString(str: any): str is string {
   if (typeof str === _typeof.string || str instanceof String) {
     return true;
   }
@@ -43,22 +43,15 @@ export function isString(str: any): str is string {
 }
 
 /**
- * @returns whether the provided parameter is a JavaScript Array and each element in the array is a string.
- */
-export function isStringArray(value: any): value is string[] {
-  return isArray(value) && (<any[]>value).every((elem) => isString(elem));
-}
-
-/**
  *
  * @returns whether the provided parameter is of type `object` but **not**
  *	`null`, an `array`, a `regexp`, nor a `date`.
  */
-export function isObject(obj: any): obj is any {
+function isObject(obj: any): obj is any {
   return typeof obj === _typeof.object && obj !== null && !Array.isArray(obj) && !(obj instanceof RegExp) && !(obj instanceof Date);
 }
 
-export abstract class AbstractSystemVariables implements ISystemVariables {
+abstract class AbstractSystemVariables implements ISystemVariables {
   public resolve(value: string): string;
   public resolve(value: string[]): string[];
   public resolve(value: IStringDictionary<string>): IStringDictionary<string>;

@@ -13,7 +13,7 @@ import { splitLines } from '../../utils';
 // Allow negative column numbers (https://github.com/PyCQA/pylint/issues/1822)
 const REGEX = '(?<line>\\d+),(?<column>-?\\d+),(?<type>\\w+),(?<code>\\w+\\d+):(?<message>.*)\\r?(\\n|$)';
 
-export interface IRegexGroup {
+interface IRegexGroup {
   line: number;
   column: number;
   code: string;
@@ -22,7 +22,7 @@ export interface IRegexGroup {
   file?: string;
 }
 
-export function matchNamedRegEx(data: string, regex: string): IRegexGroup | undefined {
+function matchNamedRegEx(data: string, regex: string): IRegexGroup | undefined {
   const compiledRegexp = namedRegexp(regex, 'g');
   const rawMatch = compiledRegexp.exec(data);
   if (rawMatch) {
@@ -33,7 +33,7 @@ export function matchNamedRegEx(data: string, regex: string): IRegexGroup | unde
   return undefined;
 }
 
-export function parseLine(line: string, regex: string, linterID: LinterId, colOffset = 0): ILintMessage | undefined {
+function parseLine(line: string, regex: string, linterID: LinterId, colOffset = 0): ILintMessage | undefined {
   const match = matchNamedRegEx(line, regex)!;
   if (!match) {
     return;

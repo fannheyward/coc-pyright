@@ -18,7 +18,7 @@ import {
 } from '@zzzen/pyright-internal/dist/parser/parseNodes';
 import { SemanticTokenModifiers, SemanticTokenTypes } from 'coc.nvim';
 
-export type SemanticTokenItem = {
+type SemanticTokenItem = {
   type: string;
   start: number;
   length: number;

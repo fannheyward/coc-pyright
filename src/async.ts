@@ -5,12 +5,6 @@
 
 'use strict';
 
-export async function sleep(timeout: number) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, timeout);
-  });
-}
-
 //======================
 // Deferred
 
@@ -61,29 +55,3 @@ export function createDeferred<T>(scope: any = null): Deferred<T> {
   return new DeferredImpl<T>(scope);
 }
 
-export function createDeferredFrom<T>(...promises: Promise<T>[]): Deferred<T> {
-  const deferred = createDeferred<T>();
-  Promise.all<T>(promises)
-    .then(deferred.resolve.bind(deferred) as any)
-    .catch(deferred.reject.bind(deferred) as any);
-
-  return deferred;
-}
-export function createDeferredFromPromise<T>(promise: Promise<T>): Deferred<T> {
-  const deferred = createDeferred<T>();
-  promise.then(deferred.resolve.bind(deferred)).catch(deferred.reject.bind(deferred));
-  return deferred;
-}
-export function callWithTimeout<T>(func: () => T, timeoutMS: number): Promise<T> {
-  return new Promise<T>((resolve, reject) => {
-    setTimeout(() => {
-      reject(new Error('Timed out'));
-    }, timeoutMS);
-    try {
-      const result = func();
-      resolve(result);
-    } catch (e) {
-      reject(e);
-    }
-  });
-}

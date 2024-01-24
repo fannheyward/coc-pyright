@@ -13,7 +13,7 @@ export class YapfFormatter extends BaseFormatter {
       yapfArgs.push(...this.pythonSettings.formatting.yapfArgs);
     }
     if (range) {
-      yapfArgs.push(...['--lines', `${range.start.line + 1}-${range.end.line + 1}`]);
+      yapfArgs.push('--lines', `${range.start.line + 1}-${range.end.line + 1}`);
     }
     // Yapf starts looking for config file starting from the file path.
     const fallbarFolder = this.getWorkspaceUri(document)?.fsPath;

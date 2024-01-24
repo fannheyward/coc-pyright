@@ -88,7 +88,7 @@ export interface ILinter {
   lint(document: TextDocument, cancellation: CancellationToken): Promise<ILintMessage[]>;
 }
 
-export interface PylintCategorySeverity {
+interface PylintCategorySeverity {
   readonly convention: DiagnosticSeverity;
   readonly refactor: DiagnosticSeverity;
   readonly warning: DiagnosticSeverity;
@@ -96,16 +96,16 @@ export interface PylintCategorySeverity {
   readonly fatal: DiagnosticSeverity;
 }
 
-export interface PycodestyleCategorySeverity {
+interface PycodestyleCategorySeverity {
   readonly W: DiagnosticSeverity;
   readonly E: DiagnosticSeverity;
 }
-export interface Flake8CategorySeverity {
+interface Flake8CategorySeverity {
   readonly F: DiagnosticSeverity;
   readonly E: DiagnosticSeverity;
   readonly W: DiagnosticSeverity;
 }
-export interface MypyCategorySeverity {
+interface MypyCategorySeverity {
   readonly error: DiagnosticSeverity;
   readonly note: DiagnosticSeverity;
 }

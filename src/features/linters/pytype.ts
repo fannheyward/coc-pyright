@@ -69,7 +69,7 @@ export class Pytype extends BaseLinter {
   protected async runLinter(document: TextDocument, cancellation: CancellationToken): Promise<ILintMessage[]> {
     const args: string[] = [];
     if (await this.hasConfigurationFile(workspace.root)) {
-      args.push(...['--config', pytypecfg]);
+      args.push('--config', pytypecfg);
     }
     args.push(Uri.parse(document.uri).fsPath);
 

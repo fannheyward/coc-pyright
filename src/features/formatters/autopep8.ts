@@ -13,7 +13,7 @@ export class AutoPep8Formatter extends BaseFormatter {
       autoPep8Args.push(...this.pythonSettings.formatting.autopep8Args);
     }
     if (range) {
-      autoPep8Args.push(...['--line-range', (range.start.line + 1).toString(), (range.end.line + 1).toString()]);
+      autoPep8Args.push('--line-range', (range.start.line + 1).toString(), (range.end.line + 1).toString());
     }
     const promise = super.provideDocumentFormattingEdits(document, options, token, autoPep8Args);
     return promise;

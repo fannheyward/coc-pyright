@@ -3,7 +3,7 @@ import { ParseTreeWalker } from '@zzzen/pyright-internal/dist/analyzer/parseTree
 import { ArgumentNode, AssignmentNode, FunctionNode, MemberAccessNode, NameNode, ParseNode, ParseNodeType } from '@zzzen/pyright-internal/dist/parser/parseNodes';
 import { ParseResults } from '@zzzen/pyright-internal/dist/parser/parser';
 
-export type TypeInlayHintsItemType = {
+type TypeInlayHintsItemType = {
   inlayHintType: 'variable' | 'functionReturn' | 'parameter';
   startOffset: number;
   endOffset: number;
