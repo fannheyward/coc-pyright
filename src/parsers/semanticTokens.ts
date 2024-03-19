@@ -55,6 +55,8 @@ export class SemanticTokensWalker extends ParseTreeWalker {
       const value = node.leftExpression.value;
       if (value[0] === value[0].toUpperCase()) {
         this.addItem(node.leftExpression, SemanticTokenTypes.class);
+      } else {
+        this.addItem(node.leftExpression, SemanticTokenTypes.function);
       }
     }
     return super.visitCall(node);
