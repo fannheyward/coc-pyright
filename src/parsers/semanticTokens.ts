@@ -14,6 +14,7 @@ import {
   ParseNode,
   ParseNodeBase,
   ParseNodeType,
+  TypeAnnotationNode,
   TypeParameterNode,
 } from '@zzzen/pyright-internal/dist/parser/parseNodes';
 import { SemanticTokenModifiers, SemanticTokenTypes } from 'coc.nvim';
@@ -130,6 +131,13 @@ export class SemanticTokensWalker extends ParseTreeWalker {
   visitTypeParameter(node: TypeParameterNode): boolean {
     this.addItem(node.name, SemanticTokenTypes.typeParameter);
     return super.visitTypeParameter(node);
+  }
+
+  visitTypeAnnotation(node: TypeAnnotationNode): boolean {
+    if (node.typeAnnotation) {
+      this.addItem(node.typeAnnotation, SemanticTokenTypes.typeParameter);
+    }
+    return super.visitTypeAnnotation(node);
   }
 
   visitFunction(node: FunctionNode): boolean {
