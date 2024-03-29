@@ -10,6 +10,7 @@ import {
   ImportFromNode,
   ImportNode,
   MemberAccessNode,
+  NameNode,
   ParameterNode,
   ParseNode,
   ParseNodeBase,
@@ -90,6 +91,25 @@ export class SemanticTokensWalker extends ParseTreeWalker {
 
   visitDecorator(node: DecoratorNode): boolean {
     this.addItem(node.expression, SemanticTokenTypes.decorator);
+    let nameNode: NameNode | undefined;
+    switch (node.expression.nodeType) {
+      case ParseNodeType.Call:
+        if (node.expression.leftExpression.nodeType === ParseNodeType.MemberAccess) {
+          nameNode = node.expression.leftExpression.memberName;
+        } else if (node.expression.leftExpression.nodeType === ParseNodeType.Name) {
+          nameNode = node.expression.leftExpression;
+        }
+        break;
+      case ParseNodeType.MemberAccess:
+        nameNode = node.expression.memberName;
+        break;
+      case ParseNodeType.Name:
+        nameNode = node.expression;
+        break;
+    }
+    if (nameNode) {
+      this.addItem(nameNode, SemanticTokenTypes.decorator);
+    }
     return super.visitDecorator(node);
   }
 
