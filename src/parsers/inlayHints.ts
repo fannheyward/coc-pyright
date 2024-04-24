@@ -1,7 +1,7 @@
 import { getCallNodeAndActiveParameterIndex } from '@zzzen/pyright-internal/dist/analyzer/parseTreeUtils';
 import { ParseTreeWalker } from '@zzzen/pyright-internal/dist/analyzer/parseTreeWalker';
 import { ArgumentNode, AssignmentNode, FunctionNode, MemberAccessNode, NameNode, ParseNode, ParseNodeType } from '@zzzen/pyright-internal/dist/parser/parseNodes';
-import { ParseResults } from '@zzzen/pyright-internal/dist/parser/parser';
+import { ParseFileResults } from '@zzzen/pyright-internal/dist/parser/parser';
 
 type TypeInlayHintsItemType = {
   inlayHintType: 'variable' | 'functionReturn' | 'parameter';
@@ -20,7 +20,7 @@ function isLeftSideOfAssignment(node: ParseNode): boolean {
 export class TypeInlayHintsWalker extends ParseTreeWalker {
   public featureItems: TypeInlayHintsItemType[] = [];
 
-  constructor(private readonly _parseResults: ParseResults) {
+  constructor(private readonly _parseResults: ParseFileResults) {
     super();
   }
 

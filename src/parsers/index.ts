@@ -1,11 +1,11 @@
 import { DiagnosticSink } from '@zzzen/pyright-internal/dist/common/diagnosticSink';
-import { ParseOptions, ParseResults, Parser } from '@zzzen/pyright-internal/dist/parser/parser';
+import { ParseOptions, ParseFileResults, Parser } from '@zzzen/pyright-internal/dist/parser/parser';
 import { TypeInlayHintsWalker } from './inlayHints';
 import { SemanticTokensWalker } from './semanticTokens';
 import { FunctionFormatItemType, TestFrameworkWalker } from './testFramework';
 
 function parse(source: string) {
-  let result: ParseResults | undefined = undefined;
+  let result: ParseFileResults | undefined = undefined;
   const parserOptions = new ParseOptions();
   const diagSink = new DiagnosticSink();
   const parser = new Parser();

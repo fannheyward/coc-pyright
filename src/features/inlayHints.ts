@@ -45,7 +45,7 @@ export class TypeInlayHintsProvider implements InlayHintsProvider {
     if (!parsed) return [];
 
     const walker = new parser.TypeInlayHintsWalker(parsed);
-    walker.walk(parsed.parseTree);
+    walker.walk(parsed.parserOutput.parseTree);
 
     const featureItems = walker.featureItems
       .filter((item) => this.enableForType(item.inlayHintType))

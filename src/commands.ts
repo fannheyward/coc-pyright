@@ -81,7 +81,7 @@ export async function runSingleTest() {
   if (!parsed) return window.showErrorMessage('Test not found');
 
   const walker = new parser.TestFrameworkWalker(framework);
-  walker.walk(parsed.parseTree);
+  walker.walk(parsed.parserOutput.parseTree);
 
   let testFunction: string | undefined = undefined;
   for (const item of walker.featureItems) {

@@ -20,7 +20,7 @@ export class TestFrameworkProvider implements CodeLensProvider, CodeActionProvid
       if (!parsed) return [];
 
       const walker = new parser.TestFrameworkWalker(this.framework);
-      walker.walk(parsed.parseTree);
+      walker.walk(parsed.parserOutput.parseTree);
 
       return walker.featureItems;
     } catch (e) {

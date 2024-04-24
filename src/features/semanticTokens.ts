@@ -68,7 +68,7 @@ export class PythonSemanticTokensProvider implements DocumentSemanticTokensProvi
     }
 
     const walker = new SemanticTokensWalker();
-    walker.walk(parsed.parseTree);
+    walker.walk(parsed.parserOutput.parseTree);
 
     for (const item of walker.semanticItems) {
       const range = convertOffsetsToRange(item.start, item.start + item.length, parsed.tokenizerOutput.lines);
