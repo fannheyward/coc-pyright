@@ -3,6 +3,7 @@ import {
   CallNode,
   ClassNode,
   DecoratorNode,
+  ForNode,
   FormatStringNode,
   FunctionNode,
   ImportAsNode,
@@ -43,6 +44,13 @@ export class SemanticTokensWalker extends ParseTreeWalker {
     // ParseNodeType.Argument;
     // console.error(node);
     return super.visit(node);
+  }
+
+  visitFor(node: ForNode): boolean {
+    if (node.nodeType === ParseNodeType.For) {
+      this.addItem(node.targetExpression, SemanticTokenTypes.variable);
+    }
+    return super.visitFor(node);
   }
 
   visitFormatString(node: FormatStringNode): boolean {
