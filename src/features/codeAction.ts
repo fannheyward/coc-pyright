@@ -1,16 +1,16 @@
 import {
   CancellationTokenSource,
-  CodeAction,
-  CodeActionContext,
+  type CodeAction,
+  type CodeActionContext,
   CodeActionKind,
-  CodeActionProvider,
-  CompleteOption,
-  Diagnostic,
+  type CodeActionProvider,
+  type CompleteOption,
+  type Diagnostic,
   Position,
   Range,
-  TextDocument,
+  type TextDocument,
   TextEdit,
-  VimCompleteItem,
+  type VimCompleteItem,
   sources,
   workspace,
 } from 'coc.nvim';
@@ -19,7 +19,10 @@ export class PythonCodeActionProvider implements CodeActionProvider {
   private wholeRange(doc: TextDocument, range: Range): boolean {
     const whole = Range.create(0, 0, doc.lineCount - 1, 0);
     return (
-      whole.start.line === range.start.line && whole.start.character === range.start.character && whole.end.line === range.end.line && whole.end.character === whole.end.character
+      whole.start.line === range.start.line &&
+      whole.start.character === range.start.character &&
+      whole.end.line === range.end.line &&
+      whole.end.character === range.end.character
     );
   }
 
@@ -28,7 +31,10 @@ export class PythonCodeActionProvider implements CodeActionProvider {
   }
 
   private lineRange(r: Range): boolean {
-    return (r.start.line + 1 === r.end.line && r.start.character === 0 && r.end.character === 0) || (r.start.line === r.end.line && r.start.character === 0);
+    return (
+      (r.start.line + 1 === r.end.line && r.start.character === 0 && r.end.character === 0) ||
+      (r.start.line === r.end.line && r.start.character === 0)
+    );
   }
 
   private sortImportsAction(): CodeAction {
@@ -59,7 +65,7 @@ export class PythonCodeActionProvider implements CodeActionProvider {
           kind: CodeActionKind.Empty,
           edit: {
             changes: {
-              [doc.uri]: [TextEdit.insert(pos, ignoreTxt + '\n')],
+              [doc.uri]: [TextEdit.insert(pos, `${ignoreTxt}\n`)],
             },
           },
         };
@@ -69,8 +75,11 @@ export class PythonCodeActionProvider implements CodeActionProvider {
     // ignore action for current line
     if (this.lineRange(range)) {
       const line = doc.getline(range.start.line);
-      if (line && line.length && !line.startsWith('#') && !line.includes(ignoreTxt)) {
-        const edit = TextEdit.replace(range, `${line}  ${ignoreTxt}${range.start.line + 1 === range.end.line ? '\n' : ''}`);
+      if (line.length && !line.startsWith('#') && !line.includes(ignoreTxt)) {
+        const edit = TextEdit.replace(
+          range,
+          `${line}  ${ignoreTxt}${range.start.line + 1 === range.end.line ? '\n' : ''}`,
+        );
         return {
           title: 'Ignore Pyright typing check for current line',
           kind: CodeActionKind.Empty,
@@ -110,7 +119,10 @@ export class PythonCodeActionProvider implements CodeActionProvider {
     ];
   }
 
-  private async fetchImportsByDiagnostic(document: TextDocument, diag: Diagnostic): Promise<ReadonlyArray<VimCompleteItem>> {
+  private async fetchImportsByDiagnostic(
+    document: TextDocument,
+    diag: Diagnostic,
+  ): Promise<ReadonlyArray<VimCompleteItem>> {
     const match = diag.message.match(/"(.*)" is not defined/);
     if (!match) return [];
 
@@ -124,7 +136,7 @@ export class PythonCodeActionProvider implements CodeActionProvider {
     tokenSource.cancel();
 
     // @ts-ignore
-    return result ? result.items.filter(x => x.label === match[1]) : [];
+    return result ? result.items.filter((x) => x.label === match[1]) : [];
   }
 
   private async fixAction(document: TextDocument, diag: Diagnostic): Promise<CodeAction[]> {
@@ -162,12 +174,16 @@ export class PythonCodeActionProvider implements CodeActionProvider {
     return actions;
   }
 
-  public async provideCodeActions(document: TextDocument, range: Range, context: CodeActionContext): Promise<CodeAction[] | null | undefined> {
+  public async provideCodeActions(
+    document: TextDocument,
+    range: Range,
+    context: CodeActionContext,
+  ): Promise<CodeAction[] | null | undefined> {
     const actions: CodeAction[] = [];
 
     if (context.diagnostics.length) {
       for (const diag of context.diagnostics) {
-        actions.push(...await this.fixAction(document, diag));
+        actions.push(...(await this.fixAction(document, diag)));
       }
     }
 

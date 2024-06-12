@@ -1,19 +1,19 @@
 import {
-  CancellationToken,
-  CompletionContext,
-  CompletionItem,
+  type CancellationToken,
+  type CompletionContext,
+  type CompletionItem,
   CompletionItemKind,
-  ConfigurationParams,
-  Diagnostic,
-  HandleDiagnosticsSignature,
+  type ConfigurationParams,
+  type Diagnostic,
+  type HandleDiagnosticsSignature,
   InsertTextFormat,
-  LinesTextDocument,
-  Position,
-  ProvideCompletionItemsSignature,
-  ProvideHoverSignature,
-  ProvideSignatureHelpSignature,
-  ResolveCompletionItemSignature,
-  SignatureHelpContext,
+  type LinesTextDocument,
+  type Position,
+  type ProvideCompletionItemsSignature,
+  type ProvideHoverSignature,
+  type ProvideSignatureHelpSignature,
+  type ResolveCompletionItemSignature,
+  type SignatureHelpContext,
   workspace,
 } from 'coc.nvim';
 import { PythonSettings } from './configSettings';
@@ -22,7 +22,8 @@ function toJSONObject(obj: any): any {
   if (obj) {
     if (Array.isArray(obj)) {
       return obj.map(toJSONObject);
-    } else if (typeof obj === 'object') {
+    }
+    if (typeof obj === 'object') {
       const res = Object.create(null);
       for (const key in obj) {
         if (Object.prototype.hasOwnProperty.call(obj, key)) {
@@ -46,8 +47,13 @@ export function configuration(params: ConfigurationParams, token: CancellationTo
       const analysis = config['analysis'];
       analysis['stubPath'] = workspace.expand(analysis['stubPath'] as string);
       const inspect = workspace.getConfiguration('python.analysis').inspect('stubPath');
-      if (inspect && (inspect.globalValue === undefined || inspect.workspaceValue === undefined || inspect.workspaceFolderValue === undefined)) {
-        delete analysis['stubPath'];
+      if (
+        inspect &&
+        (inspect.globalValue === undefined ||
+          inspect.workspaceValue === undefined ||
+          inspect.workspaceFolderValue === undefined)
+      ) {
+        analysis['stubPath'] = undefined;
       }
       const extraPaths = analysis['extraPaths'] as string[];
       if (extraPaths?.length) {
@@ -68,8 +74,13 @@ export function configuration(params: ConfigurationParams, token: CancellationTo
       const analysis = toJSONObject(workspace.getConfiguration(analysisItem.section, analysisItem.scopeUri));
       analysis['stubPath'] = workspace.expand(analysis['stubPath'] as string);
       const inspect = workspace.getConfiguration('python.analysis').inspect('stubPath');
-      if (inspect && (inspect.globalValue === undefined || inspect.workspaceValue === undefined || inspect.workspaceFolderValue === undefined)) {
-        delete analysis['stubPath'];
+      if (
+        inspect &&
+        (inspect.globalValue === undefined ||
+          inspect.workspaceValue === undefined ||
+          inspect.workspaceFolderValue === undefined)
+      ) {
+        analysis['stubPath'] = undefined;
       }
       const extraPaths = analysis['extraPaths'] as string[];
       if (extraPaths?.length) {
@@ -93,12 +104,13 @@ export async function provideCompletionItem(
   position: Position,
   context: CompletionContext,
   token: CancellationToken,
-  next: ProvideCompletionItemsSignature
+  next: ProvideCompletionItemsSignature,
 ) {
   const result = await next(document, position, context, token);
   if (!result) return;
 
   const items = Array.isArray(result) ? result : result.items;
+  // biome-ignore lint/suspicious/noAssignInExpressions: ignore
   items.map((x) => (x.sortText ? (x.sortText = x.sortText.toLowerCase()) : (x.sortText = x.label.toLowerCase())));
 
   const snippetSupport = workspace.getConfiguration('pyright').get<boolean>('completion.snippetSupport');
@@ -115,15 +127,29 @@ export async function provideCompletionItem(
   return Array.isArray(result) ? items : { items, isIncomplete: result.isIncomplete };
 }
 
-export async function resolveCompletionItem(item: CompletionItem, token: CancellationToken, next: ResolveCompletionItemSignature) {
+export async function resolveCompletionItem(
+  item: CompletionItem,
+  token: CancellationToken,
+  next: ResolveCompletionItemSignature,
+) {
   const result = await next(item, token);
-  if (result && typeof result.documentation === 'object' && 'kind' in result.documentation && result.documentation.kind === 'markdown') {
+  if (
+    result &&
+    typeof result.documentation === 'object' &&
+    'kind' in result.documentation &&
+    result.documentation.kind === 'markdown'
+  ) {
     result.documentation.value = result.documentation.value.replace(/&nbsp;/g, ' ');
   }
   return result;
 }
 
-export async function provideHover(document: LinesTextDocument, position: Position, token: CancellationToken, next: ProvideHoverSignature) {
+export async function provideHover(
+  document: LinesTextDocument,
+  position: Position,
+  token: CancellationToken,
+  next: ProvideHoverSignature,
+) {
   const hover = await next(document, position, token);
   if (hover && typeof hover.contents === 'object' && 'kind' in hover.contents && hover.contents.kind === 'markdown') {
     hover.contents.value = hover.contents.value.replace(/&nbsp;/g, ' ');
@@ -136,15 +162,15 @@ export async function provideSignatureHelp(
   position: Position,
   context: SignatureHelpContext,
   token: CancellationToken,
-  next: ProvideSignatureHelpSignature
+  next: ProvideSignatureHelpSignature,
 ) {
   const sign = await next(document, position, context, token);
-  if (sign && sign.signatures.length) {
-    sign.signatures.forEach((info) => {
+  if (sign?.signatures.length) {
+    for (const info of sign.signatures) {
       if (info.documentation && typeof info.documentation === 'object' && info.documentation.kind === 'markdown') {
         info.documentation.value = info.documentation.value.replace(/&nbsp;/g, ' ');
       }
-    });
+    }
   }
 
   return sign;
@@ -153,6 +179,6 @@ export async function provideSignatureHelp(
 export async function handleDiagnostics(uri: string, diagnostics: Diagnostic[], next: HandleDiagnosticsSignature) {
   next(
     uri,
-    diagnostics.filter((d) => d.message !== '"__" is not accessed')
+    diagnostics.filter((d) => d.message !== '"__" is not accessed'),
   );
 }

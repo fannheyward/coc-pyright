@@ -1,7 +1,15 @@
 import { getCallNodeAndActiveParameterIndex } from '@zzzen/pyright-internal/dist/analyzer/parseTreeUtils';
 import { ParseTreeWalker } from '@zzzen/pyright-internal/dist/analyzer/parseTreeWalker';
-import { ArgumentNode, AssignmentNode, FunctionNode, MemberAccessNode, NameNode, ParseNode, ParseNodeType } from '@zzzen/pyright-internal/dist/parser/parseNodes';
-import { ParseFileResults } from '@zzzen/pyright-internal/dist/parser/parser';
+import {
+  type ArgumentNode,
+  type AssignmentNode,
+  type FunctionNode,
+  type MemberAccessNode,
+  type NameNode,
+  type ParseNode,
+  ParseNodeType,
+} from '@zzzen/pyright-internal/dist/parser/parseNodes';
+import type { ParseFileResults } from '@zzzen/pyright-internal/dist/parser/parser';
 
 type TypeInlayHintsItemType = {
   inlayHintType: 'variable' | 'functionReturn' | 'parameter';

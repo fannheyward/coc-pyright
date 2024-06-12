@@ -1,9 +1,9 @@
-import * as child_process from 'child_process';
-import { Terminal, Uri, window, workspace } from 'coc.nvim';
-import path from 'path';
+import * as child_process from 'node:child_process';
+import { type Terminal, Uri, window, workspace } from 'coc.nvim';
+import path from 'node:path';
 import { PythonSettings } from './configSettings';
 import * as parser from './parsers';
-import { TestingFramework } from './types';
+import type { TestingFramework } from './types';
 
 let terminal: Terminal | undefined;
 
@@ -21,7 +21,7 @@ function validPythonModule(pythonPath: string, moduleName: string) {
 
 async function runTest(uri: string, testFunction?: string) {
   const workspaceUri = Uri.parse(workspace.root).toString();
-  const relativeFileUri = uri.replace(workspaceUri + '/', '');
+  const relativeFileUri = uri.replace(`${workspaceUri}/`, '');
   let testFile = '';
   if (framework === 'pytest') {
     testFile = relativeFileUri.split('/').join(path.sep);

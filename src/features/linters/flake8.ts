@@ -1,5 +1,5 @@
-import { CancellationToken, OutputChannel, TextDocument, Uri } from 'coc.nvim';
-import { ILinterInfo, ILintMessage } from '../../types';
+import { type CancellationToken, type OutputChannel, type TextDocument, Uri } from 'coc.nvim';
+import type { ILinterInfo, ILintMessage } from '../../types';
 import { BaseLinter } from './baseLinter';
 
 const COLUMN_OFF_SET = 1;
@@ -18,9 +18,9 @@ export class Flake8 extends BaseLinter {
       args.push(fsPath);
     }
     const messages = await this.run(args, document, cancellation);
-    messages.forEach((msg) => {
+    for (const msg of messages) {
       msg.severity = this.parseMessagesSeverity(msg.type, this.pythonSettings.linting.flake8CategorySeverity);
-    });
+    }
     return messages;
   }
 }

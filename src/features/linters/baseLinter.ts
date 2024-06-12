@@ -1,13 +1,20 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
-'use strict';
 
-import { spawn } from 'child_process';
-import { CancellationToken, OutputChannel, TextDocument, Uri, workspace } from 'coc.nvim';
+import { spawn } from 'node:child_process';
+import { type CancellationToken, type OutputChannel, type TextDocument, Uri, workspace } from 'coc.nvim';
 import namedRegexp from 'named-js-regexp';
 import { PythonSettings } from '../../configSettings';
 import { PythonExecutionService } from '../../processService';
-import { ExecutionInfo, ILinter, ILinterInfo, ILintMessage, IPythonSettings, LinterId, LintMessageSeverity } from '../../types';
+import {
+  type ExecutionInfo,
+  type ILinter,
+  type ILinterInfo,
+  type ILintMessage,
+  type IPythonSettings,
+  type LinterId,
+  LintMessageSeverity,
+} from '../../types';
 import { splitLines } from '../../utils';
 
 // Allow negative column numbers (https://github.com/PyCQA/pylint/issues/1822)
@@ -45,7 +52,7 @@ function parseLine(line: string, regex: string, linterID: LinterId, colOffset = 
   return {
     code: match.code,
     message: match.message,
-    column: isNaN(match.column) || match.column <= 0 ? 0 : match.column - colOffset,
+    column: Number.isNaN(match.column) || match.column <= 0 ? 0 : match.column - colOffset,
     line: match.line,
     type: match.type,
     provider: linterID,
@@ -63,7 +70,11 @@ export abstract class BaseLinter implements ILinter {
     return this._pythonSettings;
   }
 
-  constructor(info: ILinterInfo, protected readonly outputChannel: OutputChannel, protected readonly columnOffset = 0) {
+  constructor(
+    info: ILinterInfo,
+    protected readonly outputChannel: OutputChannel,
+    protected readonly columnOffset = 0,
+  ) {
     this._info = info;
     this._pythonSettings = PythonSettings.getInstance();
   }
@@ -114,7 +125,7 @@ export abstract class BaseLinter implements ILinter {
       child.stdin.end();
 
       let result = '';
-      child.stdout.on('data', data => {
+      child.stdout.on('data', (data) => {
         result += data.toString('utf-8').trim();
       });
       child.on('close', () => {
@@ -123,7 +134,12 @@ export abstract class BaseLinter implements ILinter {
     });
   }
 
-  protected async run(args: string[], document: TextDocument, token: CancellationToken, regEx = REGEX): Promise<ILintMessage[]> {
+  protected async run(
+    args: string[],
+    document: TextDocument,
+    token: CancellationToken,
+    regEx = REGEX,
+  ): Promise<ILintMessage[]> {
     if (!this.info.isEnabled(Uri.parse(document.uri))) {
       return [];
     }
@@ -138,8 +154,8 @@ export abstract class BaseLinter implements ILinter {
       if (this.info.stdinSupport) {
         result = await this.stdinRun(executionInfo, document);
       } else {
-        const pythonToolsExecutionService = new PythonExecutionService();
-        result = (await pythonToolsExecutionService.exec(executionInfo, { cwd: workspace.root, token, mergeStdOutErr: false })).stdout;
+        const service = new PythonExecutionService();
+        result = (await service.exec(executionInfo, { cwd: workspace.root, token, mergeStdOutErr: false })).stdout;
       }
 
       this.outputChannel.append(`${'#'.repeat(10)} Linting Output - ${this.info.id} ${'#'.repeat(10)}\n`);

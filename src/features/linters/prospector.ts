@@ -1,6 +1,6 @@
-import { CancellationToken, OutputChannel, TextDocument, Uri, workspace } from 'coc.nvim';
-import path from 'path';
-import { ILinterInfo, ILintMessage } from '../../types';
+import { type CancellationToken, OutputChannel, type TextDocument, Uri, workspace } from 'coc.nvim';
+import path from 'node:path';
+import { ILinterInfo, type ILintMessage } from '../../types';
 import { BaseLinter } from './baseLinter';
 
 interface IProspectorResponse {
@@ -21,10 +21,6 @@ interface IProspectorLocation {
 }
 
 export class Prospector extends BaseLinter {
-  constructor(info: ILinterInfo, outputChannel: OutputChannel) {
-    super(info, outputChannel);
-  }
-
   protected async runLinter(document: TextDocument, cancellation: CancellationToken): Promise<ILintMessage[]> {
     const relativePath = path.relative(workspace.root, Uri.parse(document.uri).fsPath);
     return this.run(['--absolute-paths', '--output-format=json', relativePath], document, cancellation);
@@ -42,7 +38,7 @@ export class Prospector extends BaseLinter {
     return parsedData.messages
       .filter((_value, index) => index <= this.pythonSettings.linting.maxNumberOfProblems)
       .map((msg) => {
-        const lineNumber = msg.location.line === null || isNaN(msg.location.line) ? 1 : msg.location.line;
+        const lineNumber = msg.location.line === null || Number.isNaN(msg.location.line) ? 1 : msg.location.line;
 
         return {
           code: msg.code,

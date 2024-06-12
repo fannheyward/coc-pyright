@@ -1,7 +1,7 @@
 import { printParseNodeType } from '@zzzen/pyright-internal/dist/analyzer/parseTreeUtils';
 import { ParseTreeWalker } from '@zzzen/pyright-internal/dist/analyzer/parseTreeWalker';
-import { ClassNode, FunctionNode, SuiteNode } from '@zzzen/pyright-internal/dist/parser/parseNodes';
-import { TestingFramework } from '../types';
+import type { ClassNode, FunctionNode, SuiteNode } from '@zzzen/pyright-internal/dist/parser/parseNodes';
+import type { TestingFramework } from '../types';
 
 export type FunctionFormatItemType = {
   value: string;

@@ -1,23 +1,23 @@
 import {
   commands,
-  DocumentSelector,
-  ExtensionContext,
+  type DocumentSelector,
+  type ExtensionContext,
   extensions,
   LanguageClient,
-  LanguageClientOptions,
+  type LanguageClientOptions,
   languages,
-  Range,
-  ServerOptions,
+  type Range,
+  type ServerOptions,
   services,
-  StaticFeature,
-  TextDocument,
+  type StaticFeature,
+  type TextDocument,
   TransportKind,
   Uri,
   window,
   workspace,
 } from 'coc.nvim';
-import { existsSync, readFileSync } from 'fs';
-import { join } from 'path';
+import { existsSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import which from 'which';
 import { runFileTest, runSingleTest } from './commands';
 import { PythonSettings } from './configSettings';
@@ -30,7 +30,14 @@ import { sortImports } from './features/sortImports';
 import { LinterProvider } from './features/lintting';
 import { extractMethod, extractVariable } from './features/refactor';
 import { TestFrameworkProvider } from './features/testing';
-import { configuration, handleDiagnostics, provideCompletionItem, provideHover, provideSignatureHelp, resolveCompletionItem } from './middleware';
+import {
+  configuration,
+  handleDiagnostics,
+  provideCompletionItem,
+  provideHover,
+  provideSignatureHelp,
+  resolveCompletionItem,
+} from './middleware';
 
 const defaultHeapSize = 3072;
 
@@ -43,7 +50,6 @@ const documentSelector: DocumentSelector = [
 ];
 
 class PyrightExtensionFeature implements StaticFeature {
-  constructor() {}
   dispose(): void {}
   initialize() {}
   fillClientCapabilities(capabilities: any) {
@@ -60,7 +66,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
 
   const state = extensions.getExtensionState('coc-python');
   if (state.toString() === 'activated') {
-    window.showWarningMessage(`coc-python is installed and activated, coc-pyright will be disabled`);
+    window.showWarningMessage('coc-python is installed and activated, coc-pyright will be disabled');
     return;
   }
   let module = pyrightCfg.get<string>('server');
@@ -136,7 +142,9 @@ export async function activate(context: ExtensionContext): Promise<void> {
   const importSupport = pyrightCfg.get<boolean>('completion.importSupport');
   if (importSupport) {
     const provider = new ImportCompletionProvider();
-    context.subscriptions.push(languages.registerCompletionItemProvider('python-import', 'PY', ['python'], provider, [' ']));
+    context.subscriptions.push(
+      languages.registerCompletionItemProvider('python-import', 'PY', ['python'], provider, [' ']),
+    );
   }
   const inlayHintEnable = workspace.getConfiguration('inlayHint').get('enable', true);
   if (inlayHintEnable && typeof languages.registerInlayHintsProvider === 'function') {
@@ -146,7 +154,9 @@ export async function activate(context: ExtensionContext): Promise<void> {
   const semanticTokensEnable = workspace.getConfiguration('semanticTokens').get('enable', true);
   if (semanticTokensEnable && typeof languages.registerDocumentSemanticTokensProvider === 'function') {
     const provider = new PythonSemanticTokensProvider();
-    context.subscriptions.push(languages.registerDocumentSemanticTokensProvider(documentSelector, provider, provider.legend));
+    context.subscriptions.push(
+      languages.registerDocumentSemanticTokensProvider(documentSelector, provider, provider.legend),
+    );
   }
   const testProvider = new TestFrameworkProvider();
   context.subscriptions.push(languages.registerCodeActionProvider(documentSelector, testProvider, 'Pyright'));
@@ -154,7 +164,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
   if (codeLens) context.subscriptions.push(languages.registerCodeLensProvider(documentSelector, testProvider));
 
   const textEditorCommands = ['pyright.organizeimports', 'pyright.addoptionalforparam'];
-  textEditorCommands.forEach((commandName: string) => {
+  for (const commandName of textEditorCommands) {
     context.subscriptions.push(
       commands.registerCommand(commandName, async (offset: number) => {
         const doc = await workspace.document;
@@ -164,9 +174,9 @@ export async function activate(context: ExtensionContext): Promise<void> {
         };
 
         await client.sendRequest(method, cmd);
-      })
+      }),
     );
-  });
+  }
 
   let command = 'pyright.restartserver';
   let disposable = commands.registerCommand(command, async () => {
@@ -177,7 +187,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
   command = 'pyright.createtypestub';
   disposable = commands.registerCommand(command, async (...args: any[]) => {
     if (!args.length) {
-      window.showWarningMessage(`Module name is missing`);
+      window.showWarningMessage('Module name is missing');
       return;
     }
     const doc = await workspace.document;
@@ -203,7 +213,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
       await extractVariable(context.extensionPath, document, range, outputChannel).catch(() => {});
     },
     null,
-    true
+    true,
   );
   context.subscriptions.push(disposable);
 
@@ -213,7 +223,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
       await extractMethod(context.extensionPath, document, range, outputChannel).catch(() => {});
     },
     null,
-    true
+    true,
   );
   context.subscriptions.push(disposable);
 

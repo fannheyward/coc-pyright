@@ -1,5 +1,5 @@
 import { DiagnosticSink } from '@zzzen/pyright-internal/dist/common/diagnosticSink';
-import { ParseOptions, ParseFileResults, Parser } from '@zzzen/pyright-internal/dist/parser/parser';
+import { ParseOptions, type ParseFileResults, Parser } from '@zzzen/pyright-internal/dist/parser/parser';
 import { TypeInlayHintsWalker } from './inlayHints';
 import { SemanticTokensWalker } from './semanticTokens';
 import { FunctionFormatItemType, TestFrameworkWalker } from './testFramework';

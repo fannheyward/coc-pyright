@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { ExecOptions, spawn, SpawnOptions as ChildProcessSpawnOptions } from 'child_process';
-import { CancellationToken } from 'coc.nvim';
+import { type ExecOptions, spawn, type SpawnOptions as ChildProcessSpawnOptions } from 'node:child_process';
+import type { CancellationToken } from 'coc.nvim';
 import * as iconv from 'iconv-lite';
-import { homedir } from 'os';
+import { homedir } from 'node:os';
 import { Observable } from 'rxjs';
 import { createDeferred } from './async';
 import { PythonSettings } from './configSettings';
-import { ExecutionInfo, ExecutionResult, ObservableExecutionResult, Output } from './types';
+import type { ExecutionInfo, ExecutionResult, ObservableExecutionResult, Output } from './types';
 
 const DEFAULT_ENCODING = 'utf8';
 
@@ -19,21 +19,9 @@ type SpawnOptions = ChildProcessSpawnOptions & {
 };
 
 class BufferDecoder {
-  public decode(buffers: Buffer[], encoding: string = DEFAULT_ENCODING): string {
-    encoding = iconv.encodingExists(encoding) ? encoding : DEFAULT_ENCODING;
+  public decode(buffers: Buffer[], value: string = DEFAULT_ENCODING): string {
+    const encoding = iconv.encodingExists(value) ? value : DEFAULT_ENCODING;
     return iconv.decode(Buffer.concat(buffers), encoding);
-  }
-}
-
-class StdErrError extends Error {
-  constructor(message: string) {
-    super(message);
-  }
-}
-
-class ErrorUtils {
-  public static outputHasModuleNotInstalledError(moduleName: string, content?: string): boolean {
-    return content && (content!.indexOf(`No module named ${moduleName}`) > 0 || content!.indexOf(`No module named '${moduleName}'`) > 0) ? true : false;
   }
 }
 
@@ -58,7 +46,6 @@ export function isNotInstalledError(error: Error): boolean {
 }
 
 class ProcessService {
-  constructor() {}
   private readonly decoder = new BufferDecoder();
 
   public static isAlive(pid: number): boolean {
@@ -80,7 +67,7 @@ class ProcessService {
 
   public execObservable(file: string, args: string[], options: SpawnOptions = {}): ObservableExecutionResult<string> {
     const spawnOptions = this.getDefaultOptions(options);
-    const encoding = spawnOptions.encoding ? spawnOptions.encoding : 'utf8';
+    const encoding = spawnOptions.encoding ? spawnOptions.encoding : DEFAULT_ENCODING;
     const proc = spawn(file, args, spawnOptions);
     let procExited = false;
 
@@ -97,7 +84,7 @@ class ProcessService {
       const sendOutput = (source: 'stdout' | 'stderr', data: Buffer) => {
         const out = this.decoder.decode([data], encoding);
         if (source === 'stderr' && options.throwOnStdErr) {
-          subscriber.error(new StdErrError(out));
+          subscriber.error(new Error(out));
         } else {
           subscriber.next({ source, out });
         }
@@ -130,12 +117,10 @@ class ProcessService {
   }
 
   public exec(file: string, args: string[], options: SpawnOptions = {}): Promise<ExecutionResult<string>> {
-    if (file.startsWith('~/')) {
-      file = file.replace('~', homedir());
-    }
+    const cmd = file.startsWith('~/') ? file.replace('~', homedir()) : file;
     const spawnOptions = this.getDefaultOptions(options);
     const encoding = spawnOptions.encoding ? spawnOptions.encoding : DEFAULT_ENCODING;
-    const proc = spawn(file, args, spawnOptions);
+    const proc = spawn(cmd, args, spawnOptions);
     const deferred = createDeferred<ExecutionResult<string>>();
 
     if (options.token) {
@@ -162,9 +147,9 @@ class ProcessService {
       if (deferred.completed) {
         return;
       }
-      const stderr: string | undefined = stderrBuffers.length === 0 ? undefined : this.decoder.decode(stderrBuffers, encoding);
+      const stderr = stderrBuffers.length === 0 ? undefined : this.decoder.decode(stderrBuffers, encoding);
       if (stderr && stderr.length > 0 && options.throwOnStdErr) {
-        deferred.reject(new StdErrError(stderr));
+        deferred.reject(new Error(stderr));
       } else {
         const stdout = this.decoder.decode(stdoutBuffers, encoding);
         deferred.resolve({ stdout, stderr });
@@ -180,12 +165,6 @@ class ProcessService {
 
   private getDefaultOptions<T extends ShellOptions | SpawnOptions>(options: T): T {
     const defaultOptions = { ...options };
-    const execOptions = defaultOptions as SpawnOptions;
-    if (execOptions) {
-      const encoding = (execOptions.encoding = typeof execOptions.encoding === 'string' && execOptions.encoding.length > 0 ? execOptions.encoding : DEFAULT_ENCODING);
-      delete execOptions.encoding;
-      execOptions.encoding = encoding;
-    }
     if (!defaultOptions.env || Object.keys(defaultOptions.env).length === 0) {
       defaultOptions.env = { ...process.env };
     } else {
@@ -205,8 +184,6 @@ class ProcessService {
 export class PythonExecutionService {
   private readonly procService = new ProcessService();
   private readonly pythonSettings = PythonSettings.getInstance();
-
-  constructor() {}
 
   public async isModuleInstalled(moduleName: string): Promise<boolean> {
     return this.procService
@@ -228,7 +205,11 @@ export class PythonExecutionService {
       const result = await this.procService.exec(this.pythonSettings.pythonPath, ['-m', moduleName, ...args], opts);
 
       // If a module is not installed we'll have something in stderr.
-      if (ErrorUtils.outputHasModuleNotInstalledError(moduleName, result.stderr)) {
+      if (
+        result.stderr &&
+        (result.stderr.indexOf(`No module named ${moduleName}`) > 0 ||
+          result.stderr.indexOf(`No module named '${moduleName}'`) > 0)
+      ) {
         throw new ModuleNotInstalledError(moduleName!);
       }
 

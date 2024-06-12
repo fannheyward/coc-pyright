@@ -16,3 +16,4 @@ build_server.sh
 diff.mjs
 esbuild.mjs
 justfile
+biome.json

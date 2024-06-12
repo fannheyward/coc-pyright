@@ -1,18 +1,23 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-import { Uri, workspace } from 'coc.nvim';
-import * as path from 'path';
+import { type Uri, workspace } from 'coc.nvim';
+import * as path from 'node:path';
 import which from 'which';
-import { PythonSettings } from '../../configSettings';
-import { ExecutionInfo, ILinterInfo, LinterId, Product } from '../../types';
+import type { PythonSettings } from '../../configSettings';
+import type { ExecutionInfo, ILinterInfo, LinterId, Product } from '../../types';
 
 export class LinterInfo implements ILinterInfo {
   private _id: LinterId;
   private _product: Product;
   private _configFileNames: string[];
 
-  constructor(product: Product, id: LinterId, protected configService: PythonSettings, configFileNames: string[] = []) {
+  constructor(
+    product: Product,
+    id: LinterId,
+    protected configService: PythonSettings,
+    configFileNames: string[] = [],
+  ) {
     this._product = product;
     this._id = id;
     this._configFileNames = configFileNames;
@@ -47,7 +52,8 @@ export class LinterInfo implements ILinterInfo {
     return Array.isArray(args) ? (args as string[]) : [];
   }
   public getExecutionInfo(customArgs: string[], resource?: Uri): ExecutionInfo {
-    const execPath = which.sync(workspace.expand(this.pathName(resource)), { nothrow: true }) || this.pathName(resource);
+    const cmd = workspace.expand(this.pathName(resource));
+    const execPath = which.sync(cmd, { nothrow: true }) || this.pathName(resource);
     const args = this.linterArgs(resource).concat(customArgs);
     let moduleName: string | undefined;
 

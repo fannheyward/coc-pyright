@@ -3,8 +3,6 @@
 /* eslint-disable prefer-rest-params */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-'use strict';
-
 //======================
 // Deferred
 
@@ -31,10 +29,12 @@ class DeferredImpl<T> implements Deferred<T> {
     });
   }
   public resolve(_value?: T | PromiseLike<T>) {
+    // biome-ignore lint/style/noArguments: <explanation>
     this._resolve.apply(this.scope ? this.scope : this, arguments as any);
     this._resolved = true;
   }
   public reject(_reason?: any) {
+    // biome-ignore lint/style/noArguments: <explanation>
     this._reject.apply(this.scope ? this.scope : this, arguments as any);
     this._rejected = true;
   }
@@ -54,4 +54,3 @@ class DeferredImpl<T> implements Deferred<T> {
 export function createDeferred<T>(scope: any = null): Deferred<T> {
   return new DeferredImpl<T>(scope);
 }
-

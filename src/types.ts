@@ -1,6 +1,6 @@
-import { ChildProcess } from 'child_process';
-import { CancellationToken, DiagnosticSeverity, DiagnosticTag, TextDocument, Uri } from 'coc.nvim';
-import { Observable } from 'rxjs';
+import type { ChildProcess } from 'node:child_process';
+import type { CancellationToken, DiagnosticSeverity, DiagnosticTag, TextDocument, Uri } from 'coc.nvim';
+import type { Observable } from 'rxjs';
 
 export interface ExecutionInfo {
   execPath: string;
@@ -46,7 +46,18 @@ export enum Product {
   pyink = 18,
 }
 
-export type LinterId = 'bandit' | 'flake8' | 'mypy' | 'ruff' | 'pycodestyle' | 'prospector' | 'pydocstyle' | 'pyflakes' | 'pylama' | 'pylint' | 'pytype';
+export type LinterId =
+  | 'bandit'
+  | 'flake8'
+  | 'mypy'
+  | 'ruff'
+  | 'pycodestyle'
+  | 'prospector'
+  | 'pydocstyle'
+  | 'pyflakes'
+  | 'pylama'
+  | 'pylint'
+  | 'pytype';
 export type FormatterId = 'yapf' | 'black' | 'autopep8' | 'darker' | 'blackd' | 'pyink' | 'ruff';
 export type TestingFramework = 'unittest' | 'pytest';
 
@@ -61,10 +72,10 @@ export interface ILinterInfo {
 }
 
 export enum LintMessageSeverity {
-  Hint,
-  Error,
-  Warning,
-  Information,
+  Hint = 0,
+  Error = 1,
+  Warning = 2,
+  Information = 3,
 }
 
 export interface ILintMessage {

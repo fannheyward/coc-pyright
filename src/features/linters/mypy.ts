@@ -1,5 +1,5 @@
-import { CancellationToken, OutputChannel, TextDocument, Uri } from 'coc.nvim';
-import { ILinterInfo, ILintMessage } from '../../types';
+import { type CancellationToken, type OutputChannel, type TextDocument, Uri } from 'coc.nvim';
+import type { ILinterInfo, ILintMessage } from '../../types';
 import { BaseLinter } from './baseLinter';
 
 const COLUMN_OFF_SET = 1;
@@ -13,10 +13,10 @@ export class MyPy extends BaseLinter {
   protected async runLinter(document: TextDocument, cancellation: CancellationToken): Promise<ILintMessage[]> {
     const args = ['--python-executable', this.pythonSettings.pythonPath, Uri.parse(document.uri).fsPath];
     const messages = await this.run(args, document, cancellation, REGEX);
-    messages.forEach((msg) => {
+    for (const msg of messages) {
       msg.severity = this.parseMessagesSeverity(msg.type, this.pythonSettings.linting.mypyCategorySeverity);
       msg.code = msg.type;
-    });
+    }
     return messages;
   }
 }

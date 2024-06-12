@@ -1,23 +1,23 @@
 import { ParseTreeWalker } from '@zzzen/pyright-internal/dist/analyzer/parseTreeWalker';
 import {
-  CallNode,
-  ClassNode,
-  DecoratorNode,
-  ForNode,
-  FormatStringNode,
-  FunctionNode,
-  ImportAsNode,
-  ImportFromAsNode,
-  ImportFromNode,
-  ImportNode,
-  MemberAccessNode,
-  NameNode,
-  ParameterNode,
-  ParseNode,
-  ParseNodeBase,
+  type CallNode,
+  type ClassNode,
+  type DecoratorNode,
+  type ForNode,
+  type FormatStringNode,
+  type FunctionNode,
+  type ImportAsNode,
+  type ImportFromAsNode,
+  type ImportFromNode,
+  type ImportNode,
+  type MemberAccessNode,
+  type NameNode,
+  type ParameterNode,
+  type ParseNode,
+  type ParseNodeBase,
   ParseNodeType,
-  TypeAnnotationNode,
-  TypeParameterNode,
+  type TypeAnnotationNode,
+  type TypeParameterNode,
 } from '@zzzen/pyright-internal/dist/parser/parseNodes';
 import { SemanticTokenModifiers, SemanticTokenTypes } from 'coc.nvim';
 
@@ -127,7 +127,7 @@ export class SemanticTokensWalker extends ParseTreeWalker {
   }
 
   visitImportAs(node: ImportAsNode): boolean {
-    if (node.alias && node.alias.value.length) {
+    if (node.alias?.value.length) {
       this.addItem(node.alias, SemanticTokenTypes.namespace);
     }
     node.module.nameParts.map((x) => this.addItem(x, SemanticTokenTypes.namespace));
@@ -142,7 +142,7 @@ export class SemanticTokensWalker extends ParseTreeWalker {
   }
 
   visitImportFromAs(node: ImportFromAsNode): boolean {
-    if (node.alias && node.alias.value.length) {
+    if (node.alias?.value.length) {
       this.addItem(node.alias, SemanticTokenTypes.namespace);
     }
     return super.visitImportFromAs(node);

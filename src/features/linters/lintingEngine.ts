@@ -1,28 +1,33 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-'use strict';
-
 import {
   CancellationTokenSource,
   Diagnostic,
-  DiagnosticCollection,
+  type DiagnosticCollection,
   DiagnosticSeverity,
-  DocumentFilter,
+  type DocumentFilter,
   languages,
-  OutputChannel,
+  type OutputChannel,
   Position,
   Range,
-  TextDocument,
+  type TextDocument,
   Uri,
   window,
   workspace,
 } from 'coc.nvim';
-import fs from 'fs';
+import fs from 'node:fs';
 import { Minimatch } from 'minimatch';
-import path from 'path';
+import path from 'node:path';
 import { PythonSettings } from '../../configSettings';
-import { LintMessageSeverity, ILinter, Product, ILintMessage, ILinterInfo, LinterErrors } from '../../types';
+import {
+  LintMessageSeverity,
+  type ILinter,
+  Product,
+  type ILintMessage,
+  type ILinterInfo,
+  LinterErrors,
+} from '../../types';
 import { Bandit } from './bandit';
 import { Flake8 } from './flake8';
 import { LinterInfo } from './linterInfo';
@@ -120,7 +125,7 @@ export class LintingEngine {
 
     this.pendingLintings.set(fsPath, cancelToken);
 
-    const activeLinters = this.getActiveLinters().filter(l => onChange ? l.stdinSupport : true);
+    const activeLinters = this.getActiveLinters().filter((l) => (onChange ? l.stdinSupport : true));
     const promises: Promise<ILintMessage[]>[] = activeLinters.map(async (info: ILinterInfo) => {
       this.outputChannel.appendLine(`Using python from ${this.configService.pythonPath}\n`);
       this.outputChannel.appendLine(`${'#'.repeat(10)} active linter: ${info.id}`);
@@ -149,7 +154,9 @@ export class LintingEngine {
               .getline(m.line - 1)
               .trim()
               .startsWith('%') &&
-            (m.code === LinterErrors.pylint.InvalidSyntax || m.code === LinterErrors.prospector.InvalidSyntax || m.code === LinterErrors.flake8.InvalidSyntax)
+            (m.code === LinterErrors.pylint.InvalidSyntax ||
+              m.code === LinterErrors.prospector.InvalidSyntax ||
+              m.code === LinterErrors.flake8.InvalidSyntax)
           ) {
             continue;
           }
@@ -205,14 +212,14 @@ export class LintingEngine {
     }
 
     const fsPath = Uri.parse(document.uri).fsPath;
-    if (settings.stdLibs.some(p => fsPath.startsWith(p))) {
+    if (settings.stdLibs.some((p) => fsPath.startsWith(p))) {
       return false;
     }
 
     const relativeFileName = path.relative(workspace.root, fsPath);
     // { dot: true } is important so dirs like `.venv` will be matched by globs
     const ignoreMinmatches = settings.linting.ignorePatterns.map((pattern) => new Minimatch(pattern, { dot: true }));
-    if (ignoreMinmatches.some((matcher) => matcher.match(Uri.parse(document.uri).fsPath) || matcher.match(relativeFileName))) {
+    if (ignoreMinmatches.some((matcher) => matcher.match(fsPath) || matcher.match(relativeFileName))) {
       this.outputChannel.appendLine(`${'#'.repeat(5)} linting is ignored by python.linting.ignorePatterns`);
       return false;
     }

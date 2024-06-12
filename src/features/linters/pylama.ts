@@ -1,8 +1,9 @@
-import { CancellationToken, OutputChannel, TextDocument, Uri } from 'coc.nvim';
-import { ILinterInfo, ILintMessage, LintMessageSeverity } from '../../types';
+import { type CancellationToken, type OutputChannel, type TextDocument, Uri } from 'coc.nvim';
+import { type ILinterInfo, type ILintMessage, LintMessageSeverity } from '../../types';
 import { BaseLinter } from './baseLinter';
 
-const REGEX = '(?<file>.py):(?<line>\\d+):(?<column>\\d+): \\[(?<type>\\w+)\\] (?<code>\\w\\d+):? (?<message>.*)\\r?(\\n|$)';
+const REGEX =
+  '(?<file>.py):(?<line>\\d+):(?<column>\\d+): \\[(?<type>\\w+)\\] (?<code>\\w\\d+):? (?<message>.*)\\r?(\\n|$)';
 const COLUMN_OFF_SET = 1;
 
 export class Pylama extends BaseLinter {
@@ -11,11 +12,16 @@ export class Pylama extends BaseLinter {
   }
 
   protected async runLinter(document: TextDocument, cancellation: CancellationToken): Promise<ILintMessage[]> {
-    const messages = await this.run(['--format=parsable', Uri.parse(document.uri).fsPath], document, cancellation, REGEX);
+    const messages = await this.run(
+      ['--format=parsable', Uri.parse(document.uri).fsPath],
+      document,
+      cancellation,
+      REGEX,
+    );
     // All messages in pylama are treated as warnings for now.
-    messages.forEach((msg) => {
+    for (const msg of messages) {
       msg.severity = LintMessageSeverity.Warning;
-    });
+    }
 
     return messages;
   }

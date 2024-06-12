@@ -1,21 +1,17 @@
-import { CancellationToken, OutputChannel, TextDocument, Uri, workspace } from 'coc.nvim';
-import * as path from 'path';
-import { ILinterInfo, ILintMessage, LintMessageSeverity } from '../../types';
+import { Uri, workspace, type CancellationToken, type TextDocument } from 'coc.nvim';
+import * as path from 'node:path';
+import { LintMessageSeverity, type ILintMessage } from '../../types';
 import { BaseLinter } from './baseLinter';
 
 export class PyDocStyle extends BaseLinter {
-  constructor(info: ILinterInfo, outputChannel: OutputChannel) {
-    super(info, outputChannel);
-  }
-
   protected async runLinter(document: TextDocument, cancellation: CancellationToken): Promise<ILintMessage[]> {
     const baseFileName = path.basename(Uri.parse(document.uri).fsPath);
     if (/^test_.*\.py$/.test(baseFileName)) return [];
     const messages = await this.run([Uri.parse(document.uri).fsPath], document, cancellation);
     // All messages in pep8 are treated as warnings for now.
-    messages.forEach((msg) => {
+    for (const msg of messages) {
       msg.severity = LintMessageSeverity.Warning;
-    });
+    }
 
     return messages;
   }

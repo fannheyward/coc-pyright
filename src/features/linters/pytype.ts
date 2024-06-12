@@ -1,7 +1,7 @@
-import { CancellationToken, OutputChannel, TextDocument, Uri, workspace } from 'coc.nvim';
-import fs from 'fs';
-import * as path from 'path';
-import { ILinterInfo, ILintMessage, LintMessageSeverity } from '../../types';
+import { Uri, workspace, type CancellationToken, type TextDocument } from 'coc.nvim';
+import fs from 'node:fs';
+import * as path from 'node:path';
+import { LintMessageSeverity, type ILintMessage } from '../../types';
 import { BaseLinter } from './baseLinter';
 
 const pytypecfg = 'pytype.cfg';
@@ -62,10 +62,6 @@ async function pathExists(p: string) {
 }
 
 export class Pytype extends BaseLinter {
-  constructor(info: ILinterInfo, outputChannel: OutputChannel) {
-    super(info, outputChannel);
-  }
-
   protected async runLinter(document: TextDocument, cancellation: CancellationToken): Promise<ILintMessage[]> {
     const args: string[] = [];
     if (await this.hasConfigurationFile(workspace.root)) {
@@ -117,13 +113,12 @@ export class Pytype extends BaseLinter {
     return false;
   }
 
-  private arePathsSame(path1: string, path2: string): boolean {
-    path1 = path.normalize(path1);
-    path2 = path.normalize(path2);
+  private arePathsSame(p1: string, p2: string): boolean {
+    const path1 = path.normalize(p1);
+    const path2 = path.normalize(p2);
     if (this.isWindows) {
       return path1.toUpperCase() === path2.toUpperCase();
-    } else {
-      return path1 === path2;
     }
+    return path1 === path2;
   }
 }

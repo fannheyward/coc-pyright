@@ -3,18 +3,8 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-'use strict';
-
-import * as Path from 'path';
-import { IStringDictionary, ISystemVariables } from './types';
-
-const _typeof = {
-  number: 'number',
-  string: 'string',
-  undefined: 'undefined',
-  object: 'object',
-  function: 'function',
-};
+import * as Path from 'node:path';
+import type { IStringDictionary, ISystemVariables } from './types';
 
 /**
  * @returns whether the provided parameter is a JavaScript Array or not.
@@ -24,7 +14,7 @@ function isArray(array: any): array is any[] {
     return Array.isArray(array);
   }
 
-  if (array && typeof array.length === _typeof.number && array.constructor === Array) {
+  if (array && typeof array.length === 'number' && array.constructor === Array) {
     return true;
   }
 
@@ -35,7 +25,7 @@ function isArray(array: any): array is any[] {
  * @returns whether the provided parameter is a JavaScript String or not.
  */
 function isString(str: any): str is string {
-  if (typeof str === _typeof.string || str instanceof String) {
+  if (typeof str === 'string' || str instanceof String) {
     return true;
   }
 
@@ -48,7 +38,9 @@ function isString(str: any): str is string {
  *	`null`, an `array`, a `regexp`, nor a `date`.
  */
 function isObject(obj: any): obj is any {
-  return typeof obj === _typeof.object && obj !== null && !Array.isArray(obj) && !(obj instanceof RegExp) && !(obj instanceof Date);
+  return (
+    typeof obj === 'object' && obj !== null && !Array.isArray(obj) && !(obj instanceof RegExp) && !(obj instanceof Date)
+  );
 }
 
 abstract class AbstractSystemVariables implements ISystemVariables {
@@ -60,9 +52,11 @@ abstract class AbstractSystemVariables implements ISystemVariables {
   public resolve(value: any): any {
     if (isString(value)) {
       return this.__resolveString(value);
-    } else if (isArray(value)) {
+    }
+    if (isArray(value)) {
       return this.__resolveArray(value);
-    } else if (isObject(value)) {
+    }
+    if (isObject(value)) {
       return this.__resolveLiteral(value);
     }
 
@@ -73,9 +67,11 @@ abstract class AbstractSystemVariables implements ISystemVariables {
   public resolveAny(value: any): any {
     if (isString(value)) {
       return this.__resolveString(value);
-    } else if (isArray(value)) {
+    }
+    if (isArray(value)) {
       return this.__resolveAnyArray(value);
-    } else if (isObject(value)) {
+    }
+    if (isObject(value)) {
       return this.__resolveAnyLiteral(value);
     }
 
@@ -88,28 +84,29 @@ abstract class AbstractSystemVariables implements ISystemVariables {
       const newValue = (<any>this)[name];
       if (isString(newValue)) {
         return newValue;
-      } else {
-        return match && (match.indexOf('env.') > 0 || match.indexOf('env:') > 0) ? '' : match;
       }
+      return match && (match.indexOf('env.') > 0 || match.indexOf('env:') > 0) ? '' : match;
     });
   }
 
-  private __resolveLiteral(values: IStringDictionary<string | IStringDictionary<string> | string[]>): IStringDictionary<string | IStringDictionary<string> | string[]> {
+  private __resolveLiteral(
+    values: IStringDictionary<string | IStringDictionary<string> | string[]>,
+  ): IStringDictionary<string | IStringDictionary<string> | string[]> {
     const result: IStringDictionary<string | IStringDictionary<string> | string[]> = Object.create(null);
-    Object.keys(values).forEach((key) => {
+    for (const key of Object.keys(values)) {
       const value = values[key];
       result[key] = <any>this.resolve(<any>value);
-    });
+    }
     return result;
   }
 
   private __resolveAnyLiteral<T>(values: T): T;
   private __resolveAnyLiteral(values: any): any {
     const result: IStringDictionary<string | IStringDictionary<string> | string[]> = Object.create(null);
-    Object.keys(values).forEach((key) => {
+    for (const key of Object.keys(values)) {
       const value = values[key];
       result[key] = <any>this.resolveAny(<any>value);
-    });
+    }
     return result;
   }
 
@@ -131,9 +128,11 @@ export class SystemVariables extends AbstractSystemVariables {
     super();
     this._workspaceFolder = typeof workspaceFolder === 'string' ? workspaceFolder : __dirname;
     this._workspaceFolderName = Path.basename(this._workspaceFolder);
-    Object.keys(process.env).forEach((key) => {
-      ((this as any) as Record<string, string | undefined>)[`env:${key}`] = ((this as any) as Record<string, string | undefined>)[`env.${key}`] = process.env[key];
-    });
+    for (const key of Object.keys(process.env)) {
+      (this as any as Record<string, string | undefined>)[`env:${key}`] = (
+        this as any as Record<string, string | undefined>
+      )[`env.${key}`] = process.env[key];
+    }
   }
 
   public get cwd(): string {

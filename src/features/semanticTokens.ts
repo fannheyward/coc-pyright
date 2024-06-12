@@ -1,14 +1,14 @@
 import { convertOffsetsToRange, convertTextRangeToRange } from '@zzzen/pyright-internal/dist/common/positionUtils';
 import {
-  CancellationToken,
-  DocumentSemanticTokensProvider,
-  LinesTextDocument,
-  ProviderResult,
+  type CancellationToken,
+  type DocumentSemanticTokensProvider,
+  type LinesTextDocument,
+  type ProviderResult,
   SemanticTokenModifiers,
   SemanticTokenTypes,
-  SemanticTokens,
+  type SemanticTokens,
   SemanticTokensBuilder,
-  SemanticTokensLegend,
+  type SemanticTokensLegend,
 } from 'coc.nvim';
 import * as parser from '../parsers';
 import { SemanticTokensWalker } from '../parsers';
@@ -28,7 +28,11 @@ const tokenTypes: string[] = [
   SemanticTokenTypes.variable,
 ];
 
-const tokenModifiers: string[] = [SemanticTokenModifiers.definition, SemanticTokenModifiers.declaration, SemanticTokenModifiers.async];
+const tokenModifiers: string[] = [
+  SemanticTokenModifiers.definition,
+  SemanticTokenModifiers.declaration,
+  SemanticTokenModifiers.async,
+];
 
 function encodeTokenType(type: string): number {
   const idx = tokenTypes.indexOf(type);
@@ -53,10 +57,13 @@ function encodeTokenModifiers(modifiers: string[]): number {
 export class PythonSemanticTokensProvider implements DocumentSemanticTokensProvider {
   public readonly legend: SemanticTokensLegend = { tokenTypes, tokenModifiers };
 
-  public provideDocumentSemanticTokens(document: LinesTextDocument, token: CancellationToken): ProviderResult<SemanticTokens> {
+  public provideDocumentSemanticTokens(
+    document: LinesTextDocument,
+    token: CancellationToken,
+  ): ProviderResult<SemanticTokens> {
     const parsed = parser.parse(document.getText());
     if (!parsed) return null;
-    if (token && token.isCancellationRequested) return null;
+    if (token?.isCancellationRequested) return null;
 
     const builder = new SemanticTokensBuilder(this.legend);
     // @ts-ignore
@@ -72,7 +79,13 @@ export class PythonSemanticTokensProvider implements DocumentSemanticTokensProvi
 
     for (const item of walker.semanticItems) {
       const range = convertOffsetsToRange(item.start, item.start + item.length, parsed.tokenizerOutput.lines);
-      builder.push(range.start.line, range.start.character, item.length, encodeTokenType(item.type), encodeTokenModifiers(item.modifiers));
+      builder.push(
+        range.start.line,
+        range.start.character,
+        item.length,
+        encodeTokenType(item.type),
+        encodeTokenModifiers(item.modifiers),
+      );
     }
 
     return builder.build();

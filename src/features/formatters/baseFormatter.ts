@@ -1,10 +1,21 @@
-import { CancellationToken, FormattingOptions, OutputChannel, Range, TextDocument, TextEdit, Thenable, Uri, window, workspace } from 'coc.nvim';
-import fs from 'fs';
+import {
+  type CancellationToken,
+  type FormattingOptions,
+  type OutputChannel,
+  type Range,
+  type TextDocument,
+  type TextEdit,
+  type Thenable,
+  Uri,
+  window,
+  workspace,
+} from 'coc.nvim';
+import fs from 'node:fs';
 import md5 from 'md5';
-import path from 'path';
+import path from 'node:path';
 import which from 'which';
 import { isNotInstalledError, PythonExecutionService } from '../../processService';
-import { ExecutionInfo, FormatterId, IPythonSettings } from '../../types';
+import type { ExecutionInfo, FormatterId, IPythonSettings } from '../../types';
 import { getTextEditsFromPatch } from '../../utils';
 
 function getTempFileWithDocumentContents(document: TextDocument): Promise<string> {
@@ -28,9 +39,18 @@ function getTempFileWithDocumentContents(document: TextDocument): Promise<string
 }
 
 export abstract class BaseFormatter {
-  constructor(public readonly Id: FormatterId, public readonly pythonSettings: IPythonSettings, public readonly outputChannel: OutputChannel) {}
+  constructor(
+    public readonly Id: FormatterId,
+    public readonly pythonSettings: IPythonSettings,
+    public readonly outputChannel: OutputChannel,
+  ) {}
 
-  public abstract formatDocument(document: TextDocument, options: FormattingOptions, token: CancellationToken, range?: Range): Thenable<TextEdit[]>;
+  public abstract formatDocument(
+    document: TextDocument,
+    options: FormattingOptions,
+    token: CancellationToken,
+    range?: Range,
+  ): Thenable<TextEdit[]>;
   protected getDocumentPath(document: TextDocument, fallbackPath?: string): string {
     const filepath = Uri.parse(document.uri).fsPath;
     if (fallbackPath && path.basename(filepath) === filepath) {
@@ -55,14 +75,16 @@ export abstract class BaseFormatter {
     return { execPath, moduleName, args };
   }
 
-  protected async provideDocumentFormattingEdits(document: TextDocument, _options: FormattingOptions, token: CancellationToken, args: string[], cwd?: string): Promise<TextEdit[]> {
+  protected async provideDocumentFormattingEdits(
+    document: TextDocument,
+    _options: FormattingOptions,
+    token: CancellationToken,
+    args: string[],
+    root?: string,
+  ): Promise<TextEdit[]> {
     if (this.pythonSettings.stdLibs.some((p) => Uri.parse(document.uri).fsPath.startsWith(p))) {
       return [];
     }
-    if (typeof cwd !== 'string' || cwd.length === 0) {
-      cwd = Uri.file(workspace.root).fsPath;
-    }
-
     // autopep8 and yapf have the ability to read from the process input stream and return the formatted code out of the output stream.
     // However they don't support returning the diff of the formatted text when reading data from the input stream.
     // Yet getting text formatted that way avoids having to create a temporary file, however the diffing will have
@@ -79,6 +101,7 @@ export abstract class BaseFormatter {
     this.outputChannel.appendLine(`moduleName: ${executionInfo.moduleName}`);
     this.outputChannel.appendLine(`args:       ${executionInfo.args}`);
 
+    const cwd = root?.length ? root : Uri.file(workspace.root).fsPath;
     const pythonToolsExecutionService = new PythonExecutionService();
     const promise = pythonToolsExecutionService
       .exec(executionInfo, { cwd, throwOnStdErr: false, token })
@@ -135,7 +158,7 @@ export abstract class BaseFormatter {
   }
 
   private checkCancellation(originalFile: string, tempFile: string, state: string, token?: CancellationToken): boolean {
-    if (token && token.isCancellationRequested) {
+    if (token?.isCancellationRequested) {
       this.outputChannel.appendLine(`${'#'.repeat(10)} ${this.Id} formatting action is canceled on ${state}`);
       this.deleteTempFile(originalFile, tempFile).catch(() => {});
       return true;

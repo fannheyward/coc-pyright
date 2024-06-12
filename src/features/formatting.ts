@@ -1,20 +1,20 @@
 import {
-  CancellationToken,
-  Disposable,
-  DocumentFormattingEditProvider,
-  DocumentRangeFormattingEditProvider,
-  FormattingOptions,
-  OutputChannel,
-  ProviderResult,
-  Range,
-  TextDocument,
-  TextEdit,
+  type CancellationToken,
+  type Disposable,
+  type DocumentFormattingEditProvider,
+  type DocumentRangeFormattingEditProvider,
+  type FormattingOptions,
+  type OutputChannel,
+  type ProviderResult,
+  type Range,
+  type TextDocument,
+  type TextEdit,
   window,
 } from 'coc.nvim';
 import { PythonSettings } from '../configSettings';
-import { FormatterId } from '../types';
+import type { FormatterId } from '../types';
 import { AutoPep8Formatter } from './formatters/autopep8';
-import { BaseFormatter } from './formatters/baseFormatter';
+import type { BaseFormatter } from './formatters/baseFormatter';
 import { BlackFormatter } from './formatters/black';
 import { BlackdFormatter } from './formatters/blackd';
 import { DarkerFormatter } from './formatters/darker';
@@ -22,7 +22,9 @@ import { PyinkFormatter } from './formatters/pyink';
 import { RuffFormatter } from './formatters/ruff';
 import { YapfFormatter } from './formatters/yapf';
 
-export class PythonFormattingEditProvider implements DocumentFormattingEditProvider, DocumentRangeFormattingEditProvider {
+export class PythonFormattingEditProvider
+  implements DocumentFormattingEditProvider, DocumentRangeFormattingEditProvider
+{
   private formatters = new Map<FormatterId, BaseFormatter>();
   private disposables: Disposable[] = [];
   private pythonSettings: PythonSettings;
@@ -60,11 +62,18 @@ export class PythonFormattingEditProvider implements DocumentFormattingEditProvi
     }
   }
 
-  private async _provideEdits(document: TextDocument, options: FormattingOptions, token: CancellationToken, range?: Range): Promise<TextEdit[]> {
+  private async _provideEdits(
+    document: TextDocument,
+    options: FormattingOptions,
+    token: CancellationToken,
+    range?: Range,
+  ): Promise<TextEdit[]> {
     const provider = this.pythonSettings.formatting.provider;
     const formatter = this.formatters.get(provider);
     if (!formatter) {
-      this.outputChannel.appendLine(`${'#'.repeat(10)} Error: python.formatting.provider is ${provider}, which is not supported`);
+      this.outputChannel.appendLine(
+        `${'#'.repeat(10)} Error: python.formatting.provider is ${provider}, which is not supported`,
+      );
       return [];
     }
 
@@ -73,15 +82,26 @@ export class PythonFormattingEditProvider implements DocumentFormattingEditProvi
     return formatter.formatDocument(document, options, token, range);
   }
 
-  provideDocumentFormattingEdits(document: TextDocument, options: FormattingOptions, token: CancellationToken): ProviderResult<TextEdit[]> {
+  provideDocumentFormattingEdits(
+    document: TextDocument,
+    options: FormattingOptions,
+    token: CancellationToken,
+  ): ProviderResult<TextEdit[]> {
     return this._provideEdits(document, options, token);
   }
 
-  provideDocumentRangeFormattingEdits(document: TextDocument, range: Range, options: FormattingOptions, token: CancellationToken): ProviderResult<TextEdit[]> {
+  provideDocumentRangeFormattingEdits(
+    document: TextDocument,
+    range: Range,
+    options: FormattingOptions,
+    token: CancellationToken,
+  ): ProviderResult<TextEdit[]> {
     return this._provideEdits(document, options, token, range);
   }
 
   public dispose() {
-    this.disposables.forEach((d) => d.dispose());
+    for (const d of this.disposables) {
+      d.dispose();
+    }
   }
 }

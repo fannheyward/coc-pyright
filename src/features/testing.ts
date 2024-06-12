@@ -1,7 +1,19 @@
-import { CodeAction, CodeActionKind, CodeActionProvider, CodeLens, CodeLensProvider, events, LinesTextDocument, Position, Range, Uri, workspace } from 'coc.nvim';
-import path from 'path';
+import {
+  type CodeAction,
+  CodeActionKind,
+  type CodeActionProvider,
+  type CodeLens,
+  type CodeLensProvider,
+  events,
+  type LinesTextDocument,
+  Position,
+  Range,
+  Uri,
+  workspace,
+} from 'coc.nvim';
+import path from 'node:path';
 import * as parser from '../parsers';
-import { TestingFramework } from '../types';
+import type { TestingFramework } from '../types';
 import { rangeInRange } from '../utils';
 
 export class TestFrameworkProvider implements CodeLensProvider, CodeActionProvider {

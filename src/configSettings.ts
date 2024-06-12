@@ -1,10 +1,10 @@
-import * as child_process from 'child_process';
-import { ConfigurationChangeEvent, Disposable, workspace, WorkspaceConfiguration } from 'coc.nvim';
-import fs from 'fs';
-import path from 'path';
+import * as child_process from 'node:child_process';
+import { type ConfigurationChangeEvent, type Disposable, workspace, type WorkspaceConfiguration } from 'coc.nvim';
+import fs from 'node:fs';
+import path from 'node:path';
 import which from 'which';
 import { SystemVariables } from './systemVariables';
-import { IFormattingSettings, ILintingSettings, IPythonSettings, ISortImportSettings } from './types';
+import type { IFormattingSettings, ILintingSettings, IPythonSettings, ISortImportSettings } from './types';
 
 export class PythonSettings implements IPythonSettings {
   private workspaceRoot: string;
@@ -35,18 +35,23 @@ export class PythonSettings implements IPythonSettings {
   }
 
   public static dispose() {
-    PythonSettings.pythonSettings.forEach((item) => item && item.dispose());
+    for (const item of PythonSettings.pythonSettings) {
+      item[1].dispose();
+    }
     PythonSettings.pythonSettings.clear();
   }
 
   public dispose() {
-    this.disposables.forEach((disposable) => disposable && disposable.dispose());
+    for (const disposable of this.disposables) {
+      disposable.dispose();
+    }
     this.disposables = [];
   }
 
   private resolvePythonFromVENV(): string | undefined {
     function pythonBinFromPath(p: string): string | undefined {
-      const fullPath = process.platform === 'win32' ? path.join(p, 'Scripts', 'python.exe') : path.join(p, 'bin', 'python');
+      const fullPath =
+        process.platform === 'win32' ? path.join(p, 'Scripts', 'python.exe') : path.join(p, 'bin', 'python');
       return fs.existsSync(fullPath) ? fullPath : undefined;
     }
 
@@ -80,7 +85,12 @@ export class PythonSettings implements IPythonSettings {
       // poetry
       p = path.join(this.workspaceRoot, 'poetry.lock');
       if (fs.existsSync(p)) {
-        const list = child_process.spawnSync('poetry', ['env', 'list', '--full-path', '--no-ansi'], { encoding: 'utf8', cwd: this.workspaceRoot }).stdout.trim();
+        const list = child_process
+          .spawnSync('poetry', ['env', 'list', '--full-path', '--no-ansi'], {
+            encoding: 'utf8',
+            cwd: this.workspaceRoot,
+          })
+          .stdout.trim();
         let info = '';
         for (const item of list.split('\n')) {
           if (item.includes('(Activated)')) {
@@ -179,14 +189,12 @@ export class PythonSettings implements IPythonSettings {
   }
 
   private getAbsolutePath(pathToCheck: string, rootDir?: string): string {
-    if (!rootDir) {
-      rootDir = this.workspaceRoot;
+    const realPath = workspace.expand(pathToCheck);
+    if (realPath.indexOf(path.sep) === -1) {
+      return realPath;
     }
-    pathToCheck = workspace.expand(pathToCheck);
-    if (pathToCheck.indexOf(path.sep) === -1) {
-      return pathToCheck;
-    }
-    return path.isAbsolute(pathToCheck) ? pathToCheck : path.resolve(rootDir, pathToCheck);
+    const root = rootDir ? rootDir : this.workspaceRoot;
+    return path.isAbsolute(realPath) ? realPath : path.resolve(root, realPath);
   }
 
   protected initialize(): void {
@@ -196,7 +204,7 @@ export class PythonSettings implements IPythonSettings {
           const currentConfig = workspace.getConfiguration('python', workspace.root);
           this.update(currentConfig);
         }
-      })
+      }),
     );
 
     const initialConfig = workspace.getConfiguration('python', workspace.root);
@@ -206,22 +214,16 @@ export class PythonSettings implements IPythonSettings {
   }
 }
 
-function getPythonExecutable(pythonPath: string): string {
-  pythonPath = workspace.expand(pythonPath);
-
+function getPythonExecutable(value: string): string {
   // If only 'python'.
-  if (pythonPath === 'python' || pythonPath.indexOf(path.sep) === -1 || path.basename(pythonPath) === path.dirname(pythonPath)) {
-    const bin = which.sync(pythonPath, { nothrow: true });
+  if (value === 'python' || value.indexOf(path.sep) === -1 || path.basename(value) === path.dirname(value)) {
+    const bin = which.sync(value, { nothrow: true });
     if (bin) {
-      pythonPath = bin;
+      return bin;
     }
   }
 
-  if (isValidPythonPath(pythonPath)) {
-    return pythonPath;
-  }
-
-  return pythonPath;
+  return workspace.expand(value);
 }
 
 function getStdLibs(pythonPath: string): string[] {
@@ -235,13 +237,5 @@ function getStdLibs(pythonPath: string): string[] {
     return [sitePkgs, userPkgs];
   } catch (e) {
     return [];
-  }
-}
-
-function isValidPythonPath(pythonPath: string): boolean {
-  try {
-    return child_process.spawnSync(pythonPath, ['-c', 'print(1234)'], { encoding: 'utf8' }).stdout.startsWith('1234');
-  } catch (ex) {
-    return false;
   }
 }

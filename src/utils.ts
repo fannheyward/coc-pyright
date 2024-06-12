@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { Position, Range, TextDocument, TextEdit, Uri } from 'coc.nvim';
-import { Diff, diff_match_patch } from 'diff-match-patch';
-import fs from 'fs';
+import { type Position, Range, type TextDocument, TextEdit, Uri } from 'coc.nvim';
+import { type Diff, diff_match_patch } from 'diff-match-patch';
+import fs from 'node:fs';
 import md5 from 'md5';
-import { EOL } from 'os';
-import * as path from 'path';
+import { EOL } from 'node:os';
+import * as path from 'node:path';
 const NEW_LINE_LENGTH = EOL.length;
 
 enum EditAction {
-  Delete,
-  Insert,
-  Replace,
+  Delete = 0,
+  Insert = 1,
+  Replace = 2,
 }
 
 class Patch {
@@ -54,8 +54,10 @@ function getTextEditsInternal(before: string, diffs: [number, string][], startLi
   let line = startLine;
   let character = 0;
   if (line > 0) {
-    const beforeLines = before.split(/\r?\n/g);
-    beforeLines.filter((_l, i) => i < line).forEach((l) => (character += l.length + NEW_LINE_LENGTH));
+    const beforeLines = before.split(/\r?\n/g).filter((_l, i) => i < line);
+    for (const l of beforeLines) {
+      character += l.length + NEW_LINE_LENGTH;
+    }
   }
   const edits: Edit[] = [];
   let edit: Edit | null = null;
@@ -199,7 +201,9 @@ function patch_fromText(textline: string): Patch[] {
   return patches;
 }
 
-export function getTextEditsFromPatch(before: string, patch: string): TextEdit[] {
+export function getTextEditsFromPatch(before: string, input: string): TextEdit[] {
+  let patch = input;
+
   if (patch.startsWith('---')) {
     // Strip the first two lines
     patch = patch.substring(patch.indexOf('@@'));
@@ -220,12 +224,14 @@ export function getTextEditsFromPatch(before: string, patch: string): TextEdit[]
   const textEdits: TextEdit[] = [];
 
   // Add line feeds and build the text edits
-  patches.forEach((p) => {
-    p.diffs.forEach((diff) => {
+  for (const p of patches) {
+    for (const diff of p.diffs) {
       diff[1] += EOL;
-    });
-    getTextEditsInternal(before, p.diffs, p.start1).forEach((edit) => textEdits.push(edit.apply()));
-  });
+    }
+    for (const edit of getTextEditsInternal(before, p.diffs, p.start1)) {
+      textEdits.push(edit.apply());
+    }
+  }
 
   return textEdits;
 }
@@ -282,8 +288,8 @@ export function getTempFileWithDocumentContents(document: TextDocument): Promise
 
 function comparePosition(position: Position, other: Position): number {
   if (position.line > other.line) return 1;
-  if (other.line == position.line && position.character > other.character) return 1;
-  if (other.line == position.line && position.character == other.character) return 0;
+  if (other.line === position.line && position.character > other.character) return 1;
+  if (other.line === position.line && position.character === other.character) return 0;
   return -1;
 }
 
@@ -297,4 +303,3 @@ export function positionInRange(position: Position, range: Range): number {
 export function rangeInRange(r: Range, range: Range): boolean {
   return positionInRange(r.start, range) === 0 && positionInRange(r.end, range) === 0;
 }
-

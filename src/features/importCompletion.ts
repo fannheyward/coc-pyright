@@ -1,7 +1,22 @@
-import { CancellationToken, CompletionContext, CompletionItem, CompletionItemKind, CompletionItemProvider, LinesTextDocument, Position, Range, sources } from 'coc.nvim';
+import {
+  type CancellationToken,
+  type CompletionContext,
+  type CompletionItem,
+  CompletionItemKind,
+  type CompletionItemProvider,
+  type LinesTextDocument,
+  type Position,
+  Range,
+  sources,
+} from 'coc.nvim';
 
 export class ImportCompletionProvider implements CompletionItemProvider {
-  async provideCompletionItems(document: LinesTextDocument, position: Position, token: CancellationToken, context: CompletionContext): Promise<CompletionItem[]> {
+  async provideCompletionItems(
+    document: LinesTextDocument,
+    position: Position,
+    token: CancellationToken,
+    context: CompletionContext,
+  ): Promise<CompletionItem[]> {
     if (context.triggerCharacter !== ' ') return [];
     const line = document.getText(Range.create(position.line, 0, position.line, position.character)).trim();
     if (!line.includes('from') && !line.includes('import')) return [];
@@ -18,8 +33,13 @@ export class ImportCompletionProvider implements CompletionItemProvider {
     if (!result) return [];
     const items: CompletionItem[] = [];
     for (const o of result.items) {
-      // @ts-ignore
-      items.push({ label: o.label || o.word, sortText: o.sortText, kind: CompletionItemKind.Module, filterText: o.filterText });
+      items.push({
+        // @ts-ignore
+        label: o.label || o.word,
+        sortText: o.sortText,
+        kind: CompletionItemKind.Module,
+        filterText: o.filterText,
+      });
     }
     return items;
   }

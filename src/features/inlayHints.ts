@@ -1,17 +1,17 @@
 import {
-  CancellationToken,
+  type CancellationToken,
   Emitter,
-  Event,
-  Hover,
-  InlayHint,
-  InlayHintLabelPart,
-  InlayHintsProvider,
-  LanguageClient,
-  LinesTextDocument,
-  MarkupContent,
+  type Event,
+  type Hover,
+  type InlayHint,
+  type InlayHintLabelPart,
+  type InlayHintsProvider,
+  type LanguageClient,
+  type LinesTextDocument,
+  type MarkupContent,
   Position,
-  Range,
-  SignatureHelp,
+  type Range,
+  type SignatureHelp,
   workspace,
 } from 'coc.nvim';
 
@@ -60,7 +60,8 @@ export class TypeInlayHintsProvider implements InlayHintsProvider {
       const startPosition = document.positionAt(item.startOffset);
       const endPosition = document.positionAt(item.endOffset);
       const hover = item.inlayHintType === 'parameter' ? null : await this.getHoverAtOffset(document, startPosition);
-      const signatureInfo = item.inlayHintType === 'parameter' ? await this.getSignatureHelpAtOffset(document, startPosition) : null;
+      const signatureInfo =
+        item.inlayHintType === 'parameter' ? await this.getSignatureHelpAtOffset(document, startPosition) : null;
 
       let inlayHintLabelValue: string | undefined = undefined;
       switch (item.inlayHintType) {
@@ -126,7 +127,7 @@ export class TypeInlayHintsProvider implements InlayHintsProvider {
   private getVariableHintFromHover(hover: Hover | null): string | undefined {
     if (!hover) return;
     const contents = hover.contents as MarkupContent;
-    if (contents && contents.value.includes('(variable)')) {
+    if (contents.value.includes('(variable)')) {
       if (contents.value.includes('(variable) def')) {
         return;
       }
@@ -139,7 +140,7 @@ export class TypeInlayHintsProvider implements InlayHintsProvider {
         if (text === 'Any' || text.startsWith('Literal[')) {
           return;
         }
-        return ': ' + text;
+        return `: ${text}`;
       }
     }
   }
@@ -150,7 +151,7 @@ export class TypeInlayHintsProvider implements InlayHintsProvider {
     if (contents && (contents.value.includes('(function)') || contents.value.includes('(method)'))) {
       const retvalIdx = contents.value.indexOf('->') + 2;
       const text = contents.value.substring(retvalIdx).split('\n')[0].trim();
-      return '-> ' + text;
+      return `-> ${text}`;
     }
   }
 
@@ -180,7 +181,7 @@ export class TypeInlayHintsProvider implements InlayHintsProvider {
     if (label.startsWith('__')) {
       return;
     }
-    return label + ': ';
+    return `${label}: `;
   }
 
   private enableForType(inlayHintType: string) {

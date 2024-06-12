@@ -1,13 +1,29 @@
-import { TextDocument, FormattingOptions, CancellationToken, Range, Thenable, TextEdit, OutputChannel } from 'coc.nvim';
-import { IPythonSettings } from '../../types';
+import type {
+  TextDocument,
+  FormattingOptions,
+  CancellationToken,
+  Range,
+  Thenable,
+  TextEdit,
+  OutputChannel,
+} from 'coc.nvim';
+import type { IPythonSettings } from '../../types';
 import { BaseFormatter } from './baseFormatter';
 
 export class YapfFormatter extends BaseFormatter {
-  constructor(public readonly pythonSettings: IPythonSettings, public readonly outputChannel: OutputChannel) {
+  constructor(
+    public readonly pythonSettings: IPythonSettings,
+    public readonly outputChannel: OutputChannel,
+  ) {
     super('yapf', pythonSettings, outputChannel);
   }
 
-  public formatDocument(document: TextDocument, options: FormattingOptions, token: CancellationToken, range?: Range): Thenable<TextEdit[]> {
+  public formatDocument(
+    document: TextDocument,
+    options: FormattingOptions,
+    token: CancellationToken,
+    range?: Range,
+  ): Thenable<TextEdit[]> {
     const yapfArgs = ['--diff'];
     if (this.pythonSettings.formatting.yapfArgs.length > 0) {
       yapfArgs.push(...this.pythonSettings.formatting.yapfArgs);

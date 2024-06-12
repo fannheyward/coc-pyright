@@ -1,5 +1,14 @@
-import { CancellationToken, DiagnosticTag, OutputChannel, Range, TextDocument, TextEdit, Uri, WorkspaceEdit } from 'coc.nvim';
-import { ILinterInfo, ILintMessage, LintMessageSeverity } from '../../types';
+import {
+  type CancellationToken,
+  DiagnosticTag,
+  type OutputChannel,
+  Range,
+  type TextDocument,
+  TextEdit,
+  Uri,
+  type WorkspaceEdit,
+} from 'coc.nvim';
+import { type ILinterInfo, type ILintMessage, LintMessageSeverity } from '../../types';
 import { BaseLinter } from './baseLinter';
 
 const COLUMN_OFF_SET = 1;
@@ -66,13 +75,18 @@ export class Ruff extends BaseLinter {
     super(info, outputChannel, COLUMN_OFF_SET);
   }
 
-  private fixToWorkspaceEdit(filename: string, fix: IRuffFix): { title: string, edit: WorkspaceEdit } | null {
+  private fixToWorkspaceEdit(filename: string, fix: IRuffFix): { title: string; edit: WorkspaceEdit } | null {
     if (!fix) return null;
 
     const u = Uri.parse(filename).toString();
-    if (fix.edits && fix.edits.length) {
+    if (fix.edits?.length) {
       const changes = fix.edits.map((edit) => {
-        const range = Range.create(edit.location.row - 1, edit.location.column - 1, edit.end_location.row - 1, edit.end_location.column - 1);
+        const range = Range.create(
+          edit.location.row - 1,
+          edit.location.column - 1,
+          edit.end_location.row - 1,
+          edit.end_location.column - 1,
+        );
         return TextEdit.replace(range, edit.content);
       });
       return {
@@ -81,11 +95,16 @@ export class Ruff extends BaseLinter {
           changes: {
             [u]: changes,
           },
-
         },
       };
-    } else if (fix.location && fix.end_location) {
-      const range = Range.create(fix.location.row - 1, fix.location.column, fix.end_location.row - 1, fix.end_location.column);
+    }
+    if (fix.location && fix.end_location) {
+      const range = Range.create(
+        fix.location.row - 1,
+        fix.location.column,
+        fix.end_location.row - 1,
+        fix.end_location.column,
+      );
       return {
         title: `Ruff: ${fix.message}`,
         edit: {

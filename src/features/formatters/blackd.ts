@@ -1,14 +1,28 @@
-import { spawn } from 'child_process';
-import { CancellationToken, fetch, FormattingOptions, OutputChannel, Range, TextDocument, TextEdit, Thenable, Uri, window } from 'coc.nvim';
+import { spawn } from 'node:child_process';
+import {
+  type CancellationToken,
+  fetch,
+  type FormattingOptions,
+  type OutputChannel,
+  type Range,
+  type TextDocument,
+  type TextEdit,
+  type Thenable,
+  Uri,
+  window,
+} from 'coc.nvim';
 import getPort from 'get-port';
 import { getTextEditsFromPatch } from '../../utils';
-import { IPythonSettings } from '../../types';
+import type { IPythonSettings } from '../../types';
 import { BaseFormatter } from './baseFormatter';
 
 export class BlackdFormatter extends BaseFormatter {
   private blackdHTTPURL = '';
 
-  constructor(public readonly pythonSettings: IPythonSettings, public readonly outputChannel: OutputChannel) {
+  constructor(
+    public readonly pythonSettings: IPythonSettings,
+    public readonly outputChannel: OutputChannel,
+  ) {
     super('blackd', pythonSettings, outputChannel);
 
     this.blackdHTTPURL = this.pythonSettings.formatting.blackdHTTPURL;
@@ -58,14 +72,19 @@ export class BlackdFormatter extends BaseFormatter {
     }
   }
 
-  public formatDocument(document: TextDocument, _options: FormattingOptions, _token: CancellationToken, range?: Range): Thenable<TextEdit[]> {
+  public formatDocument(
+    document: TextDocument,
+    _options: FormattingOptions,
+    _token: CancellationToken,
+    range?: Range,
+  ): Thenable<TextEdit[]> {
     if (range) {
       const msg = 'blackd does not support range formatting';
       this.outputChannel.appendLine(msg);
       window.showErrorMessage(msg);
       return Promise.resolve([]);
     }
-    if (this.pythonSettings.stdLibs.some(p => Uri.parse(document.uri).fsPath.startsWith(p))) {
+    if (this.pythonSettings.stdLibs.some((p) => Uri.parse(document.uri).fsPath.startsWith(p))) {
       return Promise.resolve([]);
     }
 

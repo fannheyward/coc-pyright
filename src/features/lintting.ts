@@ -1,4 +1,14 @@
-import { commands, ConfigurationChangeEvent, DiagnosticCollection, DidChangeTextDocumentParams, Disposable, ExtensionContext, TextDocument, Uri, workspace } from 'coc.nvim';
+import {
+  commands,
+  type ConfigurationChangeEvent,
+  type DiagnosticCollection,
+  type DidChangeTextDocumentParams,
+  type Disposable,
+  type ExtensionContext,
+  type TextDocument,
+  Uri,
+  workspace,
+} from 'coc.nvim';
 import { PythonSettings } from '../configSettings';
 import { LintingEngine } from './linters/lintingEngine';
 
@@ -18,7 +28,7 @@ export class LinterProvider implements Disposable {
     workspace.onDidOpenTextDocument((e) => this.onDocumentOpened(e), this.context.subscriptions);
     workspace.onDidCloseTextDocument((e) => this.onDocumentClosed(e), this.context.subscriptions);
     workspace.onDidSaveTextDocument((e) => this.onDocumentSaved(e), this.context.subscriptions);
-    workspace.onDidChangeTextDocument(e => this.onDocumentChanged(e), this.context.subscriptions);
+    workspace.onDidChangeTextDocument((e) => this.onDocumentChanged(e), this.context.subscriptions);
 
     const disposable = workspace.onDidChangeConfiguration(this.lintSettingsChangedHandler.bind(this));
     this.disposables.push(disposable);
@@ -29,7 +39,9 @@ export class LinterProvider implements Disposable {
   }
 
   public dispose() {
-    this.disposables.forEach((d) => d.dispose());
+    for (const d of this.disposables) {
+      d.dispose();
+    }
   }
 
   private runLinting(): Promise<DiagnosticCollection> {
@@ -38,11 +50,11 @@ export class LinterProvider implements Disposable {
 
   private lintSettingsChangedHandler(e: ConfigurationChangeEvent) {
     // Look for python files that belong to the specified workspace folder.
-    workspace.textDocuments.forEach((document) => {
+    for (const document of workspace.textDocuments) {
       if (e.affectsConfiguration('python.linting', document.uri)) {
         this.engine.lintDocument(document).catch(() => {});
       }
-    });
+    }
   }
 
   private onDocumentOpened(document: TextDocument): void {

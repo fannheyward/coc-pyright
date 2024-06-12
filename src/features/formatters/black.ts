@@ -1,13 +1,29 @@
-import { CancellationToken, FormattingOptions, OutputChannel, Range, TextDocument, TextEdit, Thenable } from 'coc.nvim';
-import { IPythonSettings } from '../../types';
+import type {
+  CancellationToken,
+  FormattingOptions,
+  OutputChannel,
+  Range,
+  TextDocument,
+  TextEdit,
+  Thenable,
+} from 'coc.nvim';
+import type { IPythonSettings } from '../../types';
 import { BaseFormatter } from './baseFormatter';
 
 export class BlackFormatter extends BaseFormatter {
-  constructor(public readonly pythonSettings: IPythonSettings, public readonly outputChannel: OutputChannel) {
+  constructor(
+    public readonly pythonSettings: IPythonSettings,
+    public readonly outputChannel: OutputChannel,
+  ) {
     super('black', pythonSettings, outputChannel);
   }
 
-  public formatDocument(document: TextDocument, options: FormattingOptions, token: CancellationToken, range?: Range): Thenable<TextEdit[]> {
+  public formatDocument(
+    document: TextDocument,
+    options: FormattingOptions,
+    token: CancellationToken,
+    range?: Range,
+  ): Thenable<TextEdit[]> {
     const blackArgs = ['--diff', '--quiet'];
     if (range) {
       blackArgs.push(`--line-ranges=${range.start.line + 1}-${range.end.line}`);

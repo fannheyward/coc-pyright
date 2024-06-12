@@ -1,26 +1,40 @@
-import { ChildProcess } from 'child_process';
-import { Disposable, Document, OutputChannel, Position, Range, TextDocument, Uri, window, workspace } from 'coc.nvim';
-import * as path from 'path';
-import fs from 'fs';
-import { createDeferred, Deferred } from '../async';
+import type { ChildProcess } from 'node:child_process';
+import {
+  type Disposable,
+  type Document,
+  type OutputChannel,
+  Position,
+  type Range,
+  type TextDocument,
+  Uri,
+  window,
+  workspace,
+} from 'coc.nvim';
+import * as path from 'node:path';
+import fs from 'node:fs';
+import { createDeferred, type Deferred } from '../async';
 import { PythonSettings } from '../configSettings';
 import { PythonExecutionService } from '../processService';
-import { IPythonSettings } from '../types';
-import { getTextEditsFromPatch, getWindowsLineEndingCount, splitLines, getTempFileWithDocumentContents } from '../utils';
+import type { IPythonSettings } from '../types';
+import {
+  getTextEditsFromPatch,
+  getWindowsLineEndingCount,
+  splitLines,
+  getTempFileWithDocumentContents,
+} from '../utils';
 
 class RefactorProxy implements Disposable {
   protected readonly isWindows = process.platform === 'win32';
   private _process?: ChildProcess;
-  private _extensionDir: string;
-  private _previousOutData = '';
-  private _previousStdErrData = '';
   private _startedSuccessfully = false;
   private _commandResolve?: (value?: any | PromiseLike<any>) => void;
   private _commandReject!: (reason?: any) => void;
   private initialized!: Deferred<void>;
-  constructor(extensionDir: string, readonly pythonSettings: IPythonSettings, private workspaceRoot: string) {
-    this._extensionDir = extensionDir;
-  }
+  constructor(
+    private extensionDir: string,
+    readonly pythonSettings: IPythonSettings,
+    private workspaceRoot: string,
+  ) {}
 
   public dispose() {
     try {
@@ -95,13 +109,13 @@ class RefactorProxy implements Disposable {
     return await new Promise<T>((resolve, reject) => {
       this._commandResolve = resolve;
       this._commandReject = reject;
-      this._process!.stdin!.write(command + '\n');
+      this._process!.stdin!.write(`${command}\n`);
     });
   }
 
   private async initialize(): Promise<void> {
     this.initialized = createDeferred<void>();
-    const cwd = path.join(this._extensionDir, 'pythonFiles');
+    const cwd = path.join(this.extensionDir, 'pythonFiles');
     const args = ['refactor.py', this.workspaceRoot];
     const pythonToolsExecutionService = new PythonExecutionService();
     const result = pythonToolsExecutionService.execObservable(this.pythonSettings.pythonPath, args, { cwd });
@@ -127,23 +141,24 @@ class RefactorProxy implements Disposable {
   private handleStdError(data: string) {
     // Possible there was an exception in parsing the data returned
     // So append the data then parse it
-    const dataStr = (this._previousStdErrData = this._previousStdErrData + data + '');
     let errorResponse: { message: string; traceback: string; type: string }[];
     try {
-      errorResponse = dataStr
+      errorResponse = data
         .split(/\r?\n/g)
         .filter((line) => line.length > 0)
         .map((resp) => JSON.parse(resp));
-      this._previousStdErrData = '';
     } catch (ex) {
       console.error(ex);
       // Possible we've only received part of the data, hence don't clear previousData
       return;
     }
     if (errorResponse[0].message.length === 0) {
-      errorResponse[0].message = splitLines(errorResponse[0].traceback, { trim: false, removeEmptyEntries: false }).pop()!;
+      errorResponse[0].message = splitLines(errorResponse[0].traceback, {
+        trim: false,
+        removeEmptyEntries: false,
+      }).pop()!;
     }
-    const errorMessage = errorResponse[0].message + '\n' + errorResponse[0].traceback;
+    const errorMessage = `${errorResponse[0].message}\n${errorResponse[0].traceback}`;
 
     if (this._startedSuccessfully) {
       this._commandReject(`Refactor failed. ${errorMessage}`);
@@ -171,14 +186,12 @@ class RefactorProxy implements Disposable {
 
     // Possible there was an exception in parsing the data returned
     // So append the data then parse it
-    const dataStr = (this._previousOutData = this._previousOutData + data + '');
     let response: any;
     try {
-      response = dataStr
+      response = data
         .split(/\r?\n/g)
         .filter((line) => line.length > 0)
         .map((resp) => JSON.parse(resp));
-      this._previousOutData = '';
     } catch (ex) {
       // Possible we've only received part of the data, hence don't clear previousData
       return;
@@ -205,11 +218,16 @@ function validateDocumentForRefactor(doc: Document): Promise<void> {
   });
 }
 
-export async function extractVariable(root: string, document: TextDocument, range: Range, outputChannel: OutputChannel): Promise<any> {
+export async function extractVariable(
+  root: string,
+  document: TextDocument,
+  range: Range,
+  outputChannel: OutputChannel,
+): Promise<any> {
   const pythonToolsExecutionService = new PythonExecutionService();
   const rope = await pythonToolsExecutionService.isModuleInstalled('rope');
   if (!rope) {
-    window.showWarningMessage(`Module rope not installed`);
+    window.showWarningMessage('Module rope not installed');
     return;
   }
 
@@ -222,19 +240,26 @@ export async function extractVariable(root: string, document: TextDocument, rang
   return validateDocumentForRefactor(doc).then(() => {
     const newName = `newvariable${new Date().getMilliseconds().toString()}`;
     const proxy = new RefactorProxy(root, pythonSettings, workspaceRoot);
-    const rename = proxy.extractVariable<RenameResponse>(doc.textDocument, newName, tempFile, range).then((response) => {
-      return response.results[0].diff;
-    });
+    const rename = proxy
+      .extractVariable<RenameResponse>(doc.textDocument, newName, tempFile, range)
+      .then((response) => {
+        return response.results[0].diff;
+      });
 
     return extractName(doc, newName, rename, outputChannel, tempFile);
   });
 }
 
-export async function extractMethod(root: string, document: TextDocument, range: Range, outputChannel: OutputChannel): Promise<any> {
+export async function extractMethod(
+  root: string,
+  document: TextDocument,
+  range: Range,
+  outputChannel: OutputChannel,
+): Promise<any> {
   const pythonToolsExecutionService = new PythonExecutionService();
   const rope = await pythonToolsExecutionService.isModuleInstalled('rope');
   if (!rope) {
-    window.showWarningMessage(`Module rope not installed`);
+    window.showWarningMessage('Module rope not installed');
     return;
   }
 
@@ -255,7 +280,13 @@ export async function extractMethod(root: string, document: TextDocument, range:
   });
 }
 
-async function extractName(textEditor: Document, newName: string, renameResponse: Promise<string>, outputChannel: OutputChannel, tempFile: string): Promise<any> {
+async function extractName(
+  textEditor: Document,
+  newName: string,
+  renameResponse: Promise<string>,
+  outputChannel: OutputChannel,
+  tempFile: string,
+): Promise<any> {
   let changeStartsAtLine = -1;
   try {
     const diff = await renameResponse;
@@ -263,11 +294,11 @@ async function extractName(textEditor: Document, newName: string, renameResponse
       return [];
     }
     const edits = getTextEditsFromPatch(textEditor.getDocumentContent(), diff);
-    edits.forEach((edit) => {
+    for (const edit of edits) {
       if (changeStartsAtLine === -1 || changeStartsAtLine > edit.range.start.line) {
         changeStartsAtLine = edit.range.start.line;
       }
-    });
+    }
     await textEditor.applyEdits(edits);
     await fs.promises.unlink(tempFile);
 
@@ -296,7 +327,7 @@ async function extractName(textEditor: Document, newName: string, renameResponse
     outputChannel.appendLine(`${'#'.repeat(10)}Refactor Output${'#'.repeat(10)}`);
     outputChannel.appendLine(`Error in refactoring:\n${errorMessage}`);
     outputChannel.appendLine('');
-    window.showErrorMessage(`Cannot perform refactoring using selected element(s).`);
+    window.showErrorMessage('Cannot perform refactoring using selected element(s).');
     return await Promise.reject(error);
   }
 }

@@ -1,9 +1,9 @@
-import { OutputChannel, TextDocument, commands, window, workspace } from 'coc.nvim';
-import fs from 'fs';
+import { type OutputChannel, type TextDocument, commands, window, workspace } from 'coc.nvim';
+import fs from 'node:fs';
 import which from 'which';
 import { PythonSettings } from '../configSettings';
 import { PythonExecutionService } from '../processService';
-import { ExecutionInfo } from '../types';
+import type { ExecutionInfo } from '../types';
 import { getTempFileWithDocumentContents, getTextEditsFromPatch } from '../utils';
 
 type SortProvider = 'pyright' | 'isort' | 'ruff';
@@ -23,7 +23,11 @@ function getSortProviderInfo(provider: SortProvider): ExecutionInfo {
   return { execPath, args };
 }
 
-async function generateImportsDiff(provider: SortProvider, document: TextDocument, outputChannel: OutputChannel): Promise<string> {
+async function generateImportsDiff(
+  provider: SortProvider,
+  document: TextDocument,
+  outputChannel: OutputChannel,
+): Promise<string> {
   const tempFile = await getTempFileWithDocumentContents(document);
 
   const executionInfo = getSortProviderInfo(provider);
@@ -70,6 +74,6 @@ export async function sortImports(outputChannel: OutputChannel): Promise<void> {
     }
     outputChannel.appendLine(`${'#'.repeat(10)} sortImports Error ${'#'.repeat(10)}`);
     outputChannel.appendLine(message);
-    window.showErrorMessage(`Failed to sort imports`);
+    window.showErrorMessage('Failed to sort imports');
   }
 }
