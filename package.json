@@ -43,7 +43,7 @@
     "@zzzen/pyright-internal": "^1.2.0-dev.20240526",
     "coc.nvim": "^0.0.83-next.18",
     "diff-match-patch": "^1.0.5",
-    "esbuild": "^0.21.4",
+    "esbuild": "^0.22.0",
     "get-port": "^6.1.2",
     "iconv-lite": "^0.6.3",
     "md5": "^2.3.0",
