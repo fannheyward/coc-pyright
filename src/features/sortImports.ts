@@ -11,13 +11,14 @@ function getSortProviderInfo(provider: SortProvider): ExecutionInfo {
   const pythonSettings = PythonSettings.getInstance();
   const modulePath = provider === 'isort' ? pythonSettings.sortImports.path : pythonSettings.linting.ruffPath;
   const execPath = which.sync(workspace.expand(modulePath), { nothrow: true }) || '';
-  let args = ['--diff'];
+  let args: string[] = [];
   if (provider === 'isort') {
+    args = ['--diff'];
     for (const item of pythonSettings.sortImports.args) {
       args.push(workspace.expand(item));
     }
   } else if (provider === 'ruff') {
-    args = args.concat(['--quiet', '--select', 'I001']);
+    args = ['check', '--diff'].concat(['--quiet', '--select', 'I001']);
   }
 
   return { execPath, args };
