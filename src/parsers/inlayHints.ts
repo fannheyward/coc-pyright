@@ -22,7 +22,7 @@ function isLeftSideOfAssignment(node: ParseNode): boolean {
   if (node.parent?.nodeType !== ParseNodeType.Assignment) {
     return false;
   }
-  return node.start < (node.parent as AssignmentNode).rightExpression.start;
+  return node.start < (node.parent as AssignmentNode).d.rightExpr.start;
 }
 
 export class TypeInlayHintsWalker extends ParseTreeWalker {
@@ -38,7 +38,7 @@ export class TypeInlayHintsWalker extends ParseTreeWalker {
         inlayHintType: 'variable',
         startOffset: node.start,
         endOffset: node.start + node.length - 1,
-        value: node.value,
+        value: node.d.value,
       });
     }
     return super.visitName(node);
@@ -48,9 +48,9 @@ export class TypeInlayHintsWalker extends ParseTreeWalker {
     if (isLeftSideOfAssignment(node)) {
       this.featureItems.push({
         inlayHintType: 'variable',
-        startOffset: node.memberName.start,
-        endOffset: node.memberName.start + node.memberName.length - 1,
-        value: node.memberName.value,
+        startOffset: node.d.member.start,
+        endOffset: node.d.member.start + node.d.member.length - 1,
+        value: node.d.member.d.value,
       });
     }
     return super.visitMemberAccess(node);
@@ -62,7 +62,7 @@ export class TypeInlayHintsWalker extends ParseTreeWalker {
         return false;
       }
       const result = getCallNodeAndActiveParameterIndex(node, node.start, this._parseResults.tokenizerOutput.tokens);
-      if (!result?.callNode || result.callNode.arguments[result.activeIndex].name) {
+      if (!result?.callNode || result.callNode.d.args[result.activeIndex].d.name) {
         return false;
       }
       this.featureItems.push({
@@ -77,12 +77,12 @@ export class TypeInlayHintsWalker extends ParseTreeWalker {
   override visitFunction(node: FunctionNode): boolean {
     // If the code describes a type, do not add the item.
     // Add item only if "node.returnTypeAnnotation" does not exist.
-    if (!node.returnTypeAnnotation) {
+    if (!node.d.returnAnnotation) {
       this.featureItems.push({
         inlayHintType: 'functionReturn',
-        startOffset: node.name.start,
-        endOffset: node.suite.start,
-        value: node.name.value,
+        startOffset: node.d.name.start,
+        endOffset: node.d.suite.start,
+        value: node.d.name.d.value,
       });
     }
     return super.visitFunction(node);

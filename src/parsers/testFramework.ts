@@ -19,7 +19,7 @@ export class TestFrameworkWalker extends ParseTreeWalker {
   }
 
   override visitFunction(node: FunctionNode): boolean {
-    if (node.name.value.startsWith('test_')) {
+    if (node.d.name.d.value.startsWith('test_')) {
       if (node.parent && printParseNodeType(node.parent.nodeType) === 'Suite') {
         const parentSuiteNode = node.parent as SuiteNode;
         if (parentSuiteNode.parent && printParseNodeType(parentSuiteNode.parent.nodeType) === 'Class') {
@@ -33,7 +33,7 @@ export class TestFrameworkWalker extends ParseTreeWalker {
           }
 
           this.featureItems.push({
-            value: classNode.name.value + combineString + node.name.value,
+            value: classNode.d.name.d.value + combineString + node.d.name.d.value,
             startOffset: node.start,
             endOffset: node.start + node.length - 1,
           });
@@ -41,7 +41,7 @@ export class TestFrameworkWalker extends ParseTreeWalker {
       } else {
         if (this.testFramework === 'pytest') {
           this.featureItems.push({
-            value: node.name.value,
+            value: node.d.name.d.value,
             startOffset: node.start,
             endOffset: node.start + node.length - 1,
           });

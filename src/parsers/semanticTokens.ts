@@ -31,7 +31,7 @@ type SemanticTokenItem = {
 export class SemanticTokensWalker extends ParseTreeWalker {
   public semanticItems: SemanticTokenItem[] = [];
 
-  private addItem(node: ParseNodeBase, type: string, modifiers: string[] = []) {
+  private addItem(node: ParseNodeBase<ParseNodeType>, type: string, modifiers: string[] = []) {
     const item: SemanticTokenItem = { type, start: node.start, length: node.length, modifiers };
     if (this.semanticItems.some((x) => x.type === item.type && x.start === item.start && x.length === item.length)) {
       return;
@@ -48,24 +48,24 @@ export class SemanticTokensWalker extends ParseTreeWalker {
 
   visitFor(node: ForNode): boolean {
     if (node.nodeType === ParseNodeType.For) {
-      this.addItem(node.targetExpression, SemanticTokenTypes.variable);
+      this.addItem(node.d.targetExpr, SemanticTokenTypes.variable);
     }
     return super.visitFor(node);
   }
 
   visitFormatString(node: FormatStringNode): boolean {
-    node.fieldExpressions.map((f) => this.addItem(f, SemanticTokenTypes.variable));
+    node.d.fieldExprs.map((f) => this.addItem(f, SemanticTokenTypes.variable));
     return super.visitFormatString(node);
   }
 
   visitCall(node: CallNode): boolean {
     // TODO: hard-code, treat first-letter UpperCase as class
-    if (node.leftExpression.nodeType === 38) {
-      const value = node.leftExpression.value;
+    if (node.d.leftExpr.nodeType === 38) {
+      const value = node.d.leftExpr.d.value;
       if (value[0] === value[0].toUpperCase()) {
-        this.addItem(node.leftExpression, SemanticTokenTypes.class);
+        this.addItem(node.d.leftExpr, SemanticTokenTypes.class);
       } else {
-        this.addItem(node.leftExpression, SemanticTokenTypes.function);
+        this.addItem(node.d.leftExpr, SemanticTokenTypes.function);
       }
     }
     return super.visitCall(node);
@@ -74,45 +74,45 @@ export class SemanticTokensWalker extends ParseTreeWalker {
   visitClass(node: ClassNode): boolean {
     // @ts-ignore
     if (node.arguments.length === 1 && node.arguments[0].valueExpression.value === 'Enum') {
-      this.addItem(node.name, SemanticTokenTypes.enum);
+      this.addItem(node.d.name, SemanticTokenTypes.enum);
 
-      for (const m of node.suite.statements) {
+      for (const m of node.d.suite.d.statements) {
         // @ts-ignore
         this.addItem(m.statements[0].leftExpression, SemanticTokenTypes.enumMember);
       }
       return super.visitClass(node);
     }
 
-    this.addItem(node.name, SemanticTokenTypes.class, [SemanticTokenModifiers.definition]);
+    this.addItem(node.d.name, SemanticTokenTypes.class, [SemanticTokenModifiers.definition]);
     return super.visitClass(node);
   }
 
   visitMemberAccess(node: MemberAccessNode): boolean {
     if (node.parent?.nodeType === ParseNodeType.Call) {
-      this.addItem(node.memberName, SemanticTokenTypes.function);
+      this.addItem(node.d.member, SemanticTokenTypes.function);
       return super.visitMemberAccess(node);
     }
 
-    this.addItem(node.memberName, SemanticTokenTypes.property);
+    this.addItem(node.d.member, SemanticTokenTypes.property);
     return super.visitMemberAccess(node);
   }
 
   visitDecorator(node: DecoratorNode): boolean {
-    this.addItem(node.expression, SemanticTokenTypes.decorator);
+    this.addItem(node.d.expr, SemanticTokenTypes.decorator);
     let nameNode: NameNode | undefined;
-    switch (node.expression.nodeType) {
+    switch (node.d.expr.nodeType) {
       case ParseNodeType.Call:
-        if (node.expression.leftExpression.nodeType === ParseNodeType.MemberAccess) {
-          nameNode = node.expression.leftExpression.memberName;
-        } else if (node.expression.leftExpression.nodeType === ParseNodeType.Name) {
-          nameNode = node.expression.leftExpression;
+        if (node.d.expr.d.leftExpr.nodeType === ParseNodeType.MemberAccess) {
+          nameNode = node.d.expr.d.leftExpr.d.member;
+        } else if (node.d.expr.d.leftExpr.nodeType === ParseNodeType.Name) {
+          nameNode = node.d.expr.d.leftExpr;
         }
         break;
       case ParseNodeType.MemberAccess:
-        nameNode = node.expression.memberName;
+        nameNode = node.d.expr.d.member;
         break;
       case ParseNodeType.Name:
-        nameNode = node.expression;
+        nameNode = node.d.expr;
         break;
     }
     if (nameNode) {
@@ -122,68 +122,76 @@ export class SemanticTokensWalker extends ParseTreeWalker {
   }
 
   visitImport(node: ImportNode): boolean {
-    node.list.map((x) => this.addItem(x, SemanticTokenTypes.namespace));
+    for (const x of node.d.list) {
+      if (x.d.alias) {
+        this.addItem(x.d.alias, SemanticTokenTypes.namespace);
+      }
+    }
     return super.visitImport(node);
   }
 
   visitImportAs(node: ImportAsNode): boolean {
-    if (node.alias?.value.length) {
-      this.addItem(node.alias, SemanticTokenTypes.namespace);
+    if (node.d.alias?.d.value.length) {
+      this.addItem(node.d.alias, SemanticTokenTypes.namespace);
     }
-    node.module.nameParts.map((x) => this.addItem(x, SemanticTokenTypes.namespace));
+    node.d.module.d.nameParts.map((x) => this.addItem(x, SemanticTokenTypes.namespace));
     return super.visitImportAs(node);
   }
 
   visitImportFrom(node: ImportFromNode): boolean {
-    node.module.nameParts.map((x) => this.addItem(x, SemanticTokenTypes.namespace));
-    node.imports.map((x) => this.addItem(x, SemanticTokenTypes.namespace));
+    node.d.module.d.nameParts.map((x) => this.addItem(x, SemanticTokenTypes.namespace));
+    for (const x of node.d.imports) {
+      if (x.d.alias) {
+        this.addItem(x.d.alias, SemanticTokenTypes.namespace);
+      }
+    }
 
     return super.visitImportFrom(node);
   }
 
   visitImportFromAs(node: ImportFromAsNode): boolean {
-    if (node.alias?.value.length) {
-      this.addItem(node.alias, SemanticTokenTypes.namespace);
+    if (node.d.alias?.d.value.length) {
+      this.addItem(node.d.alias, SemanticTokenTypes.namespace);
     }
     return super.visitImportFromAs(node);
   }
 
   visitParameter(node: ParameterNode): boolean {
-    if (!node.name) return super.visitParameter(node);
+    if (!node.d.name) return super.visitParameter(node);
 
-    this.addItem(node.name, SemanticTokenTypes.parameter);
-    if (node.typeAnnotation) {
-      this.addItem(node.typeAnnotation, SemanticTokenTypes.typeParameter);
+    this.addItem(node.d.name, SemanticTokenTypes.parameter);
+    if (node.d.annotation) {
+      this.addItem(node.d.annotation, SemanticTokenTypes.typeParameter);
     }
     return super.visitParameter(node);
   }
 
   visitTypeParameter(node: TypeParameterNode): boolean {
-    this.addItem(node.name, SemanticTokenTypes.typeParameter);
+    this.addItem(node.d.name, SemanticTokenTypes.typeParameter);
     return super.visitTypeParameter(node);
   }
 
   visitTypeAnnotation(node: TypeAnnotationNode): boolean {
-    if (node.typeAnnotation) {
-      this.addItem(node.typeAnnotation, SemanticTokenTypes.typeParameter);
+    if (node.d.annotation) {
+      this.addItem(node.d.annotation, SemanticTokenTypes.typeParameter);
     }
     return super.visitTypeAnnotation(node);
   }
 
   visitFunction(node: FunctionNode): boolean {
     const modifiers = [SemanticTokenModifiers.definition];
-    if (node.isAsync) {
+    if (node.d.isAsync) {
       modifiers.push(SemanticTokenModifiers.async);
     }
     const type = node.parent?.parent?.nodeType === 10 ? SemanticTokenTypes.method : SemanticTokenTypes.function;
-    this.addItem(node.name, type, modifiers);
+    this.addItem(node.d.name, type, modifiers);
 
-    for (const p of node.parameters) {
-      if (!p.name) continue;
+    for (const p of node.d.params) {
+      if (!p.d.name) continue;
 
-      this.addItem(p.name, SemanticTokenTypes.parameter);
-      if (p.typeAnnotation) {
-        this.addItem(p.typeAnnotation, SemanticTokenTypes.typeParameter);
+      this.addItem(p.d.name, SemanticTokenTypes.parameter);
+      if (p.d.annotation) {
+        this.addItem(p.d.annotation, SemanticTokenTypes.typeParameter);
       }
     }
 
