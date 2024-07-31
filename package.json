@@ -40,7 +40,7 @@
     "@types/minimatch": "^5.1.2",
     "@types/node": "16",
     "@types/which": "^3.0.4",
-    "@zzzen/pyright-internal": "^1.2.0-dev.20240721",
+    "@zzzen/pyright-internal": "^1.2.0-dev.20240728",
     "coc.nvim": "^0.0.83-next.18",
     "diff-match-patch": "^1.0.5",
     "esbuild": "^0.23.0",
@@ -2228,6 +2228,6 @@
     ]
   },
   "dependencies": {
-    "pyright": "^1.1.373"
+    "pyright": "^1.1.374"
   }
 }

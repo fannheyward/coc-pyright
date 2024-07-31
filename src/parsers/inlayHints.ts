@@ -1,4 +1,4 @@
-import { getCallNodeAndActiveParameterIndex } from '@zzzen/pyright-internal/dist/analyzer/parseTreeUtils';
+import { getCallNodeAndActiveParamIndex } from '@zzzen/pyright-internal/dist/analyzer/parseTreeUtils';
 import { ParseTreeWalker } from '@zzzen/pyright-internal/dist/analyzer/parseTreeWalker';
 import {
   type ArgumentNode,
@@ -61,7 +61,7 @@ export class TypeInlayHintsWalker extends ParseTreeWalker {
       if (node.parent.nodeType === ParseNodeType.Assignment) {
         return false;
       }
-      const result = getCallNodeAndActiveParameterIndex(node, node.start, this._parseResults.tokenizerOutput.tokens);
+      const result = getCallNodeAndActiveParamIndex(node, node.start, this._parseResults.tokenizerOutput.tokens);
       if (!result?.callNode || result.callNode.d.args[result.activeIndex].d.name) {
         return false;
       }
