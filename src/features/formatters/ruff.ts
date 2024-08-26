@@ -25,17 +25,10 @@ export class RuffFormatter extends BaseFormatter {
     token: CancellationToken,
     range?: Range,
   ): Thenable<TextEdit[]> {
-    if (range) {
-      const errorMessage = async () => {
-        this.outputChannel.appendLine('Ruff does not support the "Format Selection" command');
-        window.showErrorMessage('Ruff does not support the "Format Selection" command');
-        return [] as TextEdit[];
-      };
-
-      return errorMessage();
-    }
-
     const ruffArgs = ['format', '--diff', '--silent'];
+    if (range) {
+      ruffArgs.push(`--range=${range.start.line + 1}-${range.end.line}`);
+    }
     if (this.pythonSettings.formatting.ruffArgs.length > 0) {
       ruffArgs.push(...this.pythonSettings.formatting.ruffArgs);
     }
