@@ -66,8 +66,15 @@ export class PythonSettings implements IPythonSettings {
         return pythonBinFromPath(process.env.CONDA_PREFIX);
       }
 
+      // uv creates `.python-version` and `.venv`
+      let p = path.join(this.workspaceRoot, 'uv.lock');
+      const p2 = path.join(this.workspaceRoot, '.venv');
+      if (fs.existsSync(p) && fs.existsSync(p2)) {
+        return pythonBinFromPath(p2);
+      }
+
       // `pyenv local` creates `.python-version`, but not `PYENV_VERSION`
-      let p = path.join(this.workspaceRoot, '.python-version');
+      p = path.join(this.workspaceRoot, '.python-version');
       if (fs.existsSync(p)) {
         if (!process.env.PYENV_VERSION) {
           // pyenv local can special multiple Python, use first one only
