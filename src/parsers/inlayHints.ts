@@ -11,8 +11,8 @@ import {
 } from '@zzzen/pyright-internal/dist/parser/parseNodes';
 import type { ParseFileResults } from '@zzzen/pyright-internal/dist/parser/parser';
 
-type TypeInlayHintsItemType = {
-  inlayHintType: 'variable' | 'functionReturn' | 'parameter';
+type InlayHintsItem = {
+  hintType: 'variable' | 'functionReturn' | 'parameter';
   startOffset: number;
   endOffset: number;
   value?: string;
@@ -26,7 +26,7 @@ function isLeftSideOfAssignment(node: ParseNode): boolean {
 }
 
 export class TypeInlayHintsWalker extends ParseTreeWalker {
-  public featureItems: TypeInlayHintsItemType[] = [];
+  public featureItems: InlayHintsItem[] = [];
 
   constructor(private readonly _parseResults: ParseFileResults) {
     super();
@@ -35,7 +35,7 @@ export class TypeInlayHintsWalker extends ParseTreeWalker {
   override visitName(node: NameNode): boolean {
     if (isLeftSideOfAssignment(node)) {
       this.featureItems.push({
-        inlayHintType: 'variable',
+        hintType: 'variable',
         startOffset: node.start,
         endOffset: node.start + node.length - 1,
         value: node.d.value,
@@ -47,7 +47,7 @@ export class TypeInlayHintsWalker extends ParseTreeWalker {
   override visitMemberAccess(node: MemberAccessNode): boolean {
     if (isLeftSideOfAssignment(node)) {
       this.featureItems.push({
-        inlayHintType: 'variable',
+        hintType: 'variable',
         startOffset: node.d.member.start,
         endOffset: node.d.member.start + node.d.member.length - 1,
         value: node.d.member.d.value,
@@ -66,7 +66,7 @@ export class TypeInlayHintsWalker extends ParseTreeWalker {
         return false;
       }
       this.featureItems.push({
-        inlayHintType: 'parameter',
+        hintType: 'parameter',
         startOffset: node.start,
         endOffset: node.start + node.length - 1,
       });
@@ -79,7 +79,7 @@ export class TypeInlayHintsWalker extends ParseTreeWalker {
     // Add item only if "node.returnTypeAnnotation" does not exist.
     if (!node.d.returnAnnotation) {
       this.featureItems.push({
-        inlayHintType: 'functionReturn',
+        hintType: 'functionReturn',
         startOffset: node.d.name.start,
         endOffset: node.d.suite.start,
         value: node.d.name.d.value,

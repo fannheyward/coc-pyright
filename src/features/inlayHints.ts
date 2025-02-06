@@ -36,8 +36,7 @@ export class TypeInlayHintsProvider implements InlayHintsProvider {
     });
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async provideInlayHints(document: LinesTextDocument, range: Range, _token: CancellationToken) {
+  async provideInlayHints(document: LinesTextDocument, range: Range, token: CancellationToken): Promise<InlayHint[]> {
     const inlayHints: InlayHint[] = [];
 
     const code = document.getText();
@@ -48,7 +47,7 @@ export class TypeInlayHintsProvider implements InlayHintsProvider {
     walker.walk(parsed.parserOutput.parseTree);
 
     const featureItems = walker.featureItems
-      .filter((item) => this.enableForType(item.inlayHintType))
+      .filter((item) => this.enableForType(item.hintType))
       .filter((item) => {
         const startPosition = document.positionAt(item.startOffset);
         const endPosition = document.positionAt(item.endOffset);
@@ -59,12 +58,13 @@ export class TypeInlayHintsProvider implements InlayHintsProvider {
     for (const item of featureItems) {
       const startPosition = document.positionAt(item.startOffset);
       const endPosition = document.positionAt(item.endOffset);
-      const hover = item.inlayHintType === 'parameter' ? null : await this.getHoverAtOffset(document, startPosition);
-      const signatureInfo =
-        item.inlayHintType === 'parameter' ? await this.getSignatureHelpAtOffset(document, startPosition) : null;
+      const hover =
+        item.hintType === 'parameter' ? null : await this.getHoverAtPosition(document, startPosition, token);
+      const signatureHelp =
+        item.hintType === 'parameter' ? await this.getSignatureHelpAtPosition(document, startPosition, token) : null;
 
       let inlayHintLabelValue: string | undefined = undefined;
-      switch (item.inlayHintType) {
+      switch (item.hintType) {
         case 'variable':
           inlayHintLabelValue = this.getVariableHintFromHover(hover);
           break;
@@ -72,7 +72,7 @@ export class TypeInlayHintsProvider implements InlayHintsProvider {
           inlayHintLabelValue = this.getFunctionReturnHintFromHover(hover);
           break;
         case 'parameter':
-          inlayHintLabelValue = this.getParameterHintFromSignature(signatureInfo);
+          inlayHintLabelValue = this.getParameterHintFromSignature(signatureHelp);
           break;
         default:
           break;
@@ -88,7 +88,7 @@ export class TypeInlayHintsProvider implements InlayHintsProvider {
       ];
 
       let inlayHintPosition: Position | undefined = undefined;
-      switch (item.inlayHintType) {
+      switch (item.hintType) {
         case 'variable':
           inlayHintPosition = Position.create(startPosition.line, endPosition.character + 1);
           break;
@@ -106,8 +106,8 @@ export class TypeInlayHintsProvider implements InlayHintsProvider {
         inlayHints.push({
           label: inlayHintLabelPart,
           position: inlayHintPosition,
-          kind: item.inlayHintType === 'parameter' ? 2 : 1,
-          paddingLeft: item.inlayHintType === 'functionReturn',
+          kind: item.hintType === 'parameter' ? 2 : 1,
+          paddingLeft: item.hintType === 'functionReturn',
         });
       }
     }
@@ -115,13 +115,21 @@ export class TypeInlayHintsProvider implements InlayHintsProvider {
     return inlayHints;
   }
 
-  private async getHoverAtOffset(document: LinesTextDocument, position: Position) {
+  private async getHoverAtPosition(document: LinesTextDocument, position: Position, token: CancellationToken) {
     const params = {
       textDocument: { uri: document.uri },
       position,
     };
 
-    return await this.client.sendRequest<Hover>('textDocument/hover', params);
+    const result = await Promise.race([
+      this.client.sendRequest<Hover>('textDocument/hover', params, token),
+      new Promise<null>((resolve) => {
+        setTimeout(() => {
+          resolve(null);
+        }, 200);
+      }),
+    ]);
+    return result;
   }
 
   private getVariableHintFromHover(hover: Hover | null): string | undefined {
@@ -155,13 +163,21 @@ export class TypeInlayHintsProvider implements InlayHintsProvider {
     }
   }
 
-  private async getSignatureHelpAtOffset(document: LinesTextDocument, position: Position) {
+  private async getSignatureHelpAtPosition(document: LinesTextDocument, position: Position, token: CancellationToken) {
     const params = {
       textDocument: { uri: document.uri },
       position,
     };
 
-    return await this.client.sendRequest<SignatureHelp>('textDocument/signatureHelp', params);
+    const result = await Promise.race([
+      this.client.sendRequest<SignatureHelp>('textDocument/signatureHelp', params, token),
+      new Promise<null>((resolve) => {
+        setTimeout(() => {
+          resolve(null);
+        }, 200);
+      }),
+    ]);
+    return result;
   }
 
   private getParameterHintFromSignature(signatureInfo: SignatureHelp | null): string | undefined {
