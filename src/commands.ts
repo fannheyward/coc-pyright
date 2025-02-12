@@ -9,13 +9,26 @@ let terminal: Terminal | undefined;
 
 const framework = workspace.getConfiguration('pyright').get<TestingFramework>('testing.provider', 'unittest');
 
-function validPythonModule(pythonPath: string, moduleName: string) {
+function pythonSupportsPathFinder(pythonPath: string) {
   try {
     const pythonProcess = child_process.spawnSync(
       pythonPath,
-      ['-c', `from importlib.machinery import PathFinder; assert PathFinder.find_spec("${moduleName}") is not None`],
+      ['-c', 'from sys import version_info; exit(0) if (version_info[0] >= 3 and version_info[1] >= 4) else exit(1)'],
       { encoding: 'utf8' },
     );
+    if (pythonProcess.error) return false;
+    return pythonProcess.status === 0;
+  } catch (ex) {
+    return false;
+  }
+}
+
+function validPythonModule(pythonPath: string, moduleName: string) {
+  const pythonArgs = pythonSupportsPathFinder(pythonPath)
+    ? ['-c', `from importlib.machinery import PathFinder; assert PathFinder.find_spec("${moduleName}") is not None`]
+    : ['-m', moduleName, '--help'];
+  try {
+    const pythonProcess = child_process.spawnSync(pythonPath, pythonArgs, { encoding: 'utf8' });
     if (pythonProcess.error) return false;
     return pythonProcess.status === 0;
   } catch (ex) {
