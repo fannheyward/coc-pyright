@@ -21,8 +21,10 @@ export class TestFrameworkWalker extends ParseTreeWalker {
   override visitFunction(node: FunctionNode): boolean {
     if (node.d.name.d.value.startsWith('test_')) {
       if (node.parent && printParseNodeType(node.parent.nodeType) === 'Suite') {
-        const parentSuiteNode = node.parent as SuiteNode;
-        if (parentSuiteNode.parent && printParseNodeType(parentSuiteNode.parent.nodeType) === 'Class') {
+        let fullyQualifiedTestName = '';
+        let currentNode = node;
+        let parentSuiteNode = currentNode.parent as SuiteNode;
+        while (parentSuiteNode.parent && printParseNodeType(parentSuiteNode.parent.nodeType) === 'Class') {
           const classNode = parentSuiteNode.parent as ClassNode;
 
           let combineString: string | undefined = undefined;
@@ -31,13 +33,15 @@ export class TestFrameworkWalker extends ParseTreeWalker {
           } else if (this.testFramework === 'pytest') {
             combineString = '::';
           }
-
-          this.featureItems.push({
-            value: classNode.d.name.d.value + combineString + node.d.name.d.value,
-            startOffset: node.start,
-            endOffset: node.start + node.length - 1,
-          });
+          fullyQualifiedTestName = classNode.d.name.d.value + combineString + fullyQualifiedTestName;
+          currentNode = currentNode.parent.parent;
+          parentSuiteNode = currentNode.parent as SuiteNode;
         }
+        this.featureItems.push({
+          value: fullyQualifiedTestName + node.d.name.d.value,
+          startOffset: node.start,
+          endOffset: node.start + node.length - 1,
+        });
       } else {
         if (this.testFramework === 'pytest') {
           this.featureItems.push({
