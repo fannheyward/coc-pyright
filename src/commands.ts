@@ -11,7 +11,11 @@ const framework = workspace.getConfiguration('pyright').get<TestingFramework>('t
 
 function validPythonModule(pythonPath: string, moduleName: string) {
   try {
-    const pythonProcess = child_process.spawnSync(pythonPath, ['-m', moduleName, '--help'], { encoding: 'utf8' });
+    const pythonProcess = child_process.spawnSync(
+      pythonPath,
+      ['-c', `from importlib.machinery import PathFinder; assert PathFinder.find_spec("${moduleName}") is not None`],
+      { encoding: 'utf8' },
+    );
     if (pythonProcess.error) return false;
     return pythonProcess.status === 0;
   } catch (ex) {
