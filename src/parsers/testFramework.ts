@@ -1,6 +1,6 @@
 import { printParseNodeType } from '@zzzen/pyright-internal/dist/analyzer/parseTreeUtils';
 import { ParseTreeWalker } from '@zzzen/pyright-internal/dist/analyzer/parseTreeWalker';
-import type { ClassNode, FunctionNode, SuiteNode } from '@zzzen/pyright-internal/dist/parser/parseNodes';
+import type { ClassNode, FunctionNode, ParseNode, SuiteNode } from '@zzzen/pyright-internal/dist/parser/parseNodes';
 import type { TestingFramework } from '../types';
 
 export type FunctionFormatItemType = {
@@ -22,8 +22,8 @@ export class TestFrameworkWalker extends ParseTreeWalker {
     if (node.d.name.d.value.startsWith('test_')) {
       if (node.parent && printParseNodeType(node.parent.nodeType) === 'Suite') {
         let fullyQualifiedTestName = '';
-        let currentNode = node;
-        let parentSuiteNode = currentNode.parent as SuiteNode;
+        let currentNode: FunctionNode | ParseNode | undefined = node;
+        let parentSuiteNode = currentNode?.parent as SuiteNode;
         while (parentSuiteNode.parent && printParseNodeType(parentSuiteNode.parent.nodeType) === 'Class') {
           const classNode = parentSuiteNode.parent as ClassNode;
 
@@ -34,8 +34,8 @@ export class TestFrameworkWalker extends ParseTreeWalker {
             combineString = '::';
           }
           fullyQualifiedTestName = classNode.d.name.d.value + combineString + fullyQualifiedTestName;
-          currentNode = currentNode.parent.parent;
-          parentSuiteNode = currentNode.parent as SuiteNode;
+          currentNode = currentNode?.parent?.parent;
+          parentSuiteNode = currentNode?.parent as SuiteNode;
         }
         this.featureItems.push({
           value: fullyQualifiedTestName + node.d.name.d.value,
