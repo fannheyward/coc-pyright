@@ -232,6 +232,9 @@ export async function extractVariable(
   }
 
   const doc = workspace.getDocument(document.uri);
+  if (!doc) {
+    return;
+  }
   const tempFile = await getTempFileWithDocumentContents(document);
   const workspaceFolder = workspace.getWorkspaceFolder(doc.uri);
   const workspaceRoot = workspaceFolder ? Uri.parse(workspaceFolder.uri).fsPath : workspace.cwd;
@@ -264,6 +267,9 @@ export async function extractMethod(
   }
 
   const doc = workspace.getDocument(document.uri);
+  if (!doc) {
+    return;
+  }
   const tempFile = await getTempFileWithDocumentContents(document);
   const workspaceFolder = workspace.getWorkspaceFolder(doc.uri);
   const workspaceRoot = workspaceFolder ? Uri.parse(workspaceFolder.uri).fsPath : workspace.cwd;

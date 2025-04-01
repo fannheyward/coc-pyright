@@ -178,8 +178,8 @@ export class LintingEngine {
 
     const ms = /['"](.*?)['"]/g.exec(message.message);
     if (ms && ms.length > 0) {
-      const line = workspace.getDocument(document.uri).getline(message.line - 1);
-      if (line.includes(ms[1])) {
+      const line = workspace.getDocument(document.uri)?.getline(message.line - 1);
+      if (line?.includes(ms[1])) {
         const s = message.column > line.indexOf(ms[1]) ? message.column : line.indexOf(ms[1]);
         start = Position.create(message.line - 1, s);
         end = Position.create(message.line - 1, s + ms[1].length);

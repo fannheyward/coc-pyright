@@ -55,6 +55,9 @@ export class PythonCodeActionProvider implements CodeActionProvider {
   private ignoreAction(document: TextDocument, range: Range): CodeAction | null {
     const ignoreTxt = '# type: ignore';
     const doc = workspace.getDocument(document.uri);
+    if (!doc) {
+      return null;
+    }
     // ignore action for whole file
     if (this.wholeRange(document, range)) {
       let pos = Position.create(0, 0);

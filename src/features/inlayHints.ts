@@ -30,7 +30,7 @@ export class TypeInlayHintsProvider implements InlayHintsProvider {
     });
     workspace.onDidChangeTextDocument((e) => {
       const doc = workspace.getDocument(e.bufnr);
-      if (doc.languageId === 'python') {
+      if (doc?.languageId === 'python') {
         this._onDidChangeInlayHints.fire();
       }
     });

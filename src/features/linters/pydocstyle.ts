@@ -30,6 +30,9 @@ export class PyDocStyle extends BaseLinter {
       outputLines.push(oldOutputLines[2 * counter] + oldOutputLines[2 * counter + 1]);
     }
     const doc = workspace.getDocument(document.uri);
+    if (!doc) {
+      return [];
+    }
 
     return (
       outputLines
