@@ -94,6 +94,7 @@ export async function activate(context: ExtensionContext): Promise<void> {
   }
   if (pyrightCfg.get<boolean>('disableDiagnostics')) {
     disabledFeatures.push('diagnostics');
+    disabledFeatures.push('pullDiagnostic');
   }
   if (pyrightCfg.get<boolean>('disableDocumentation')) {
     disabledFeatures.push('hover');

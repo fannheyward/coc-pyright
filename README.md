@@ -83,9 +83,9 @@ These configurations are used by `coc-pyright`, you need to set them in your `co
 | python.sortImports.path                     | Path to isort script, default using inner version                   | ''            |
 | python.sortImports.args                     | Arguments passed to isort                                           | []            |
 | pyright.server                              | Custom `pyright-langserver` path                                    | ''            |
-| pyright.disableCompletion                   | Disables completion from Pyright                                    | false         |
+| pyright.disableCompletion                   | Disable completion from Pyright                                     | false         |
 | pyright.disableDiagnostics                  | Disable diagnostics from Pyright                                    | false         |
-| pyright.disableDocumentation                | Disables hover documentation from Pyright                           | false         |
+| pyright.disableDocumentation                | Disable hover documentation from Pyright                            | false         |
 | pyright.disableProgressNotifications        | Disable the initialization and workdone progress notifications      | false         |
 | pyright.completion.importSupport            | Enable `python-import` completion source support                    | true          |
 | pyright.completion.snippetSupport           | Enable completion snippets support                                  | true          |
