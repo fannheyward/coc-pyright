@@ -1,8 +1,5 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
-/* eslint-disable prefer-rest-params */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 //======================
 // Deferred
 
@@ -29,13 +26,11 @@ class DeferredImpl<T> implements Deferred<T> {
     });
   }
   public resolve(_value?: T | PromiseLike<T>) {
-    // biome-ignore lint/style/noArguments: <explanation>
-    this._resolve.apply(this.scope ? this.scope : this, arguments as any);
+    this._resolve.apply(this.scope ? this.scope : this, [_value]);
     this._resolved = true;
   }
   public reject(_reason?: any) {
-    // biome-ignore lint/style/noArguments: <explanation>
-    this._reject.apply(this.scope ? this.scope : this, arguments as any);
+    this._reject.apply(this.scope ? this.scope : this, [_reason]);
     this._rejected = true;
   }
   get promise(): Promise<T> {

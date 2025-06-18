@@ -1,12 +1,11 @@
-import {
-  type CancellationToken,
-  type FormattingOptions,
-  type OutputChannel,
-  type Range,
-  type TextDocument,
-  type TextEdit,
-  type Thenable,
-  window,
+import type {
+  CancellationToken,
+  FormattingOptions,
+  OutputChannel,
+  Range,
+  TextDocument,
+  TextEdit,
+  Thenable,
 } from 'coc.nvim';
 import type { IPythonSettings } from '../../types';
 import { BaseFormatter } from './baseFormatter';

@@ -63,7 +63,7 @@ export class TypeInlayHintsProvider implements InlayHintsProvider {
       const signatureHelp =
         item.hintType === 'parameter' ? await this.getSignatureHelpAtPosition(document, startPosition, token) : null;
 
-      let inlayHintLabelValue: string | undefined = undefined;
+      let inlayHintLabelValue: string | undefined;
       switch (item.hintType) {
         case 'variable':
           inlayHintLabelValue = this.getVariableHintFromHover(hover);
@@ -87,7 +87,7 @@ export class TypeInlayHintsProvider implements InlayHintsProvider {
         },
       ];
 
-      let inlayHintPosition: Position | undefined = undefined;
+      let inlayHintPosition: Position | undefined;
       switch (item.hintType) {
         case 'variable':
           inlayHintPosition = Position.create(startPosition.line, endPosition.character + 1);

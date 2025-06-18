@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 import { type ExecOptions, spawn, type SpawnOptions as ChildProcessSpawnOptions } from 'node:child_process';
 import type { CancellationToken } from 'coc.nvim';
 import * as iconv from 'iconv-lite';

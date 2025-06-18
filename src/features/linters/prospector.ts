@@ -1,6 +1,6 @@
-import { type CancellationToken, OutputChannel, type TextDocument, Uri, workspace } from 'coc.nvim';
+import { type CancellationToken, type TextDocument, Uri, workspace } from 'coc.nvim';
 import path from 'node:path';
-import { ILinterInfo, type ILintMessage } from '../../types';
+import type { ILintMessage } from '../../types';
 import { BaseLinter } from './baseLinter';
 
 interface IProspectorResponse {
@@ -25,12 +25,11 @@ export class Prospector extends BaseLinter {
     const relativePath = path.relative(workspace.root, Uri.parse(document.uri).fsPath);
     return this.run(['--absolute-paths', '--output-format=json', relativePath], document, cancellation);
   }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected async parseMessages(output: string, _document: TextDocument, _regEx: string) {
     let parsedData: IProspectorResponse;
     try {
       parsedData = JSON.parse(output);
-    } catch (ex) {
+    } catch (_ex) {
       this.outputChannel.appendLine(`${'#'.repeat(10)}Linting Output - ${this.info.id}${'#'.repeat(10)}`);
       this.outputChannel.append(output);
       return [];

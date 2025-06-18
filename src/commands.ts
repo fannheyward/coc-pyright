@@ -18,7 +18,7 @@ function pythonSupportsPathFinder(pythonPath: string) {
     );
     if (pythonProcess.error) return false;
     return pythonProcess.status === 0;
-  } catch (ex) {
+  } catch (_ex) {
     return false;
   }
 }
@@ -31,7 +31,7 @@ function validPythonModule(pythonPath: string, moduleName: string) {
     const pythonProcess = child_process.spawnSync(pythonPath, pythonArgs, { encoding: 'utf8' });
     if (pythonProcess.error) return false;
     return pythonProcess.status === 0;
-  } catch (ex) {
+  } catch (_ex) {
     return false;
   }
 }
@@ -100,7 +100,7 @@ export async function runSingleTest() {
   const walker = new parser.TestFrameworkWalker(framework);
   walker.walk(parsed.parserOutput.parseTree);
 
-  let testFunction: string | undefined = undefined;
+  let testFunction: string | undefined;
   for (const item of walker.featureItems) {
     const itemStartPosition = document.positionAt(item.startOffset);
     const itemEndPosition = document.positionAt(item.endOffset);

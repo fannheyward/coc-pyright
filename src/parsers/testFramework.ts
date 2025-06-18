@@ -27,7 +27,7 @@ export class TestFrameworkWalker extends ParseTreeWalker {
         while (parentSuiteNode.parent && printParseNodeType(parentSuiteNode.parent.nodeType) === 'Class') {
           const classNode = parentSuiteNode.parent as ClassNode;
 
-          let combineString: string | undefined = undefined;
+          let combineString: string | undefined;
           if (this.testFramework === 'unittest') {
             combineString = '.';
           } else if (this.testFramework === 'pytest') {

@@ -34,18 +34,15 @@ export class LinterInfo implements ILinterInfo {
     return (settings.linting as any)[`${this.id}Stdin`] as boolean;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public isEnabled(_resource?: Uri): boolean {
     const settings = this.configService;
     return (settings.linting as any)[`${this.id}Enabled`] as boolean;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public pathName(_resource?: Uri): string {
     const settings = this.configService;
     return (settings.linting as any)[`${this.id}Path`] as string;
   }
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public linterArgs(_resource?: Uri): string[] {
     const settings = this.configService;
     const args = (settings.linting as any)[`${this.id}Args`];

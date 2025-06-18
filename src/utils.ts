@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 import { type Position, Range, type TextDocument, TextEdit, Uri } from 'coc.nvim';
 import { type Diff, diff_match_patch } from 'diff-match-patch';
 import fs from 'node:fs';
@@ -173,7 +172,7 @@ function patch_fromText(textline: string): Patch[] {
         // Temporary solution, disable decoding
         // Issue #188
         line = text[textPointer].substring(1);
-      } catch (ex) {
+      } catch (_ex) {
         // Malformed URI sequence.
         throw new Error('Illegal escape in patch_fromText');
       }

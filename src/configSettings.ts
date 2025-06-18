@@ -190,7 +190,7 @@ export class PythonSettings implements IPythonSettings {
     try {
       this._pythonPath = getPythonExecutable(value);
       this._stdLibs = getStdLibs(this._pythonPath);
-    } catch (ex) {
+    } catch (_ex) {
       this._pythonPath = value;
     }
   }
@@ -242,7 +242,7 @@ function getStdLibs(pythonPath: string): string[] {
     const userPkgs = child_process.spawnSync(pythonPath, args, { encoding: 'utf8' }).stdout.trim();
 
     return [sitePkgs, userPkgs];
-  } catch (e) {
+  } catch (_e) {
     return [];
   }
 }

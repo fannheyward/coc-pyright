@@ -39,7 +39,7 @@ class RefactorProxy implements Disposable {
   public dispose() {
     try {
       this._process!.kill();
-    } catch (ex) {}
+    } catch (_ex) {}
     this._process = undefined;
   }
 
@@ -192,7 +192,7 @@ class RefactorProxy implements Disposable {
         .split(/\r?\n/g)
         .filter((line) => line.length > 0)
         .map((resp) => JSON.parse(resp));
-    } catch (ex) {
+    } catch (_ex) {
       // Possible we've only received part of the data, hence don't clear previousData
       return;
     }

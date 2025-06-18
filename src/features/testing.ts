@@ -35,7 +35,7 @@ export class TestFrameworkProvider implements CodeLensProvider, CodeActionProvid
       walker.walk(parsed.parserOutput.parseTree);
 
       return walker.featureItems;
-    } catch (e) {
+    } catch (_e) {
       return [];
     }
   }
