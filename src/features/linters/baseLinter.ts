@@ -33,7 +33,7 @@ function matchNamedRegEx(data: string, regex: string): IRegexGroup | undefined {
   const compiledRegexp = namedRegexp(regex, 'g');
   const rawMatch = compiledRegexp.exec(data);
   if (rawMatch) {
-    // @ts-ignore
+    // @ts-expect-error
     return rawMatch.groups() as IRegexGroup;
   }
 

@@ -66,7 +66,7 @@ export class PythonSemanticTokensProvider implements DocumentSemanticTokensProvi
     if (token?.isCancellationRequested) return null;
 
     const builder = new SemanticTokensBuilder(this.legend);
-    // @ts-ignore
+    // @ts-expect-error
     for (const item of parsed.tokenizerOutput.tokens._items) {
       if (item.type === 8 && item.keywordType) {
         const range = convertTextRangeToRange(item, parsed.tokenizerOutput.lines);

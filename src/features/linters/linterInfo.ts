@@ -10,6 +10,7 @@ import type { ExecutionInfo, ILinterInfo, LinterId, Product } from '../../types'
 export class LinterInfo implements ILinterInfo {
   private _id: LinterId;
   private _product: Product;
+  // biome-ignore lint/correctness/noUnusedPrivateClassMembers: x
   private _configFileNames: string[];
 
   constructor(

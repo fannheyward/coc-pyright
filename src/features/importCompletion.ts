@@ -34,7 +34,7 @@ export class ImportCompletionProvider implements CompletionItemProvider {
     const items: CompletionItem[] = [];
     for (const o of result.items) {
       items.push({
-        // @ts-ignore
+        // @ts-expect-error
         label: o.label || o.word,
         sortText: o.sortText,
         kind: CompletionItemKind.Module,

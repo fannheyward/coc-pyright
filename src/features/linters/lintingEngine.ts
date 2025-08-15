@@ -194,7 +194,7 @@ export class LintingEngine {
       diagnostic.codeDescription = { href: message.url };
     }
     diagnostic.source = message.provider;
-    // @ts-ignore
+    // @ts-expect-error
     diagnostic.fix = message.fix;
     diagnostic.tags = message.tags;
     return diagnostic;

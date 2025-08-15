@@ -132,13 +132,13 @@ export class PythonCodeActionProvider implements CodeActionProvider {
     const source = sources.sources.find((s) => s.name.includes('pyright'));
     if (!source) return [];
 
-    // @ts-ignore
+    // @ts-expect-error
     const option: CompleteOption = { position: diag.range.end, bufnr: document.uri };
     const tokenSource = new CancellationTokenSource();
     const result = await source.doComplete(option, tokenSource.token);
     tokenSource.cancel();
 
-    // @ts-ignore
+    // @ts-expect-error
     return result ? result.items.filter((x) => x.label === match[1]) : [];
   }
 
@@ -147,9 +147,9 @@ export class PythonCodeActionProvider implements CodeActionProvider {
     if (diag.code === 'reportUndefinedVariable') {
       const items = await this.fetchImportsByDiagnostic(document, diag);
       for (const item of items) {
-        // @ts-ignore
+        // @ts-expect-error
         const changes: TextEdit[] = [item.textEdit].concat(item.additionalTextEdits ?? []);
-        // @ts-ignore
+        // @ts-expect-error
         const title = item.documentation?.value.replace('```\n', '').replace('\n```', '').trim();
         actions.push({
           title,
@@ -163,13 +163,13 @@ export class PythonCodeActionProvider implements CodeActionProvider {
       }
     }
 
-    // @ts-ignore
+    // @ts-expect-error
     if (diag.fix) {
       actions.push({
-        // @ts-ignore
+        // @ts-expect-error
         title: diag.fix.title,
         kind: CodeActionKind.QuickFix,
-        // @ts-ignore
+        // @ts-expect-error
         edit: diag.fix.edit,
       });
     }

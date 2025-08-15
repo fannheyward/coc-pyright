@@ -49,7 +49,7 @@ export class PyDocStyle extends BaseLinter {
         .map((line) => {
           try {
             if (line.trim().length === 0) {
-              return;
+              return null;
             }
             const lineNumber = parseInt(line.substring(0, line.indexOf(' ')), 10);
             const part = line.substring(line.indexOf(':') + 1).trim();
@@ -75,7 +75,7 @@ export class PyDocStyle extends BaseLinter {
             } else if (err instanceof Error) {
               this.outputChannel.appendLine(err.message);
             }
-            return;
+            return null;
           }
         })
         .filter((item) => item !== undefined)

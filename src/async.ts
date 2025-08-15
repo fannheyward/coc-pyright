@@ -20,7 +20,7 @@ class DeferredImpl<T> implements Deferred<T> {
   private _promise: Promise<T>;
   constructor(private scope: any = null) {
     this._promise = new Promise<T>((res, rej) => {
-      // @ts-ignore
+      // @ts-expect-error
       this._resolve = res;
       this._reject = rej;
     });

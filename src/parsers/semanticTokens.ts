@@ -72,12 +72,12 @@ export class SemanticTokensWalker extends ParseTreeWalker {
   }
 
   visitClass(node: ClassNode): boolean {
-    // @ts-ignore
+    // @ts-expect-error
     if (node.d.arguments.length === 1 && node.d.arguments[0].d.valueExpr.d.value === 'Enum') {
       this.addItem(node.d.name, SemanticTokenTypes.enum);
 
       for (const m of node.d.suite.d.statements) {
-        // @ts-ignore
+        // @ts-expect-error
         this.addItem(m.d.statements[0].d.leftExpr, SemanticTokenTypes.enumMember);
       }
       return super.visitClass(node);
