@@ -34,7 +34,7 @@
     "prepare": "node esbuild.mjs"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.2.0",
+    "@biomejs/biome": "2.2.2",
     "@types/diff-match-patch": "^1.0.36",
     "@types/md5": "^2.3.5",
     "@types/node": "16",
