@@ -69,24 +69,34 @@ export async function activate(context: ExtensionContext): Promise<void> {
     window.showWarningMessage('coc-python is installed and activated, coc-pyright will be disabled');
     return;
   }
-  let module = pyrightCfg.get<string>('server');
-  if (module) {
-    module = which.sync(workspace.expand(module), { nothrow: true }) || module;
-  } else {
-    module = join(context.extensionPath, 'node_modules', 'pyright', 'langserver.index.js');
-  }
-  if (!existsSync(module)) {
-    window.showErrorMessage(`Pyright langserver doesn't exist, please reinstall coc-pyright`);
-    return;
-  }
 
   const runOptions = { execArgv: [`--max-old-space-size=${defaultHeapSize}`] };
   const debugOptions = { execArgv: ['--nolazy', '--inspect=6600', `--max-old-space-size=${defaultHeapSize}`] };
 
-  const serverOptions: ServerOptions = {
-    run: { module: module, transport: TransportKind.ipc, options: runOptions },
-    debug: { module: module, transport: TransportKind.ipc, options: debugOptions },
-  };
+  let serverOptions: ServerOptions;
+
+  let module = pyrightCfg.get<string>('server');
+  if (module) {
+    const serverBin = which.sync(workspace.expand(module), { nothrow: true }) || module;
+    if (!existsSync(serverBin)) {
+      window.showErrorMessage(`Pyright langserver ${serverBin} doesn't exist`);
+      return;
+    }
+    serverOptions = {
+      run: { command: serverBin, args: [...runOptions.execArgv, '--stdio'] },
+      debug: { command: serverBin, args: [...debugOptions.execArgv, '--stdio'] },
+    };
+  } else {
+    module = join(context.extensionPath, 'node_modules', 'pyright', 'langserver.index.js');
+    serverOptions = {
+      run: { module: module, transport: TransportKind.ipc, options: runOptions },
+      debug: { module: module, transport: TransportKind.ipc, options: debugOptions },
+    };
+    if (!existsSync(module)) {
+      window.showErrorMessage(`Pyright langserver doesn't exist, please reinstall coc-pyright`);
+      return;
+    }
+  }
 
   const disabledFeatures: string[] = [];
   if (pyrightCfg.get<boolean>('disableCompletion')) {
