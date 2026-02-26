@@ -24,7 +24,7 @@ export class RuffFormatter extends BaseFormatter {
     token: CancellationToken,
     range?: Range,
   ): Thenable<TextEdit[]> {
-    const ruffArgs = ['format', '--diff', '--silent'];
+    const ruffArgs = ['format', '--diff', '--quiet'];
     if (range) {
       ruffArgs.push(`--range=${range.start.line + 1}-${range.end.line + 1}`);
     }
