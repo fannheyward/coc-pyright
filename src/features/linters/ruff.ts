@@ -78,7 +78,7 @@ export class Ruff extends BaseLinter {
   private fixToWorkspaceEdit(filename: string, fix: IRuffFix): { title: string; edit: WorkspaceEdit } | null {
     if (!fix) return null;
 
-    const u = Uri.parse(filename).toString();
+    const u = Uri.file(filename).toString();
     if (fix.edits?.length) {
       const changes = fix.edits.map((edit) => {
         const range = Range.create(
