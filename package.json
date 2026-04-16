@@ -29,12 +29,12 @@
   ],
   "scripts": {
     "schema": "node diff.mjs",
-    "lint": "biome check package.json src",
+    "check": "biome check package.json src",
     "build": "node esbuild.mjs",
     "prepare": "node esbuild.mjs"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.4.10",
+    "@biomejs/biome": "2.4.12",
     "@types/diff-match-patch": "^1.0.36",
     "@types/md5": "^2.3.6",
     "@types/node": "16",

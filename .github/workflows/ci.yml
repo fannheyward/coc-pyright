@@ -29,6 +29,6 @@ jobs:
       - name: npm ci
         run: |
           npm ci
-      - name: npm lint
+      - name: biome check
         run: |
-          npm run lint
+          npm run check
