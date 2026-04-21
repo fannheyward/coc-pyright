@@ -39,7 +39,7 @@
     "@types/md5": "^2.3.6",
     "@types/node": "16",
     "@types/which": "^3.0.4",
-    "@zzzen/pyright-internal": "^1.2.0-dev.20251207",
+    "@zzzen/pyright-internal": "^1.2.0-dev.20260222",
     "coc.nvim": "^0.0.83-next.18",
     "diff-match-patch": "^1.0.5",
     "esbuild": "^0.28.0",
