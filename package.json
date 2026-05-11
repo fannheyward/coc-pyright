@@ -34,7 +34,7 @@
     "prepare": "node esbuild.mjs"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.4.13",
+    "@biomejs/biome": "2.4.15",
     "@types/diff-match-patch": "^1.0.36",
     "@types/md5": "^2.3.6",
     "@types/node": "16",
@@ -50,7 +50,7 @@
     "named-js-regexp": "^1.3.5",
     "rxjs": "^7.8.2",
     "tree-kill": "^1.2.2",
-    "typescript": "^6.0.2",
+    "typescript": "^6.0.3",
     "which": "^4.0.0"
   },
   "prettier": {
