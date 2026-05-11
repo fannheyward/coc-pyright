@@ -9,6 +9,7 @@ tsconfig.json
 .github
 .watchmanconfig
 .idea
+.claude
 webpack.config.js
 yarn.lock
 yarn-error.log
