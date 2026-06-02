@@ -2213,5 +2213,9 @@
   },
   "dependencies": {
     "pyright": "^1.1.409"
+  },
+  "allowScripts": {
+    "esbuild@0.28.0": true,
+    "fsevents@2.3.3": true
   }
 }
