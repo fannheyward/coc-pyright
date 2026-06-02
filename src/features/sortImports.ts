@@ -49,7 +49,7 @@ async function generateImportsDiff(
 
 export async function sortImports(outputChannel: OutputChannel): Promise<void> {
   const doc = await workspace.document;
-  if (!doc || doc.filetype !== 'python' || doc.lineCount <= 1) {
+  if (doc?.filetype !== 'python' || doc.lineCount <= 1) {
     return;
   }
 
