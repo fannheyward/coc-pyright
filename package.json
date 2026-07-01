@@ -42,7 +42,7 @@
     "@zzzen/pyright-internal": "^1.2.0-dev.20260222",
     "coc.nvim": "^0.0.83-next.18",
     "diff-match-patch": "^1.0.5",
-    "esbuild": "^0.28.0",
+    "esbuild": "^0.28.1",
     "get-port": "^7.2.0",
     "iconv-lite": "^0.7.2",
     "md5": "^2.3.0",
@@ -2215,7 +2215,7 @@
     "pyright": "^1.1.409"
   },
   "allowScripts": {
-    "esbuild@0.28.0": true,
-    "fsevents@2.3.3": true
+    "fsevents@2.3.3": true,
+    "esbuild@0.28.1": true
   }
 }
