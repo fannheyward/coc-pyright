@@ -125,7 +125,7 @@ export async function provideCompletionItem(
     }
   }
 
-  return Array.isArray(result) ? items : { items, isIncomplete: result.isIncomplete };
+  return result;
 }
 
 export async function resolveCompletionItem(
