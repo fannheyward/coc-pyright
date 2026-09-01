@@ -2212,10 +2212,10 @@
     ]
   },
   "dependencies": {
-    "pyright": "^1.1.411"
+    "pyright": "^1.1.413"
   },
   "allowScripts": {
     "fsevents@2.3.3": true,
-    "esbuild@0.28.1": true
+    "esbuild@0.28.2": true
   }
 }
