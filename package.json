@@ -46,7 +46,7 @@
     "get-port": "^7.2.0",
     "iconv-lite": "^0.7.3",
     "md5": "^2.3.0",
-    "minimatch": "^10.2.6",
+    "minimatch": "^11.0.3",
     "named-js-regexp": "^1.3.5",
     "rxjs": "^7.8.2",
     "tree-kill": "^1.2.2",
